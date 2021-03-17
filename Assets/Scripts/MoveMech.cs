@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MoveMech : MonoBehaviour {
     
@@ -11,6 +12,7 @@ public class MoveMech : MonoBehaviour {
     public MovementEnum ForwardDirection;
     public MovementEnum SidewaysDirection;
     public float LookRotationSpeed = 1f;
+    private Vector3 inputVec = default;
 
     public enum MovementEnum
     {
@@ -36,7 +38,7 @@ public class MoveMech : MonoBehaviour {
     
     void Update()
     {
-        var newSidewaysDirection= DetermineMovementDirection("Horizontal");
+        var newSidewaysDirection= DetermineMovementDirection(inputVec.x);
         if (HasMovemnetDirectionChanged(SidewaysDirection, newSidewaysDirection))
         {
             SidewaysDirection = newSidewaysDirection;
@@ -44,7 +46,7 @@ public class MoveMech : MonoBehaviour {
             TurnVector.Set(0, TurnSpeed, 0);
         }
 
-        var newForwardDirection = DetermineMovementDirection("Vertical");
+        var newForwardDirection = DetermineMovementDirection(inputVec.y);
         if (HasMovemnetDirectionChanged(ForwardDirection, newForwardDirection))
         {
             ForwardDirection = newForwardDirection;
@@ -52,10 +54,9 @@ public class MoveMech : MonoBehaviour {
         }
     }
 
-    private MovementEnum DetermineMovementDirection(string axisName)
+    private MovementEnum DetermineMovementDirection(float axisFloat)
     {
-        MovementEnum newDirection;
-        var axisFloat = Input.GetAxis(axisName);
+        MovementEnum newDirection;// Input.GetAxis(axisName);
         if (axisFloat > 0)
             newDirection = MovementEnum.Positive;
         else if (axisFloat < 0)
@@ -68,6 +69,11 @@ public class MoveMech : MonoBehaviour {
     private bool HasMovemnetDirectionChanged(MovementEnum oldM, MovementEnum newM)
     {
         return oldM != newM;
+    }
+
+    public void OnMove(InputValue input) {
+        var moveVec = input.Get<Vector2>();
+        inputVec = new Vector3(moveVec.x, moveVec.y, 0);
     }
 
     void FixedUpdate()

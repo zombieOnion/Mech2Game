@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
- 
+using static Mech_Controller;
+using UnityEngine.InputSystem;
+
 [AddComponentMenu("Camera-Control/Smooth Mouse Look")]
 public class SmoothMouseLook : MonoBehaviour {
  
@@ -28,7 +30,10 @@ public class SmoothMouseLook : MonoBehaviour {
 	public float frameCounter = 20;
  
 	Quaternion originalRotation;
- 
+	float MouseYAxis = 0;
+	float MouseXAxis = 0;
+	public InputAction lookAction;
+
 	void Update ()
 	{
 		if (axes == RotationAxes.MouseXAndY)
@@ -36,8 +41,8 @@ public class SmoothMouseLook : MonoBehaviour {
 			rotAverageY = 0f;
 			rotAverageX = 0f;
  
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-			rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+			rotationY += MouseYAxis * sensitivityY;
+			rotationX += MouseXAxis * sensitivityX;
  
 			rotArrayY.Add(rotationY);
 			rotArrayX.Add(rotationX);
@@ -71,7 +76,7 @@ public class SmoothMouseLook : MonoBehaviour {
 		{			
 			rotAverageX = 0f;
  
-			rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+			rotationX += MouseXAxis * sensitivityX;
  
 			rotArrayX.Add(rotationX);
  
@@ -92,7 +97,7 @@ public class SmoothMouseLook : MonoBehaviour {
 		{			
 			rotAverageY = 0f;
  
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+			rotationY += MouseYAxis * sensitivityY;
  
 			rotArrayY.Add(rotationY);
  
@@ -131,5 +136,13 @@ public class SmoothMouseLook : MonoBehaviour {
 			}			
 		}
 		return Mathf.Clamp (angle, min, max);
+	}
+
+    public void OnLook(InputValue input) {
+		Vector2 inputVec = input.Get<Vector2>();
+		MouseYAxis = inputVec.y;
+		MouseXAxis = inputVec.x;
+		print($"MouseX {MouseXAxis} MouseY {MouseYAxis}");
+
 	}
 }

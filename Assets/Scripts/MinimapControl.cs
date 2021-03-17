@@ -19,6 +19,7 @@ public class MinimapControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		/*
 		if (Input.GetButtonDown("Fire2") && camSize<=110f){
 			camSize = camSize+10;
 			camera.orthographicSize=camSize;
@@ -28,5 +29,6 @@ public class MinimapControl : MonoBehaviour {
 			camera.orthographicSize=camSize;
 			Debug.Log(camSize);
 		}
+		*/
 	}
 }

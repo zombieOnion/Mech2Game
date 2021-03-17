@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MechShoot : MonoBehaviour {
     
@@ -17,6 +18,7 @@ public class MechShoot : MonoBehaviour {
     public Transform CurrentTarget;
     public bool UseMouse = false;
     float nextFire = 0.0f;
+    private Vector2 _panThisFrame;
 
     void Awake() {
         varBullet = Resources.Load("Rocket");
@@ -30,6 +32,7 @@ public class MechShoot : MonoBehaviour {
     }
     
     void Update() {
+        /*
         if(UseMouse) {
             if (Input.GetButton("FireMouse1") && Time.time > nextFire) {
                 FireMainGun();
@@ -57,13 +60,15 @@ public class MechShoot : MonoBehaviour {
             var controller2Y = Input.GetAxis("Vertical 2nd axis");
             transform.Rotate(-controller2Y * LookRotationSpeed, controller2X * LookRotationSpeed, 0.0f);
         }
-        
+        */
+        transform.Rotate(-_panThisFrame.y * LookRotationSpeed, _panThisFrame.x * LookRotationSpeed, 0.0f);
         Quaternion q = transform.rotation;
         q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
         transform.rotation = q;
     }
 
     public void LockTarget() {
+        Debug.Log("Locking");
         RaycastHit objectHit;
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
         Debug.DrawRay(transform.position, fwd * 50, Color.red, duration: 1200, depthTest: false);
@@ -76,5 +81,30 @@ public class MechShoot : MonoBehaviour {
         ILockTarget lockTarget = newRocket.GetComponent<ILockTarget>();
         if (CurrentTarget != null && lockTarget != null)
             lockTarget.SetTarget(CurrentTarget);
+    }
+
+    public void OnFire1(InputValue input) {
+        if(Time.time > nextFire) {
+            FireMainGun();
+            nextFire = Time.time + selectedWeaponBase.RateOfFire;
+        }
+    }
+
+    public void OnFire2(InputValue input) {
+        LockTarget();
+    }
+    public void OnLook(InputValue input) {
+        _panThisFrame = input.Get<Vector2>() * 0.125f;
+        print($"MouseX {_panThisFrame.x} MouseY {_panThisFrame.y}");
+    }
+
+    public void OnChangeWeapon(InputValue input) {
+        int weaponIndex = mechWeapons.IndexOf(selectedWeapon);
+        if(weaponIndex == mechWeapons.Count - 1)
+            weaponIndex = 0;
+        else
+            weaponIndex += 1;
+        selectedWeapon = mechWeapons[weaponIndex];
+        selectedWeaponBase = (selectedWeapon as GameObject).GetComponent<WeaponBase>();
     }
 }
