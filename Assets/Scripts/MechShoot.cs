@@ -95,7 +95,6 @@ public class MechShoot : MonoBehaviour {
     }
     public void OnLook(InputValue input) {
         _panThisFrame = input.Get<Vector2>() * 0.125f;
-        print($"MouseX {_panThisFrame.x} MouseY {_panThisFrame.y}");
     }
 
     public void OnChangeWeapon(InputValue input) {

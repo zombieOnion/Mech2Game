@@ -12,6 +12,7 @@ public class MoveMech : MonoBehaviour {
     public MovementEnum ForwardDirection;
     public MovementEnum SidewaysDirection;
     public float LookRotationSpeed = 1f;
+    public GameObject PilotPrefab;
     private Vector3 inputVec = default;
 
     public enum MovementEnum
@@ -29,6 +30,7 @@ public class MoveMech : MonoBehaviour {
         ForwardSpeeds = new float[3] { 0, -5f, 5f };
         SidewaysSpeeds = new float[3] { 0, -20f, 20f };
         TurnVector = new Vector3(0f, 0f, 0f);
+        PlayerInput.Instantiate(PilotPrefab, playerIndex: 0, controlScheme: "KeyboardMouse", pairWithDevices: new InputDevice[] { Keyboard.current, Mouse.current });
     }
 
     void Start()
