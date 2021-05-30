@@ -130,7 +130,7 @@
                     "path": "<Keyboard>/numpad5",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Pilot Keyboard Mouse",
+                    "groups": "PilotKeyboardMouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -141,7 +141,7 @@
                     "path": "<Keyboard>/numpad2",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Pilot Keyboard Mouse",
+                    "groups": "PilotKeyboardMouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -152,7 +152,7 @@
                     "path": "<Keyboard>/numpad1",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Pilot Keyboard Mouse",
+                    "groups": "PilotKeyboardMouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -163,7 +163,7 @@
                     "path": "<Keyboard>/numpad3",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Pilot Keyboard Mouse",
+                    "groups": "PilotKeyboardMouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -174,7 +174,7 @@
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse Default;Pilot Keyboard Mouse",
+                    "groups": "Keyboard&Mouse Default;PilotKeyboardMouse",
                     "action": "Fire1",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -218,7 +218,7 @@
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Pilot Keyboard Mouse",
+                    "groups": "PilotKeyboardMouse",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -251,7 +251,7 @@
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Pilot Keyboard Mouse",
+                    "groups": "PilotKeyboardMouse",
                     "action": "Fire2",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -284,7 +284,7 @@
                     "path": "<Keyboard>/numpad4",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Pilot Keyboard Mouse",
+                    "groups": "PilotKeyboardMouse",
                     "action": "ChangeWeapon",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -319,7 +319,7 @@
                     "path": "<Keyboard>/period",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Pilot Keyboard Mouse",
+                    "groups": "PilotKeyboardMouse",
                     "action": "IncreaseMinimapResolution",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -330,7 +330,7 @@
                     "path": "<Keyboard>/comma",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Pilot Keyboard Mouse",
+                    "groups": "PilotKeyboardMouse",
                     "action": "DecreaseMinimapResolution",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -367,8 +367,8 @@
             ]
         },
         {
-            "name": "Pilot Keyboard Mouse",
-            "bindingGroup": "Pilot Keyboard Mouse",
+            "name": "PilotKeyboardMouse",
+            "bindingGroup": "PilotKeyboardMouse",
             "devices": [
                 {
                     "devicePath": "<Keyboard>",

@@ -143,7 +143,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/numpad5"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
+                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -154,7 +154,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/numpad2"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
+                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -165,7 +165,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/numpad1"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
+                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -176,7 +176,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/numpad3"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
+                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -187,7 +187,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default;Pilot Keyboard Mouse"",
+                    ""groups"": ""Keyboard&Mouse Default;PilotKeyboardMouse"",
                     ""action"": ""Fire1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -231,7 +231,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
+                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -264,7 +264,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
+                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""Fire2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -297,7 +297,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/numpad4"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
+                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""ChangeWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -332,7 +332,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/period"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
+                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""IncreaseMinimapResolution"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -343,7 +343,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/comma"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
+                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""DecreaseMinimapResolution"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -380,8 +380,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
             ]
         },
         {
-            ""name"": ""Pilot Keyboard Mouse"",
-            ""bindingGroup"": ""Pilot Keyboard Mouse"",
+            ""name"": ""PilotKeyboardMouse"",
+            ""bindingGroup"": ""PilotKeyboardMouse"",
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
@@ -582,7 +582,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
     {
         get
         {
-            if (m_PilotKeyboardMouseSchemeIndex == -1) m_PilotKeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("Pilot Keyboard Mouse");
+            if (m_PilotKeyboardMouseSchemeIndex == -1) m_PilotKeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("PilotKeyboardMouse");
             return asset.controlSchemes[m_PilotKeyboardMouseSchemeIndex];
         }
     }
