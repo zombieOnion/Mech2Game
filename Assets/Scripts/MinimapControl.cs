@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-	
-	//kvar att skapa: public variabler för camSize minimum och maximum
+using UnityEngine.InputSystem;
+//kvar att skapa: public variabler för camSize minimum och maximum
 
 public class MinimapControl : MonoBehaviour {
 	//deklarera variabler: objektet, dess component, och variabeln camSize:
@@ -19,16 +19,19 @@ public class MinimapControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		/*
-		if (Input.GetButtonDown("Fire2") && camSize<=110f){
-			camSize = camSize+10;
-			camera.orthographicSize=camSize;
-			Debug.Log(camSize);
-		} else if (Input.GetButtonDown("Fire3") && camSize>=19f){
-			camSize = camSize-10;
-			camera.orthographicSize=camSize;
-			Debug.Log(camSize);
-		}
-		*/
+	}
+
+	public void OnIncreaseMinimapResolution() {
+		camSize = camSize + 10;
+		camera.orthographicSize = camSize;
+		Debug.Log(camSize);
+	}
+
+	public void OnDecreaseMinimapResolution() {
+		if(camSize == 0)
+			return;
+		camSize = camSize - 10;
+		camera.orthographicSize = camSize;
+		Debug.Log(camSize);
 	}
 }

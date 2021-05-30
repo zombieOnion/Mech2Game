@@ -187,7 +187,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default"",
+                    ""groups"": ""Keyboard&Mouse Default;Pilot Keyboard Mouse"",
                     ""action"": ""Fire1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -199,17 +199,6 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XboxController"",
-                    ""action"": ""Fire1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bedaa1bb-dc59-4941-aea8-2e0bea6339f5"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Pilot Keyboard Mouse"",
                     ""action"": ""Fire1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -320,17 +309,17 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
             ""id"": ""e0646344-bfa8-42c0-94c9-03ea77a5ae43"",
             ""actions"": [
                 {
-                    ""name"": ""Increase Resolution"",
+                    ""name"": ""IncreaseMinimapResolution"",
                     ""type"": ""Button"",
-                    ""id"": ""a04c0c0c-6cf0-49de-804b-f58435e0b877"",
+                    ""id"": ""3f024827-c976-4bf9-993b-316123425579"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Decrease Resolution"",
+                    ""name"": ""DecreaseMinimapResolution"",
                     ""type"": ""Button"",
-                    ""id"": ""fbd7cd45-b082-4372-ae4d-27580c909a8b"",
+                    ""id"": ""7d695515-08ba-48c6-92a0-a10f25d84bd1"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -339,23 +328,23 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""ce64f535-4b13-4755-b65d-898cc67f1e88"",
-                    ""path"": ""<Keyboard>/comma"",
+                    ""id"": ""829933d3-4ec6-4794-8342-7dd2822522b3"",
+                    ""path"": ""<Keyboard>/period"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Pilot Keyboard Mouse"",
-                    ""action"": ""Increase Resolution"",
+                    ""action"": ""IncreaseMinimapResolution"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""bb2ace60-dab3-4f9f-81ea-20c964a21bc3"",
-                    ""path"": ""<Keyboard>/period"",
+                    ""id"": ""7ac5ece7-2953-4404-ba02-26c1c14cf054"",
+                    ""path"": ""<Keyboard>/comma"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Pilot Keyboard Mouse"",
-                    ""action"": ""Decrease Resolution"",
+                    ""action"": ""DecreaseMinimapResolution"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -369,12 +358,12 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
-                    ""isOptional"": false,
+                    ""isOptional"": true,
                     ""isOR"": false
                 },
                 {
                     ""devicePath"": ""<Mouse>"",
-                    ""isOptional"": false,
+                    ""isOptional"": true,
                     ""isOR"": false
                 }
             ]
@@ -396,12 +385,12 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
-                    ""isOptional"": false,
+                    ""isOptional"": true,
                     ""isOR"": false
                 },
                 {
                     ""devicePath"": ""<Mouse>"",
-                    ""isOptional"": false,
+                    ""isOptional"": true,
                     ""isOR"": false
                 }
             ]
@@ -417,8 +406,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
         m_MechPilot_ChangeWeapon = m_MechPilot.FindAction("ChangeWeapon", throwIfNotFound: true);
         // ElectronicWarfareOfficer
         m_ElectronicWarfareOfficer = asset.FindActionMap("ElectronicWarfareOfficer", throwIfNotFound: true);
-        m_ElectronicWarfareOfficer_IncreaseResolution = m_ElectronicWarfareOfficer.FindAction("Increase Resolution", throwIfNotFound: true);
-        m_ElectronicWarfareOfficer_DecreaseResolution = m_ElectronicWarfareOfficer.FindAction("Decrease Resolution", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_IncreaseMinimapResolution = m_ElectronicWarfareOfficer.FindAction("IncreaseMinimapResolution", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_DecreaseMinimapResolution = m_ElectronicWarfareOfficer.FindAction("DecreaseMinimapResolution", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -533,14 +522,14 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
     // ElectronicWarfareOfficer
     private readonly InputActionMap m_ElectronicWarfareOfficer;
     private IElectronicWarfareOfficerActions m_ElectronicWarfareOfficerActionsCallbackInterface;
-    private readonly InputAction m_ElectronicWarfareOfficer_IncreaseResolution;
-    private readonly InputAction m_ElectronicWarfareOfficer_DecreaseResolution;
+    private readonly InputAction m_ElectronicWarfareOfficer_IncreaseMinimapResolution;
+    private readonly InputAction m_ElectronicWarfareOfficer_DecreaseMinimapResolution;
     public struct ElectronicWarfareOfficerActions
     {
         private @Mech_Controller m_Wrapper;
         public ElectronicWarfareOfficerActions(@Mech_Controller wrapper) { m_Wrapper = wrapper; }
-        public InputAction @IncreaseResolution => m_Wrapper.m_ElectronicWarfareOfficer_IncreaseResolution;
-        public InputAction @DecreaseResolution => m_Wrapper.m_ElectronicWarfareOfficer_DecreaseResolution;
+        public InputAction @IncreaseMinimapResolution => m_Wrapper.m_ElectronicWarfareOfficer_IncreaseMinimapResolution;
+        public InputAction @DecreaseMinimapResolution => m_Wrapper.m_ElectronicWarfareOfficer_DecreaseMinimapResolution;
         public InputActionMap Get() { return m_Wrapper.m_ElectronicWarfareOfficer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -550,22 +539,22 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface != null)
             {
-                @IncreaseResolution.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnIncreaseResolution;
-                @IncreaseResolution.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnIncreaseResolution;
-                @IncreaseResolution.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnIncreaseResolution;
-                @DecreaseResolution.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseResolution;
-                @DecreaseResolution.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseResolution;
-                @DecreaseResolution.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseResolution;
+                @IncreaseMinimapResolution.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnIncreaseMinimapResolution;
+                @IncreaseMinimapResolution.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnIncreaseMinimapResolution;
+                @IncreaseMinimapResolution.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnIncreaseMinimapResolution;
+                @DecreaseMinimapResolution.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseMinimapResolution;
+                @DecreaseMinimapResolution.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseMinimapResolution;
+                @DecreaseMinimapResolution.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseMinimapResolution;
             }
             m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @IncreaseResolution.started += instance.OnIncreaseResolution;
-                @IncreaseResolution.performed += instance.OnIncreaseResolution;
-                @IncreaseResolution.canceled += instance.OnIncreaseResolution;
-                @DecreaseResolution.started += instance.OnDecreaseResolution;
-                @DecreaseResolution.performed += instance.OnDecreaseResolution;
-                @DecreaseResolution.canceled += instance.OnDecreaseResolution;
+                @IncreaseMinimapResolution.started += instance.OnIncreaseMinimapResolution;
+                @IncreaseMinimapResolution.performed += instance.OnIncreaseMinimapResolution;
+                @IncreaseMinimapResolution.canceled += instance.OnIncreaseMinimapResolution;
+                @DecreaseMinimapResolution.started += instance.OnDecreaseMinimapResolution;
+                @DecreaseMinimapResolution.performed += instance.OnDecreaseMinimapResolution;
+                @DecreaseMinimapResolution.canceled += instance.OnDecreaseMinimapResolution;
             }
         }
     }
@@ -607,7 +596,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
     }
     public interface IElectronicWarfareOfficerActions
     {
-        void OnIncreaseResolution(InputAction.CallbackContext context);
-        void OnDecreaseResolution(InputAction.CallbackContext context);
+        void OnIncreaseMinimapResolution(InputAction.CallbackContext context);
+        void OnDecreaseMinimapResolution(InputAction.CallbackContext context);
     }
 }
