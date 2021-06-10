@@ -16,9 +16,4 @@ public class EWOInputConfiguration : MonoBehaviour
         playerInput.SwitchCurrentActionMap("ElectronicWarfareOfficer");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

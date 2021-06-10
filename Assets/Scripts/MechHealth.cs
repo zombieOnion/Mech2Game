@@ -23,16 +23,6 @@ public class MechHealth : MonoBehaviour, IHealth
         print("_health is" + _health.ToString());
     }
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     void OnDestroy()
     {
         print("Mech was destroyed");

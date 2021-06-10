@@ -19,12 +19,7 @@ public class ViewportGUIChecker : MonoBehaviour {
 		Debug.Log("Viewport GUI Checker script initiated");
         //GUIText.SetActive(true);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        //if not colliding with anything disable KeyTextRender.
-		
-	}
+
 	void OnTriggerEnter (Collider col){
         if(col.gameObject.name == "CameraNavigator")
         //if(enter)

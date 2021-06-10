@@ -6,11 +6,7 @@ public class ControlNavCamera : MonoBehaviour {
     public Camera navigatorCam;
 	public bool UseMouse = false;
     public float LookRotationSpeed = 1f;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if(UseMouse) {

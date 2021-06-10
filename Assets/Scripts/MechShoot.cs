@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 public class MechShoot : MonoBehaviour {
     
@@ -30,42 +31,6 @@ public class MechShoot : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         gunnerCam = transform.parent.gameObject.GetComponentInChildren<Camera>();
     }
-    
-    void Update() {
-        /*
-        if(UseMouse) {
-            if (Input.GetButton("FireMouse1") && Time.time > nextFire) {
-                FireMainGun();
-                nextFire = Time.time + selectedWeaponBase.RateOfFire;
-            }
-            else if(Input.GetButtonDown("FireMouse2")) {
-                LockTarget();
-            }
-            if (Input.GetButtonDown("Weapon1")) selectedWeapon = mechWeapons[0];
-            if (Input.GetButtonDown("Weapon2")) selectedWeapon = mechWeapons[1];
-            selectedWeaponBase = (selectedWeapon as GameObject).GetComponent<WeaponBase>();
-            var mousePos = Input.mousePosition;
-            var screenPos = gunnerCam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, gunnerCam.farClipPlane));
-            transform.LookAt(screenPos);
-        }
-        else
-        {
-            if (Input.GetButtonDown("FireJoy360A") || Input.GetButtonDown("FireJoy360Right")) {
-                FireMainGun();
-            }
-            else if (Input.GetButtonDown("FireJoy360B")) {
-                LockTarget();
-            }
-            var controller2X = Input.GetAxis("Horizontal 2nd axis");
-            var controller2Y = Input.GetAxis("Vertical 2nd axis");
-            transform.Rotate(-controller2Y * LookRotationSpeed, controller2X * LookRotationSpeed, 0.0f);
-        }
-        */
-        transform.Rotate(-_panThisFrame.y * LookRotationSpeed, _panThisFrame.x * LookRotationSpeed, 0.0f);
-        Quaternion q = transform.rotation;
-        q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
-        transform.rotation = q;
-    }
 
     public void LockTarget() {
         Debug.Log("Locking");
@@ -83,21 +48,25 @@ public class MechShoot : MonoBehaviour {
             lockTarget.SetTarget(CurrentTarget);
     }
 
-    public void OnFire1(InputValue input) {
+    public void OnFire1() {
         if(Time.time > nextFire) {
             FireMainGun();
             nextFire = Time.time + selectedWeaponBase.RateOfFire;
         }
     }
 
-    public void OnFire2(InputValue input) {
+    public void OnFire2() {
         LockTarget();
     }
     public void OnLook(InputValue input) {
         _panThisFrame = input.Get<Vector2>() * 0.125f;
+        transform.Rotate(-_panThisFrame.y * LookRotationSpeed, _panThisFrame.x * LookRotationSpeed, 0.0f);
+        Quaternion q = transform.rotation;
+        q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
+        transform.rotation = q;
     }
 
-    public void OnChangeWeapon(InputValue input) {
+    public void OnChangeWeapon() {
         int weaponIndex = mechWeapons.IndexOf(selectedWeapon);
         if(weaponIndex == mechWeapons.Count - 1)
             weaponIndex = 0;
