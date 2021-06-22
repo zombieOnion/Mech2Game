@@ -11,14 +11,14 @@ public class MechPilotInputConfiguration : MonoBehaviour
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();
-        SetPilotKeyboardMouse();
+        SetXboxController();
     }
 
     private void SetPilotKeyboardMouse() {
         InputUser user = playerInput.user;
         InputUser.PerformPairingWithDevice(Keyboard.current, user);
         InputUser.PerformPairingWithDevice(Mouse.current, user);
-        playerInput.SwitchCurrentControlScheme("PilotKeyboardMouse", new InputDevice[] { Keyboard.current, Mouse.current });
+        playerInput.SwitchCurrentControlScheme("Keyboard&Mouse", new InputDevice[] { Keyboard.current, Mouse.current });
         playerInput.SwitchCurrentActionMap("MechPilot");
     }
 
