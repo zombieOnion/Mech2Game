@@ -1,0 +1,18 @@
+Pseudokod SIS
+
+Ha lista på alla aktiva sändare i scenen
+Objekt som är aktiva sändare lägger till sig själva i master-listan
+Mechen har en SIS
+SISen har ett skript som kollar alla aktiva sändare i scenen
+Mot alla aktiva sändare i scenen, som är inom ett visst avstånd, ritar SISen ut en SIS-pil
+Pilen pekar från Mechen i riktningen mot sändaren, men berättar inte avståndet
+Pilen kan ha färgkodning?
+	Orange = FC = fire control, eldledningsradar (pålåsning)
+	Lila = NAV = navigation, navigationsradar (högfrekvent)
+	Cyan = SURV = surveillance, spaningsradar (medel till lågfrekvent)
+Med hjälp av pilarna så vet man ifall dessa sändare finns.
+
+Sändare som inte sänder måste tas bort från listan av aktiva sändare.
+Ens egen radar läggs till, men ritas inte ut pil till.
+
+Möjlighet att klicka på pilar och markera dom som "kollade" måste finnas: pilar blir då små o halvgenomskinnliga? Eller liknande. På så sätt kan man sortera.
