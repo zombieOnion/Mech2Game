@@ -17,8 +17,17 @@ public class MinimapControl : MonoBehaviour {
 		//camSize = minimapCamera.GetComponent<Camera>.orthographicSize;
 	}
 
-	public void OnIncreaseMinimapResolution() {
+    public void OnSelect() {
+		Vector3 worldPoint = minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+		Ray ray = minimapCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+		RaycastHit hit;
+		if(Physics.Raycast(ray, out hit, 50, 1 << 6)) {
+			Debug.Log(hit.point);
+			Debug.Log(hit.transform);
+		}
+	}
 
+    public void OnIncreaseMinimapResolution() {
 		camSize = camSize + 10;
 		minimapCamera.orthographicSize = camSize;
 		Debug.Log(camSize);

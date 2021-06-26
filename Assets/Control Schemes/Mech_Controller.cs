@@ -77,7 +77,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -88,7 +88,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -99,7 +99,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -110,7 +110,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -138,56 +138,12 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""up"",
-                    ""id"": ""f6960d9e-36e7-4c0b-bb3e-277d268192d1"",
-                    ""path"": ""<Keyboard>/numpad5"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PilotKeyboardMouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""f9f8e072-fcc5-4f47-835e-c39532b07568"",
-                    ""path"": ""<Keyboard>/numpad2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PilotKeyboardMouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""feaeccbc-05ca-4e14-8af8-ed738c71dfd6"",
-                    ""path"": ""<Keyboard>/numpad1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PilotKeyboardMouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""d2a43eaf-1ee5-48e3-ad6c-445cda67d30c"",
-                    ""path"": ""<Keyboard>/numpad3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PilotKeyboardMouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""99e91d91-3e28-49b2-bba6-e5ba2903fbb3"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default;PilotKeyboardMouse"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Fire1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -209,7 +165,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -227,22 +183,11 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""51023b4e-bcad-4bef-bd02-6f75ef5db9b6"",
-                    ""path"": ""<Mouse>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PilotKeyboardMouse"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""9ba45e11-66f5-4262-8b10-45ff5d5bdd92"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Fire2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -260,22 +205,11 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8edd9e82-c27f-4e4c-b3c2-f0094df4fffd"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PilotKeyboardMouse"",
-                    ""action"": ""Fire2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""de6ef2cc-4bdb-4f12-a1cc-625e4d0e05ff"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse Default"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""ChangeWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -287,17 +221,6 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XboxController"",
-                    ""action"": ""ChangeWeapon"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""13536876-62a3-4fe8-bb0a-7cd3f6f38aa8"",
-                    ""path"": ""<Keyboard>/numpad4"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PilotKeyboardMouse"",
                     ""action"": ""ChangeWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -323,28 +246,47 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""562d5dab-5958-413e-9e46-09a8a21970cf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""829933d3-4ec6-4794-8342-7dd2822522b3"",
+                    ""id"": ""f4c010d4-e93f-4f93-ba6f-5942977ff848"",
                     ""path"": ""<Keyboard>/period"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""PilotKeyboardMouse"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""IncreaseMinimapResolution"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7ac5ece7-2953-4404-ba02-26c1c14cf054"",
+                    ""id"": ""a7433f76-152f-4774-888c-b303fbfdef07"",
                     ""path"": ""<Keyboard>/comma"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""PilotKeyboardMouse"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""DecreaseMinimapResolution"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e44081c2-2396-4a6c-8988-926763814ca4"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -353,8 +295,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
     ],
     ""controlSchemes"": [
         {
-            ""name"": ""Keyboard&Mouse Default"",
-            ""bindingGroup"": ""Keyboard&Mouse Default"",
+            ""name"": ""Keyboard&Mouse"",
+            ""bindingGroup"": ""Keyboard&Mouse"",
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
@@ -378,22 +320,6 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""isOR"": false
                 }
             ]
-        },
-        {
-            ""name"": ""PilotKeyboardMouse"",
-            ""bindingGroup"": ""PilotKeyboardMouse"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<Keyboard>"",
-                    ""isOptional"": true,
-                    ""isOR"": false
-                },
-                {
-                    ""devicePath"": ""<Mouse>"",
-                    ""isOptional"": true,
-                    ""isOR"": false
-                }
-            ]
         }
     ]
 }");
@@ -408,6 +334,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
         m_ElectronicWarfareOfficer = asset.FindActionMap("ElectronicWarfareOfficer", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_IncreaseMinimapResolution = m_ElectronicWarfareOfficer.FindAction("IncreaseMinimapResolution", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_DecreaseMinimapResolution = m_ElectronicWarfareOfficer.FindAction("DecreaseMinimapResolution", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_Select = m_ElectronicWarfareOfficer.FindAction("Select", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -524,12 +451,14 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
     private IElectronicWarfareOfficerActions m_ElectronicWarfareOfficerActionsCallbackInterface;
     private readonly InputAction m_ElectronicWarfareOfficer_IncreaseMinimapResolution;
     private readonly InputAction m_ElectronicWarfareOfficer_DecreaseMinimapResolution;
+    private readonly InputAction m_ElectronicWarfareOfficer_Select;
     public struct ElectronicWarfareOfficerActions
     {
         private @Mech_Controller m_Wrapper;
         public ElectronicWarfareOfficerActions(@Mech_Controller wrapper) { m_Wrapper = wrapper; }
         public InputAction @IncreaseMinimapResolution => m_Wrapper.m_ElectronicWarfareOfficer_IncreaseMinimapResolution;
         public InputAction @DecreaseMinimapResolution => m_Wrapper.m_ElectronicWarfareOfficer_DecreaseMinimapResolution;
+        public InputAction @Select => m_Wrapper.m_ElectronicWarfareOfficer_Select;
         public InputActionMap Get() { return m_Wrapper.m_ElectronicWarfareOfficer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -545,6 +474,9 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                 @DecreaseMinimapResolution.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseMinimapResolution;
                 @DecreaseMinimapResolution.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseMinimapResolution;
                 @DecreaseMinimapResolution.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseMinimapResolution;
+                @Select.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnSelect;
+                @Select.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnSelect;
+                @Select.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnSelect;
             }
             m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface = instance;
             if (instance != null)
@@ -555,17 +487,20 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                 @DecreaseMinimapResolution.started += instance.OnDecreaseMinimapResolution;
                 @DecreaseMinimapResolution.performed += instance.OnDecreaseMinimapResolution;
                 @DecreaseMinimapResolution.canceled += instance.OnDecreaseMinimapResolution;
+                @Select.started += instance.OnSelect;
+                @Select.performed += instance.OnSelect;
+                @Select.canceled += instance.OnSelect;
             }
         }
     }
     public ElectronicWarfareOfficerActions @ElectronicWarfareOfficer => new ElectronicWarfareOfficerActions(this);
-    private int m_KeyboardMouseDefaultSchemeIndex = -1;
-    public InputControlScheme KeyboardMouseDefaultScheme
+    private int m_KeyboardMouseSchemeIndex = -1;
+    public InputControlScheme KeyboardMouseScheme
     {
         get
         {
-            if (m_KeyboardMouseDefaultSchemeIndex == -1) m_KeyboardMouseDefaultSchemeIndex = asset.FindControlSchemeIndex("Keyboard&Mouse Default");
-            return asset.controlSchemes[m_KeyboardMouseDefaultSchemeIndex];
+            if (m_KeyboardMouseSchemeIndex == -1) m_KeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard&Mouse");
+            return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
         }
     }
     private int m_XboxControllerSchemeIndex = -1;
@@ -575,15 +510,6 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
         {
             if (m_XboxControllerSchemeIndex == -1) m_XboxControllerSchemeIndex = asset.FindControlSchemeIndex("XboxController");
             return asset.controlSchemes[m_XboxControllerSchemeIndex];
-        }
-    }
-    private int m_PilotKeyboardMouseSchemeIndex = -1;
-    public InputControlScheme PilotKeyboardMouseScheme
-    {
-        get
-        {
-            if (m_PilotKeyboardMouseSchemeIndex == -1) m_PilotKeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("PilotKeyboardMouse");
-            return asset.controlSchemes[m_PilotKeyboardMouseSchemeIndex];
         }
     }
     public interface IMechPilotActions
@@ -598,5 +524,6 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
     {
         void OnIncreaseMinimapResolution(InputAction.CallbackContext context);
         void OnDecreaseMinimapResolution(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
     }
 }
