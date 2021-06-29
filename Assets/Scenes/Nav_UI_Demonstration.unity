@@ -843,7 +843,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: PilotKeyboardMouse
+  m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: MechPilot
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
