@@ -27,7 +27,7 @@ public class CreateEmitterArrow : MonoBehaviour
         //create arrows for every emitter in the scene
         //fill EmittersFC with gameobjects that are Emitters
         EmittersFC = GameObject.FindGameObjectsWithTag("EmitterFC").ToList();
-        for (int i = 0; i <= EmittersFC.Count; i++)
+        for (int i = 0; i <= EmittersFC.Count-1; i++)
         {
             if (RenderedEmittersFC.Contains(EmittersFC[i])==false) 
             {
