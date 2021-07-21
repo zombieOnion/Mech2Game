@@ -241,6 +241,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "RadarSwitchPower",
+                    "type": "Button",
+                    "id": "31cf5ab1-c970-47b0-8fab-1826703d48df",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "TerrainMapSwitch",
+                    "type": "Button",
+                    "id": "542f3196-88d5-4451-8571-e0002d1b5e4f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -274,6 +290,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "47a23a39-955a-4741-aeea-ba6af885345b",
+                    "path": "<Keyboard>/numpad1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RadarSwitchPower",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eb255fca-bd70-458c-85f9-fc520d3fe62a",
+                    "path": "<Keyboard>/numpad2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "TerrainMapSwitch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

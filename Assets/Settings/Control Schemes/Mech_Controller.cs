@@ -254,6 +254,22 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""RadarSwitchPower"",
+                    ""type"": ""Button"",
+                    ""id"": ""31cf5ab1-c970-47b0-8fab-1826703d48df"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""TerrainMapSwitch"",
+                    ""type"": ""Button"",
+                    ""id"": ""542f3196-88d5-4451-8571-e0002d1b5e4f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -287,6 +303,28 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""47a23a39-955a-4741-aeea-ba6af885345b"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RadarSwitchPower"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eb255fca-bd70-458c-85f9-fc520d3fe62a"",
+                    ""path"": ""<Keyboard>/numpad2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""TerrainMapSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -335,6 +373,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
         m_ElectronicWarfareOfficer_IncreaseMinimapResolution = m_ElectronicWarfareOfficer.FindAction("IncreaseMinimapResolution", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_DecreaseMinimapResolution = m_ElectronicWarfareOfficer.FindAction("DecreaseMinimapResolution", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_Select = m_ElectronicWarfareOfficer.FindAction("Select", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_RadarSwitchPower = m_ElectronicWarfareOfficer.FindAction("RadarSwitchPower", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_TerrainMapSwitch = m_ElectronicWarfareOfficer.FindAction("TerrainMapSwitch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -452,6 +492,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
     private readonly InputAction m_ElectronicWarfareOfficer_IncreaseMinimapResolution;
     private readonly InputAction m_ElectronicWarfareOfficer_DecreaseMinimapResolution;
     private readonly InputAction m_ElectronicWarfareOfficer_Select;
+    private readonly InputAction m_ElectronicWarfareOfficer_RadarSwitchPower;
+    private readonly InputAction m_ElectronicWarfareOfficer_TerrainMapSwitch;
     public struct ElectronicWarfareOfficerActions
     {
         private @Mech_Controller m_Wrapper;
@@ -459,6 +501,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
         public InputAction @IncreaseMinimapResolution => m_Wrapper.m_ElectronicWarfareOfficer_IncreaseMinimapResolution;
         public InputAction @DecreaseMinimapResolution => m_Wrapper.m_ElectronicWarfareOfficer_DecreaseMinimapResolution;
         public InputAction @Select => m_Wrapper.m_ElectronicWarfareOfficer_Select;
+        public InputAction @RadarSwitchPower => m_Wrapper.m_ElectronicWarfareOfficer_RadarSwitchPower;
+        public InputAction @TerrainMapSwitch => m_Wrapper.m_ElectronicWarfareOfficer_TerrainMapSwitch;
         public InputActionMap Get() { return m_Wrapper.m_ElectronicWarfareOfficer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -477,6 +521,12 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                 @Select.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnSelect;
                 @Select.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnSelect;
                 @Select.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnSelect;
+                @RadarSwitchPower.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRadarSwitchPower;
+                @RadarSwitchPower.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRadarSwitchPower;
+                @RadarSwitchPower.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRadarSwitchPower;
+                @TerrainMapSwitch.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnTerrainMapSwitch;
+                @TerrainMapSwitch.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnTerrainMapSwitch;
+                @TerrainMapSwitch.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnTerrainMapSwitch;
             }
             m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface = instance;
             if (instance != null)
@@ -490,6 +540,12 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                 @Select.started += instance.OnSelect;
                 @Select.performed += instance.OnSelect;
                 @Select.canceled += instance.OnSelect;
+                @RadarSwitchPower.started += instance.OnRadarSwitchPower;
+                @RadarSwitchPower.performed += instance.OnRadarSwitchPower;
+                @RadarSwitchPower.canceled += instance.OnRadarSwitchPower;
+                @TerrainMapSwitch.started += instance.OnTerrainMapSwitch;
+                @TerrainMapSwitch.performed += instance.OnTerrainMapSwitch;
+                @TerrainMapSwitch.canceled += instance.OnTerrainMapSwitch;
             }
         }
     }
@@ -525,5 +581,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
         void OnIncreaseMinimapResolution(InputAction.CallbackContext context);
         void OnDecreaseMinimapResolution(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
+        void OnRadarSwitchPower(InputAction.CallbackContext context);
+        void OnTerrainMapSwitch(InputAction.CallbackContext context);
     }
 }
