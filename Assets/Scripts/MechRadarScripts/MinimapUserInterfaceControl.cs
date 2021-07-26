@@ -10,7 +10,7 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	private Camera minimapCamera;
 	public float camSize;
 	private RadarSweepScript radarSweeper;
-	private RadarTargetProcessor targetProcessor;
+	private RadarTargetComputer targetProcessor;
 	[SerializeField] public LayerMask OnlyPlotLayermask;
 	[SerializeField] public LayerMask PlotAndTerrainLayermask;
 
@@ -20,7 +20,7 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 		minimapCamera = minimapCameraGO.GetComponent<Camera>();
 		radarSweeper = minimapCameraGO.transform.GetComponentInChildren<RadarSweepScript>();
 		minimapCamera.orthographicSize = camSize;
-		targetProcessor = gameObject.GetComponent<RadarTargetProcessor>();
+		targetProcessor = gameObject.GetComponent<RadarTargetComputer>();
 		//camSize = minimapCamera.GetComponent<Camera>.orthographicSize;
 	}
 

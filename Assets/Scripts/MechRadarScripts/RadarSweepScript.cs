@@ -10,7 +10,7 @@ public class RadarSweepScript : MonoBehaviour
     public float rotationSpeed;
     public float radarDistance;
     [SerializeField] public LayerMask RadarLayer;
-    private RadarTargetProcessor targetProcessor;
+    private RadarTargetComputer targetProcessor;
     private Collider radarSweepCollider;
     private bool radarOn = true;
     public bool RadarOn { get => radarOn; set => radarOn = value; }
@@ -22,7 +22,7 @@ public class RadarSweepScript : MonoBehaviour
         radarSweepTransform = transform;
         radarSweepCollider = radarSweepTransform.GetComponent<Collider>();
         mechTransform = transform.parent.parent;
-        targetProcessor = gameObject.GetComponent<RadarTargetProcessor>();
+        targetProcessor = gameObject.GetComponent<RadarTargetComputer>();
     }
 
     // Update is called once per frame

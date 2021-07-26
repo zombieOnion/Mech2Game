@@ -5,15 +5,21 @@ using UnityEngine;
 public class RadarTargetScript : MonoBehaviour
 {
     public bool StayActive = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Transform TargetTransform = null;
+    private float DisappearTimer;
+    public float DisappearTimerMax;
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+        if(StayActive == false && TargetTransform == null) {
+            DisappearTimer += Time.deltaTime;
+            if(DisappearTimer >= DisappearTimerMax)
+                Destroy(gameObject);
+        }
+        else {
+            DisappearTimer = 0f;
+        }
     }
+
+    public void ReceiveNewRadarHitOnTarget(Transform newHit) { }
 }
