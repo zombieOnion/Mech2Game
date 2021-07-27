@@ -1132,6 +1132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5294518eba1e44f93a8002915557dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerInput: {fileID: 0}
 --- !u!1 &373504546
 GameObject:
   m_ObjectHideFlags: 0
@@ -1954,6 +1955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b96da3cfee26b41a06c767ad834e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerInput: {fileID: 0}
 --- !u!1 &1051122574
 GameObject:
   m_ObjectHideFlags: 0
@@ -2168,6 +2170,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PilotCamera: {fileID: 2058820111}
   EWOCamera: {fileID: 999852466}
+  pilotInputCfg: {fileID: 0}
+  ewoInputCfg: {fileID: 0}
 --- !u!4 &1156891099
 Transform:
   m_ObjectHideFlags: 0
@@ -7868,6 +7872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b96da3cfee26b41a06c767ad834e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerInput: {fileID: 0}
 --- !u!114 &2027260274
 MonoBehaviour:
   m_ObjectHideFlags: 0

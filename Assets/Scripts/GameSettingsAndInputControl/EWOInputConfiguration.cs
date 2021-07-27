@@ -6,14 +6,19 @@ using UnityEngine.InputSystem.Users;
 
 public class EWOInputConfiguration : MonoBehaviour
 {
-    private InputUser user;
-    // Start is called before the first frame update
+    public PlayerInput PlayerInput;
     void Start() {
-        PlayerInput playerInput = GetComponent<PlayerInput>();
-        InputUser user = playerInput.user;
-        InputUser.PerformPairingWithDevice(Keyboard.current, user);
-        InputUser.PerformPairingWithDevice(Mouse.current, user);
-        playerInput.SwitchCurrentActionMap("ElectronicWarfareOfficer");
+        PlayerInput = GetComponent<PlayerInput>();
+        //SetEWOKeyboardMouse();
     }
 
+    public void SetEWOKeyboardMouse() {
+        
+        InputUser user = PlayerInput.user;
+        user.UnpairDevices();
+        InputUser.PerformPairingWithDevice(Keyboard.current, user);
+        InputUser.PerformPairingWithDevice(Mouse.current, user);
+        PlayerInput.SwitchCurrentControlScheme("Keyboard&Mouse", new InputDevice[] { Keyboard.current, Mouse.current });
+        PlayerInput.SwitchCurrentActionMap("ElectronicWarfareOfficer"); 
+    }
 }

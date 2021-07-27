@@ -21,7 +21,6 @@ public class RadarHitList {
         }
         RadarHits[NextToAddIndex] = newTransform;
         NextToAddIndex++;
-        Debug.Log(NextToAddIndex);
     }
 
     public Transform GetCurrent() => NextToAddIndex == 0 ? RadarHits[size - 1] : RadarHits[NextToAddIndex-1];
