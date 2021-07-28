@@ -14,6 +14,7 @@ public class RadarSweepScript : MonoBehaviour
     private Collider radarSweepCollider;
     private bool radarOn = true;
     public bool RadarOn { get => radarOn; set => radarOn = value; }
+    private float xSweepRotationAngle;
     
 
     // Start is called before the first frame update
@@ -30,7 +31,9 @@ public class RadarSweepScript : MonoBehaviour
     {
         if(!radarOn)
             return;
-        radarSweepTransform.eulerAngles -= new Vector3(0, rotationSpeed * Time.deltaTime, 0);
+        //radarSweepTransform.eulerAngles -= new Vector3(0, rotationSpeed * Time.deltaTime, 0);
+        xSweepRotationAngle -= Time.deltaTime * rotationSpeed;
+        radarSweepTransform.rotation = Quaternion.Euler(0, xSweepRotationAngle, 0);
         RaycastHit[] hits;
         hits = Physics.BoxCastAll(radarSweepCollider.bounds.center, radarSweepTransform.localScale, radarSweepTransform.forward, radarSweepTransform.rotation, 500, RadarLayer);
         int index = 0;
