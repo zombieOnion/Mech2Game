@@ -21,6 +21,9 @@ public class MechShoot : MonoBehaviour {
     float nextFire = 0.0f;
     private Vector2 _panThisFrame;
 
+    private float xRotation = 0f;
+    private float yRotation = 0f;
+
     void Awake() {
         varBullet = Resources.Load("Rocket");
         mechWeapons.Add(varBullet);
@@ -60,10 +63,11 @@ public class MechShoot : MonoBehaviour {
     }
     public void OnLook(InputValue input) {
         _panThisFrame = input.Get<Vector2>() * 0.125f;
-        transform.Rotate(-_panThisFrame.y * LookRotationSpeed, _panThisFrame.x * LookRotationSpeed, 0.0f);
-        Quaternion q = transform.rotation;
-        q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
-        transform.rotation = q;
+        xRotation -= _panThisFrame.y * LookRotationSpeed;
+        yRotation += _panThisFrame.x * LookRotationSpeed;
+        xRotation = Mathf.Clamp(xRotation, -40, 40);
+        yRotation = Mathf.Clamp(yRotation, -40, 40);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 
     public void OnChangeWeapon() {
