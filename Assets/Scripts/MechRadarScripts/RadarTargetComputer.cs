@@ -19,10 +19,6 @@ public class RadarTargetComputer : MonoBehaviour
 
     public void AddRadarHit(Transform hit) {
         HitList.Add(hit);
-    }
-    // Update is called once per frame
-    void LateUpdate()
-    {
         Transform radarHit = HitList.GetCurrent();
         if(radarHit == null) {
             currentlyTrackedTarget = null;

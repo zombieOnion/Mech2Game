@@ -11,6 +11,7 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	public float camSize;
 	private RadarSweepScript radarSweeper;
 	private RadarTargetComputer targetProcessor;
+	private MechShoot mechShoot;
 	[SerializeField] public LayerMask OnlyPlotLayermask;
 	[SerializeField] public LayerMask PlotAndTerrainLayermask;
 
@@ -21,6 +22,7 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 		radarSweeper = minimapCameraGO.transform.GetComponentInChildren<RadarSweepScript>();
 		minimapCamera.orthographicSize = camSize;
 		targetProcessor = gameObject.GetComponent<RadarTargetComputer>();
+		mechShoot = gameObject.transform.root.GetComponentInChildren<MechShoot>();
 		//camSize = minimapCamera.GetComponent<Camera>.orthographicSize;
 	}
 
@@ -29,9 +31,10 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 		Vector3 worldPoint = minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 		Ray ray = minimapCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit, 50, 1 << 6 | 1 << 8)) {
+		if(Physics.Raycast(ray, out hit, 50,1 << 8)) { // 1 << 6 | 
 			Debug.Log(hit.point);
 			Debug.Log(hit.transform);
+			mechShoot.LockTarget(hit.transform.GetComponent<RadarTargetScript>().TargetTransform);
 		}
 	}
 

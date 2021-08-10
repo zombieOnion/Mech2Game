@@ -35,13 +35,8 @@ public class MechShoot : MonoBehaviour {
         gunnerCam = transform.parent.gameObject.GetComponentInChildren<Camera>();
     }
 
-    public void LockTarget() {
-        Debug.Log("Locking");
-        RaycastHit objectHit;
-        Vector3 fwd = transform.TransformDirection(Vector3.forward);
-        Debug.DrawRay(transform.position, fwd * 50, Color.red, duration: 1200, depthTest: false);
-        if (Physics.Raycast(transform.position, fwd, out objectHit, 50) && objectHit.transform.tag == "TestEnemy")
-            CurrentTarget = objectHit.transform;
+    public void LockTarget(Transform target) {
+        CurrentTarget = target;
     }
 
     public void FireMainGun() {
@@ -59,7 +54,12 @@ public class MechShoot : MonoBehaviour {
     }
 
     public void OnFire2() {
-        LockTarget();
+        Debug.Log("Locking");
+        RaycastHit objectHit;
+        Vector3 fwd = transform.TransformDirection(Vector3.forward);
+        Debug.DrawRay(transform.position, fwd * 50, Color.red, duration: 1200, depthTest: false);
+        if(Physics.Raycast(transform.position, fwd, out objectHit, 50) && objectHit.transform.tag == "TestEnemy")
+            LockTarget(objectHit.transform); 
     }
     public void OnLook(InputValue input) {
         _panThisFrame = input.Get<Vector2>() * 0.125f;
