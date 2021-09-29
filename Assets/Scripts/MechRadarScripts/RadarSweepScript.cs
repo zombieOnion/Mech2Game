@@ -33,7 +33,7 @@ public class RadarSweepScript : MonoBehaviour
             return;
         //radarSweepTransform.eulerAngles -= new Vector3(0, rotationSpeed * Time.deltaTime, 0);
         xSweepRotationAngle -= Time.deltaTime * rotationSpeed;
-        radarSweepTransform.rotation = Quaternion.Euler(0, xSweepRotationAngle, 0);
+        radarSweepTransform.rotation = Quaternion.Euler(0, xSweepRotationAngle, 90);
         RaycastHit[] hits;
         hits = Physics.BoxCastAll(radarSweepCollider.bounds.center, radarSweepTransform.localScale, radarSweepTransform.forward, radarSweepTransform.rotation, 500, RadarLayer);
         int index = 0;
@@ -46,6 +46,6 @@ public class RadarSweepScript : MonoBehaviour
     }
 
     void FixedUpdate() {
-        radarSweepTransform.transform.position = new Vector3(mechTransform.position.x, mechTransform.position.y+1, mechTransform.position.z);
+        radarSweepTransform.transform.position = new Vector3(mechTransform.position.x, mechTransform.position.y+1, transform.position.z);
     }
 }

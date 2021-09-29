@@ -248,9 +248,17 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Select"",
+                    ""name"": ""PointClick1"",
                     ""type"": ""Button"",
                     ""id"": ""562d5dab-5958-413e-9e46-09a8a21970cf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""PointClick2"",
+                    ""type"": ""Button"",
+                    ""id"": ""16bf1c09-3464-4549-a25b-d1929678e337"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -302,7 +310,7 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Select"",
+                    ""action"": ""PointClick1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -325,6 +333,17 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""TerrainMapSwitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""048a4379-bfc1-4bee-b911-f51185a9e1b1"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""PointClick2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -372,7 +391,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
         m_ElectronicWarfareOfficer = asset.FindActionMap("ElectronicWarfareOfficer", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_IncreaseMinimapResolution = m_ElectronicWarfareOfficer.FindAction("IncreaseMinimapResolution", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_DecreaseMinimapResolution = m_ElectronicWarfareOfficer.FindAction("DecreaseMinimapResolution", throwIfNotFound: true);
-        m_ElectronicWarfareOfficer_Select = m_ElectronicWarfareOfficer.FindAction("Select", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_PointClick1 = m_ElectronicWarfareOfficer.FindAction("PointClick1", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_PointClick2 = m_ElectronicWarfareOfficer.FindAction("PointClick2", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_RadarSwitchPower = m_ElectronicWarfareOfficer.FindAction("RadarSwitchPower", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_TerrainMapSwitch = m_ElectronicWarfareOfficer.FindAction("TerrainMapSwitch", throwIfNotFound: true);
     }
@@ -491,7 +511,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
     private IElectronicWarfareOfficerActions m_ElectronicWarfareOfficerActionsCallbackInterface;
     private readonly InputAction m_ElectronicWarfareOfficer_IncreaseMinimapResolution;
     private readonly InputAction m_ElectronicWarfareOfficer_DecreaseMinimapResolution;
-    private readonly InputAction m_ElectronicWarfareOfficer_Select;
+    private readonly InputAction m_ElectronicWarfareOfficer_PointClick1;
+    private readonly InputAction m_ElectronicWarfareOfficer_PointClick2;
     private readonly InputAction m_ElectronicWarfareOfficer_RadarSwitchPower;
     private readonly InputAction m_ElectronicWarfareOfficer_TerrainMapSwitch;
     public struct ElectronicWarfareOfficerActions
@@ -500,7 +521,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
         public ElectronicWarfareOfficerActions(@Mech_Controller wrapper) { m_Wrapper = wrapper; }
         public InputAction @IncreaseMinimapResolution => m_Wrapper.m_ElectronicWarfareOfficer_IncreaseMinimapResolution;
         public InputAction @DecreaseMinimapResolution => m_Wrapper.m_ElectronicWarfareOfficer_DecreaseMinimapResolution;
-        public InputAction @Select => m_Wrapper.m_ElectronicWarfareOfficer_Select;
+        public InputAction @PointClick1 => m_Wrapper.m_ElectronicWarfareOfficer_PointClick1;
+        public InputAction @PointClick2 => m_Wrapper.m_ElectronicWarfareOfficer_PointClick2;
         public InputAction @RadarSwitchPower => m_Wrapper.m_ElectronicWarfareOfficer_RadarSwitchPower;
         public InputAction @TerrainMapSwitch => m_Wrapper.m_ElectronicWarfareOfficer_TerrainMapSwitch;
         public InputActionMap Get() { return m_Wrapper.m_ElectronicWarfareOfficer; }
@@ -518,9 +540,12 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                 @DecreaseMinimapResolution.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseMinimapResolution;
                 @DecreaseMinimapResolution.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseMinimapResolution;
                 @DecreaseMinimapResolution.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseMinimapResolution;
-                @Select.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnSelect;
-                @Select.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnSelect;
-                @Select.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnSelect;
+                @PointClick1.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnPointClick1;
+                @PointClick1.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnPointClick1;
+                @PointClick1.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnPointClick1;
+                @PointClick2.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnPointClick2;
+                @PointClick2.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnPointClick2;
+                @PointClick2.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnPointClick2;
                 @RadarSwitchPower.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRadarSwitchPower;
                 @RadarSwitchPower.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRadarSwitchPower;
                 @RadarSwitchPower.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRadarSwitchPower;
@@ -537,9 +562,12 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
                 @DecreaseMinimapResolution.started += instance.OnDecreaseMinimapResolution;
                 @DecreaseMinimapResolution.performed += instance.OnDecreaseMinimapResolution;
                 @DecreaseMinimapResolution.canceled += instance.OnDecreaseMinimapResolution;
-                @Select.started += instance.OnSelect;
-                @Select.performed += instance.OnSelect;
-                @Select.canceled += instance.OnSelect;
+                @PointClick1.started += instance.OnPointClick1;
+                @PointClick1.performed += instance.OnPointClick1;
+                @PointClick1.canceled += instance.OnPointClick1;
+                @PointClick2.started += instance.OnPointClick2;
+                @PointClick2.performed += instance.OnPointClick2;
+                @PointClick2.canceled += instance.OnPointClick2;
                 @RadarSwitchPower.started += instance.OnRadarSwitchPower;
                 @RadarSwitchPower.performed += instance.OnRadarSwitchPower;
                 @RadarSwitchPower.canceled += instance.OnRadarSwitchPower;
@@ -580,7 +608,8 @@ public class @Mech_Controller : IInputActionCollection, IDisposable
     {
         void OnIncreaseMinimapResolution(InputAction.CallbackContext context);
         void OnDecreaseMinimapResolution(InputAction.CallbackContext context);
-        void OnSelect(InputAction.CallbackContext context);
+        void OnPointClick1(InputAction.CallbackContext context);
+        void OnPointClick2(InputAction.CallbackContext context);
         void OnRadarSwitchPower(InputAction.CallbackContext context);
         void OnTerrainMapSwitch(InputAction.CallbackContext context);
     }

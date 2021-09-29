@@ -29,7 +29,8 @@ public class HomingRocket : WeaponBase, ILockTarget {
     }
 
     private void HomeInOnTarget() {
-        Vector3 targetDelta = Target.position - transform.position;
+        var target = Target.position;
+        Vector3 targetDelta = new Vector3(target.x, target.y+1f, target.z) - transform.position;
 
         //get the angle between transform.forward and target delta
         float angleDiff = Vector3.Angle(transform.forward, targetDelta);

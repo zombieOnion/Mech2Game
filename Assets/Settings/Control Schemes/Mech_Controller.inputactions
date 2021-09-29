@@ -235,9 +235,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Select",
+                    "name": "PointClick1",
                     "type": "Button",
                     "id": "562d5dab-5958-413e-9e46-09a8a21970cf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "PointClick2",
+                    "type": "Button",
+                    "id": "16bf1c09-3464-4549-a25b-d1929678e337",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -289,7 +297,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Select",
+                    "action": "PointClick1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -312,6 +320,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "TerrainMapSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "048a4379-bfc1-4bee-b911-f51185a9e1b1",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "PointClick2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

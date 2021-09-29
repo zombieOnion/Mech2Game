@@ -1,36 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PhysicalSpaceLibrary;
 
 public class RadarTargetComputer : MonoBehaviour
 {
-    public RadarHitList HitList;
+    public RadarHitList<Transform> HitList;
     public List<Transform> Targets = new List<Transform>();
     [SerializeField] public Transform RadarTarget;
-    private LayerMask plotLayermask = 1 << 6;
-    private LayerMask targetLayermask = 1 << 8;
-    private LayerMask unitLayermask = 1 << 3;
-    private RadarTargetScript currentlyTrackedTarget = null; //cache variable for hits on the same targetc
+    public LayerMask PlotLayermask = 1 << 6;
+    public LayerMask TargetLayermask = 1 << 8;
+    public LayerMask UnitLayermask = 1 << 3;
+    private RadarTargetScript _currentlyTrackedTarget = null; //cache variable for hits on the same targetc
     // Start is called before the first frame update
     void Start()
     {
-        HitList = new RadarHitList(300);
+        HitList = new RadarHitList<Transform>(300);
     }
 
     public void AddRadarHit(Transform hit) {
         HitList.Add(hit);
         Transform radarHit = HitList.GetCurrent();
         if(radarHit == null) {
-            currentlyTrackedTarget = null;
+            _currentlyTrackedTarget = null;
             return;
         }
 
-        Collider[] alreadyExistingRadarTargetsAtHitLocation = CheckForOverlap(radarHit, targetLayermask);
+        Collider[] alreadyExistingRadarTargetsAtHitLocation = CheckForOverlap(radarHit, TargetLayermask);
         bool alreadyMarked = false;
         if(alreadyExistingRadarTargetsAtHitLocation != null && alreadyExistingRadarTargetsAtHitLocation.Length>0) {
             var target = alreadyExistingRadarTargetsAtHitLocation[0];
             // target is already the current tracked target
-            if(currentlyTrackedTarget != null && target.transform.GetInstanceID() == currentlyTrackedTarget.transform.GetInstanceID()) {
+            if(_currentlyTrackedTarget != null && target.transform.GetInstanceID() == _currentlyTrackedTarget.transform.GetInstanceID()) {
                 alreadyMarked = true;
             }
             else {
@@ -38,33 +40,43 @@ public class RadarTargetComputer : MonoBehaviour
                     // the target has been seen and tracked earlier, in an earlier sweep cycle, set to current tracked target
                     if(target.transform.GetInstanceID() == alreadyPlottedTarget.GetInstanceID()) {
                         alreadyMarked = true;
-                        currentlyTrackedTarget = target.transform.GetComponent<RadarTargetScript>();
-                        var realTarget = CheckForOverlap(radarHit, targetLayermask);
+                        _currentlyTrackedTarget = target.transform.GetComponent<RadarTargetScript>();
+                        var realTarget = CheckForOverlap(radarHit, TargetLayermask);
                         break;
                     }
                 }
             }
         }
 
-        Collider[] overlappingPlottHits = CheckForOverlap(radarHit, plotLayermask);
+        
+        //Collider[] overlappingPlottHits = CheckForOverlap(radarHit, plotLayermask);
         // if target existed, update it with new radar hit, otherwise create a new radar target, but only if a unity gamebject exist at the hit
         if(alreadyMarked) {
-            currentlyTrackedTarget.ReceiveNewRadarHitOnTarget(radarHit);
-        }
+            _currentlyTrackedTarget.ReceiveNewRadarHitOnTarget(radarHit);
+        }/*
         else if(alreadyMarked == false && overlappingPlottHits.Length > 0) {
             var realTarget = CheckForOverlap(radarHit, unitLayermask);
-            if(realTarget != null && realTarget.Length>0) {
-                Targets.Add(Instantiate(RadarTarget, overlappingPlottHits[0].transform.position, new Quaternion()).transform);
-                currentlyTrackedTarget = Targets[Targets.Count - 1].GetComponent<RadarTargetScript>();
+            if(realTarget != null && realTarget.Length>0 && false) {
+                CreateNewTarget(overlappingPlottHits[0].transform.position);
                 currentlyTrackedTarget.ReceiveNewRadarHitOnTarget(radarHit);
-                currentlyTrackedTarget.TargetTransform = realTarget[0].gameObject.transform;
+                return;
             }
         }
         // we hit something but no overlapp with anything, not enough signal to create a target
+        */
         else {
-            currentlyTrackedTarget = null;
-        }        
+            _currentlyTrackedTarget = null;
+        }     
     }
 
-    private Collider[] CheckForOverlap(Transform transform, LayerMask layer) => Physics.OverlapBox(transform.position, transform.localScale / 2, Quaternion.identity, layer);
+    public void DestroyTarget(Transform clickedTarget) {
+        Targets.Remove(clickedTarget);
+        Destroy(clickedTarget.gameObject);
+    }
+
+    public void CreateNewTarget(Vector3 position) {
+        Targets.Add(Instantiate(RadarTarget, position, new Quaternion()).transform);
+        _currentlyTrackedTarget = Targets[Targets.Count - 1].GetComponent<RadarTargetScript>();
+    }
+
 }

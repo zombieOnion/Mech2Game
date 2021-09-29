@@ -5,17 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class RadarHitList {
+public class RadarHitList <T> {
     private int NextToAddIndex { get; set; } = 0;
-    private Transform[] RadarHits;
+    private T[] RadarHits;
     private int size;
 
     public RadarHitList(int size) {
         this.size = size;
-        RadarHits = new Transform[size];
+        RadarHits = new T[size];
     }
 
-    public void Add(Transform newTransform) {
+    public void Add(T newTransform) {
         if(NextToAddIndex==size-1) {
             NextToAddIndex = 0;
         }
@@ -23,9 +23,9 @@ public class RadarHitList {
         NextToAddIndex++;
     }
 
-    public Transform GetCurrent() => NextToAddIndex == 0 ? RadarHits[size - 1] : RadarHits[NextToAddIndex-1];
-    public List<Transform> GetLast(int amount) {
-        List<Transform> returnList = new List<Transform>(amount);
+    public T GetCurrent() => NextToAddIndex == 0 ? RadarHits[size - 1] : RadarHits[NextToAddIndex-1];
+    public List<T> GetLast(int amount) {
+        List<T> returnList = new List<T>(amount);
         if(0 >= NextToAddIndex - amount) {
             for(int i = NextToAddIndex-1; i >= 0; i--) {
                 returnList.Add(RadarHits[i]);

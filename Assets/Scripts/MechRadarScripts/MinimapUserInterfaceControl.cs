@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-//kvar att skapa: public variabler för camSize minimum och maximum
+using static PhysicalSpaceLibrary;
 
 public class MinimapUserInterfaceControl : MonoBehaviour {
 	//deklarera variabler: objektet, dess component, och variabeln camSize:
@@ -21,24 +22,38 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 		minimapCamera = minimapCameraGO.GetComponent<Camera>();
 		radarSweeper = minimapCameraGO.transform.GetComponentInChildren<RadarSweepScript>();
 		minimapCamera.orthographicSize = camSize;
-		targetProcessor = gameObject.GetComponent<RadarTargetComputer>();
+		targetProcessor = gameObject.transform.root.GetComponentInChildren<RadarTargetComputer>();
 		mechShoot = gameObject.transform.root.GetComponentInChildren<MechShoot>();
 		//camSize = minimapCamera.GetComponent<Camera>.orthographicSize;
 	}
 
-    public void OnSelect() {
-		Debug.Log("click");
-		Vector3 worldPoint = minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-		Ray ray = minimapCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit, 50,1 << 8)) { // 1 << 6 | 
-			Debug.Log(hit.point);
-			Debug.Log(hit.transform);
-			mechShoot.LockTarget(hit.transform.GetComponent<RadarTargetScript>().TargetTransform);
-		}
+	private Vector3 GetClickedWorldPoint() => minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+	private (Vector3, Collider) FindGroundAndScan() {
+		Vector3 worldPoint = GetClickedWorldPoint();
+		worldPoint.y = Terrain.activeTerrain.SampleHeight(transform.position);
+		var clickedTarget = CheckForOverlap(worldPoint, targetProcessor.RadarTarget, targetProcessor.TargetLayermask);
+		if(clickedTarget.Length < 1)
+			return (worldPoint, null);
+		else
+			return (worldPoint, clickedTarget[0]); 
+	}
+	public void OnPointClick1() {
+		Debug.Log("click1");
+		(Vector3 point, Collider target) = FindGroundAndScan();
+		if(target == null)
+			targetProcessor.CreateNewTarget(point);
+		else
+			targetProcessor.DestroyTarget(target.transform);
 	}
 
-    public void OnIncreaseMinimapResolution() {
+	public void OnPointClick2() {
+		Debug.Log("click2");
+		(Vector3 _, Collider target) = FindGroundAndScan();
+		if(targetProcessor != null)
+			mechShoot.LockTarget(target.transform);
+	}
+
+	public void OnIncreaseMinimapResolution() {
 		camSize = camSize + 10;
 		minimapCamera.orthographicSize = camSize;
 		Debug.Log(camSize);
@@ -54,4 +69,6 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 
     public void OnRadarSwitchPower() => radarSweeper.RadarOn = !radarSweeper.RadarOn;
 	public void OnTerrainMapSwitch() => minimapCamera.cullingMask = minimapCamera.cullingMask == OnlyPlotLayermask ? PlotAndTerrainLayermask : OnlyPlotLayermask; 
+
+
 }
