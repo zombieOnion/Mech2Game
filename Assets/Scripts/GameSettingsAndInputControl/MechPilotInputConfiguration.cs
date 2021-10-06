@@ -6,35 +6,26 @@ using UnityEngine.InputSystem.Users;
 
 public class MechPilotInputConfiguration : MonoBehaviour
 {
-    PlayerInput playerInput;
+    public PlayerInput PlayerInput;
     // Start is called before the first frame update
     void Start()
     {
-        playerInput = GetComponent<PlayerInput>();
-        SetXboxController();
+        PlayerInput = GetComponent<PlayerInput>();
+        //SetXboxController();
     }
 
-    private void SetPilotKeyboardMouse() {
-        InputUser user = playerInput.user;
+    public void SetPilotKeyboardMouse() {
+        InputUser user = PlayerInput.user;
         InputUser.PerformPairingWithDevice(Keyboard.current, user);
         InputUser.PerformPairingWithDevice(Mouse.current, user);
-        playerInput.SwitchCurrentControlScheme("Keyboard&Mouse", new InputDevice[] { Keyboard.current, Mouse.current });
-        playerInput.SwitchCurrentActionMap("MechPilot");
+        PlayerInput.SwitchCurrentControlScheme("Keyboard&Mouse", new InputDevice[] { Keyboard.current, Mouse.current });
+        PlayerInput.SwitchCurrentActionMap("MechPilot");
     }
 
-    private void SetXboxController() {
-        InputUser user = playerInput.user;
+    public void SetXboxController() {
+        InputUser user = PlayerInput.user;
         InputUser.PerformPairingWithDevice(Gamepad.current, user);
-        playerInput.SwitchCurrentControlScheme("XboxController", Gamepad.current);
-        playerInput.SwitchCurrentActionMap("MechPilot");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(Keyboard.current.f5Key.wasPressedThisFrame)
-            SetPilotKeyboardMouse();
-        if(Keyboard.current.f6Key.wasPressedThisFrame)
-            SetXboxController();
+        PlayerInput.SwitchCurrentControlScheme("XboxController", Gamepad.current);
+        PlayerInput.SwitchCurrentActionMap("MechPilot");
     }
 }

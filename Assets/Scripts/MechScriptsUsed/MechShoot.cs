@@ -8,7 +8,7 @@ using static UnityEngine.InputSystem.InputAction;
 public class MechShoot : MonoBehaviour {
     
     Object varBullet;
-    Object homingRocket;
+    Object CommandGuidedRocket;
     Object selectedWeapon;
     WeaponBase selectedWeaponBase;
     List<Object> mechWeapons = new List<Object>();
@@ -21,24 +21,22 @@ public class MechShoot : MonoBehaviour {
     float nextFire = 0.0f;
     private Vector2 _panThisFrame;
 
+    private float xRotation = 0f;
+    private float yRotation = 0f;
+
     void Awake() {
         varBullet = Resources.Load("Rocket");
         mechWeapons.Add(varBullet);
-        homingRocket = Resources.Load("HomingRocket");
-        mechWeapons.Add(homingRocket);
+        CommandGuidedRocket = Resources.Load("CommandGuidedRocket");
+        mechWeapons.Add(CommandGuidedRocket);
         selectedWeapon = mechWeapons.First();
         selectedWeaponBase = (selectedWeapon as GameObject).GetComponent<WeaponBase>();
         rb = GetComponent<Rigidbody>();
         gunnerCam = transform.parent.gameObject.GetComponentInChildren<Camera>();
     }
 
-    public void LockTarget() {
-        Debug.Log("Locking");
-        RaycastHit objectHit;
-        Vector3 fwd = transform.TransformDirection(Vector3.forward);
-        Debug.DrawRay(transform.position, fwd * 50, Color.red, duration: 1200, depthTest: false);
-        if (Physics.Raycast(transform.position, fwd, out objectHit, 50) && objectHit.transform.tag == "TestEnemy")
-            CurrentTarget = objectHit.transform;
+    public void LockTarget(Transform target) {
+        CurrentTarget = target;
     }
 
     public void FireMainGun() {
@@ -56,14 +54,20 @@ public class MechShoot : MonoBehaviour {
     }
 
     public void OnFire2() {
-        LockTarget();
+        Debug.Log("Locking");
+        RaycastHit objectHit;
+        Vector3 fwd = transform.TransformDirection(Vector3.forward);
+        Debug.DrawRay(transform.position, fwd * 50, Color.red, duration: 1200, depthTest: false);
+        if(Physics.Raycast(transform.position, fwd, out objectHit, 50) && objectHit.transform.tag == "TestEnemy")
+            LockTarget(objectHit.transform); 
     }
     public void OnLook(InputValue input) {
         _panThisFrame = input.Get<Vector2>() * 0.125f;
-        transform.Rotate(-_panThisFrame.y * LookRotationSpeed, _panThisFrame.x * LookRotationSpeed, 0.0f);
-        Quaternion q = transform.rotation;
-        q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
-        transform.rotation = q;
+        xRotation -= _panThisFrame.y * LookRotationSpeed;
+        yRotation += _panThisFrame.x * LookRotationSpeed;
+        xRotation = Mathf.Clamp(xRotation, -40, 40);
+        yRotation = Mathf.Clamp(yRotation, -40, 40);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 
     public void OnChangeWeapon() {

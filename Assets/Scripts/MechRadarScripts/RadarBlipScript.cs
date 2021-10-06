@@ -5,7 +5,7 @@ using UnityEngine;
 public class RadarBlipScript : MonoBehaviour
 {
 
-    public float DisappearTimer;
+    private float DisappearTimer;
     public float DisappearTimerMax;
 
     // Update is called once per frame

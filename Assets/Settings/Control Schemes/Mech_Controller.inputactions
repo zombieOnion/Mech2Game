@@ -235,9 +235,33 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Select",
+                    "name": "PointClick1",
                     "type": "Button",
                     "id": "562d5dab-5958-413e-9e46-09a8a21970cf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "PointClick2",
+                    "type": "Button",
+                    "id": "16bf1c09-3464-4549-a25b-d1929678e337",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "RadarSwitchPower",
+                    "type": "Button",
+                    "id": "31cf5ab1-c970-47b0-8fab-1826703d48df",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "TerrainMapSwitch",
+                    "type": "Button",
+                    "id": "542f3196-88d5-4451-8571-e0002d1b5e4f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -273,7 +297,40 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Select",
+                    "action": "PointClick1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "47a23a39-955a-4741-aeea-ba6af885345b",
+                    "path": "<Keyboard>/numpad1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RadarSwitchPower",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eb255fca-bd70-458c-85f9-fc520d3fe62a",
+                    "path": "<Keyboard>/numpad2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "TerrainMapSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "048a4379-bfc1-4bee-b911-f51185a9e1b1",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "PointClick2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -287,12 +344,12 @@
             "devices": [
                 {
                     "devicePath": "<Keyboard>",
-                    "isOptional": true,
+                    "isOptional": false,
                     "isOR": false
                 },
                 {
                     "devicePath": "<Mouse>",
-                    "isOptional": true,
+                    "isOptional": false,
                     "isOR": false
                 }
             ]

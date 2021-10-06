@@ -5,9 +5,9 @@ using UnityEngine;
 public class EWOInputCommandRouter : MonoBehaviour
 {
 	public GameObject MinimapControlGameObject;
-    private MinimapControl minimap;
+    private MinimapUserInterfaceControl minimap;
     void Start() {
-		minimap = MinimapControlGameObject.GetComponent<MinimapControl>();
+		minimap = MinimapControlGameObject.GetComponent<MinimapUserInterfaceControl>();
 	}
     public void OnIncreaseMinimapResolution() {
 		minimap.OnIncreaseMinimapResolution();
