@@ -8,7 +8,7 @@ using static UnityEngine.InputSystem.InputAction;
 public class MechShoot : MonoBehaviour {
     
     Object varBullet;
-    Object homingRocket;
+    Object CommandGuidedRocket;
     Object selectedWeapon;
     WeaponBase selectedWeaponBase;
     List<Object> mechWeapons = new List<Object>();
@@ -27,8 +27,8 @@ public class MechShoot : MonoBehaviour {
     void Awake() {
         varBullet = Resources.Load("Rocket");
         mechWeapons.Add(varBullet);
-        homingRocket = Resources.Load("HomingRocket");
-        mechWeapons.Add(homingRocket);
+        CommandGuidedRocket = Resources.Load("CommandGuidedRocket");
+        mechWeapons.Add(CommandGuidedRocket);
         selectedWeapon = mechWeapons.First();
         selectedWeaponBase = (selectedWeapon as GameObject).GetComponent<WeaponBase>();
         rb = GetComponent<Rigidbody>();
