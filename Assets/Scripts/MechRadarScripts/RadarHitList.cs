@@ -36,7 +36,7 @@ public class RadarHitList <T> {
             }
         }
         else {
-            for(int i = NextToAddIndex-1; i > NextToAddIndex-amount; i--) {
+            for(int i = NextToAddIndex-1; i >= NextToAddIndex-amount; i--) {
                 returnList.Add(RadarHits[i]);
             }
         }
