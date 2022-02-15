@@ -7,6 +7,7 @@ using UnityEngine;
 public class RadarTargetScript : MonoBehaviour
 {
     public bool StayActive = true;
+    public bool TrackerRadarIsOn = false;
     public Transform TargetTransform = null;
     private int _radarHitModeStatus = 0; // 0 is waiting for new hits, 1 is actively receiving hits
     private float _maxTimeWaitForNewHit = 0.2f;
@@ -27,7 +28,7 @@ public class RadarTargetScript : MonoBehaviour
     void Update() {
         if(_radarHitModeStatus==1) {
             _hitReceiverCountDown += Time.deltaTime;
-            if(_hitReceiverCountDown >= _maxTimeWaitForNewHit) {
+            if(TrackerRadarIsOn || _hitReceiverCountDown >= _maxTimeWaitForNewHit) {
                 ProccessLatestHits();
             }
         }

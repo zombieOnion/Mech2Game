@@ -71,6 +71,8 @@ public class RadarTargetComputer : MonoBehaviour
 
     public void TrackTarget(RadarTargetScript target) {
         var lockedTarget = Targets.Find(t => t.transform.GetInstanceID() == target.transform.GetInstanceID());
+        Targets.Remove(lockedTarget.transform);
+        target.TrackerRadarIsOn = true;
         _radarTracker.TrackTarget(target);
     }
 }
