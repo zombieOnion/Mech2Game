@@ -15,22 +15,26 @@ public class RadarMonopulse : MonoBehaviour
     public RaycastHit? LobeHitRight = null;
     int targetDrift = 0; // -1 left, 1 right
     int rightLeftBalance = 0; //0 only left hit, 1 only right hit, 2 both hit, 3 both null
+    private Transform RadarBlipLeftLobe;
+    private Transform RadarBlipRightLobe;
 
     public bool leftToRight = true;
 
     void Start()
     {
         localeCollider = gameObject.GetComponent<Collider>();
+        var RadarBlipLeftLobe = CreateRadarBlip();
+        var RadarBlipRightLobe = CreateRadarBlip();
     }
 
     public void SendMonoPulse()
     {
         RotateTransform(false);
-        LobeHitLeft = SendAndRecieveRadarPulse();
+        LobeHitLeft = SendAndRecieveRadarPulse(ref RadarBlipLeftLobe);
         RotateTransform(true);
 
         RotateTransform(true);
-        LobeHitRight = SendAndRecieveRadarPulse();
+        LobeHitRight = SendAndRecieveRadarPulse(ref RadarBlipRightLobe);
         RotateTransform(false);
 
         if (LobeHitLeft == null && LobeHitRight == null)
@@ -82,19 +86,27 @@ public class RadarMonopulse : MonoBehaviour
         }
     }
 
-    private RaycastHit? SendAndRecieveRadarPulse()
+    private RaycastHit? SendAndRecieveRadarPulse(ref Transform radarBlip)
     {
-        var leftLobe = Physics.BoxCastAll(localeCollider.bounds.center, transform.localScale, transform.forward, transform.rotation, 500, RadarLayer);
+        var lobe = Physics.BoxCastAll(localeCollider.bounds.center, transform.localScale, transform.forward, transform.rotation, 500, RadarLayer);
         
-        if (leftLobe.Length > 0 && leftLobe[0].distance != 0)
+        if (lobe.Length > 0 && lobe[0].distance != 0)
         {
-            var radarHit = Instantiate(RadarBlip, leftLobe[0].point, new Quaternion());
-            radarHit.gameObject.GetComponent<RadarBlipScript>().DisappearTimerMax = 1;
+
+            if(radarBlip == null)            
+                radarBlip = Instantiate(RadarBlip, lobe[0].point, new Quaternion());
+            else
+                radarBlip.transform.position = lobe[0].point;
+
+            var radarHit = radarBlip.transform;
+            radarHit.gameObject.GetComponent<RadarBlipScript>().DisappearTimerMax = 4;
             radarHit.gameObject.GetComponent<Renderer>().materials[1].color = Color.blue;
-            return leftLobe[0];
+            return lobe[0];
         }
         else
             return null;
         
     }
+
+    private Transform CreateRadarBlip() => Instantiate(RadarBlip, transform.position + Vector3.down * 3, new Quaternion());
 }

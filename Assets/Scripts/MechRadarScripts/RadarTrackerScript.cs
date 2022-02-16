@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,16 @@ public class RadarTrackerScript : MonoBehaviour
     public void TrackTarget(RadarTargetScript target) {
         TrackingTarget = true;
         CurrentlyTrackedTarget = target;
+        CurrentlyTrackedTarget.TrackerRadarIsOn = true;
         transform.LookAt(target.transform);
+    }
+
+    public RadarTargetScript StopTracking()
+    {
+        TrackingTarget = false;
+        CurrentlyTrackedTarget.TrackerRadarIsOn=false;
+        var previouslyTrackedTarget = CurrentlyTrackedTarget;
+        CurrentlyTrackedTarget = null;
+        return previouslyTrackedTarget;
     }
 }

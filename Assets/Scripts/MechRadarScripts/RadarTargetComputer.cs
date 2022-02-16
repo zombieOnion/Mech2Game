@@ -60,6 +60,8 @@ public class RadarTargetComputer : MonoBehaviour
             OnTarget = false;
             CurrentlyTrackedTarget = null;
         }*/
+        if (_radarTracker.TrackingTarget)
+            _radarTracker.StopTracking();
         Targets.Remove(clickedTarget);
         Destroy(clickedTarget.gameObject);
     }
@@ -71,8 +73,15 @@ public class RadarTargetComputer : MonoBehaviour
 
     public void TrackTarget(RadarTargetScript target) {
         var lockedTarget = Targets.Find(t => t.transform.GetInstanceID() == target.transform.GetInstanceID());
-        Targets.Remove(lockedTarget.transform);
-        target.TrackerRadarIsOn = true;
-        _radarTracker.TrackTarget(target);
+        if (lockedTarget == null)
+        {
+            var trackedTarget = _radarTracker.StopTracking();
+            Targets.Add(trackedTarget.transform);
+        }
+        else
+        {
+            Targets.Remove(lockedTarget.transform);
+            _radarTracker.TrackTarget(target);
+        }
     }
 }

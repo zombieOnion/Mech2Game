@@ -49,6 +49,8 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	public void OnPointClick2() {
 		Debug.Log("click2");
 		(Vector3 _, Collider target) = FindGroundAndScan();
+		if (target == null)
+			return;
 		targetProcessor.TrackTarget(target.GetComponent<RadarTargetScript>());
 		mechShoot.LockTarget(target.transform);
 	}
