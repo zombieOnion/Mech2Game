@@ -24,10 +24,16 @@ public class RadarTrackerScript : MonoBehaviour
 
     private void UpdateTargetWithHits(RadarMonopulse pulse)
     {
-         if (pulse.LobeHitLeft != null)
-            CurrentlyTrackedTarget.ReceiveNewRadarHitOnTarget(pulse.LobeHitLeft.Value.transform);
-         else if (pulse.LobeHitRight != null)
-            CurrentlyTrackedTarget.ReceiveNewRadarHitOnTarget(pulse.LobeHitRight.Value.transform);
+        if (pulse.LobeHitsLeft != null && pulse.LobeHitsLeft.Length > 0)
+        {
+            foreach(var hit in pulse.LobeHitsLeft)
+                CurrentlyTrackedTarget.ReceiveNewRadarHitOnTarget(hit.transform);
+        }
+        if(pulse.LobeHitsRight != null && pulse.LobeHitsRight.Length > 0)
+        {
+            foreach (var hit in pulse.LobeHitsRight)
+                CurrentlyTrackedTarget.ReceiveNewRadarHitOnTarget(hit.transform);
+        }
     }
 
     public void TrackTarget(RadarTargetScript target) {

@@ -18,10 +18,16 @@ public class GameSettings : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Keyboard.current.f1Key.wasPressedThisFrame)
+        if (Keyboard.current.f1Key.wasPressedThisFrame)
+        {
             SetCameraToFullscreen(0, FullscreenRect, 1, FullscreenRect);
-        if(Keyboard.current.f2Key.wasPressedThisFrame)
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        if (Keyboard.current.f2Key.wasPressedThisFrame)
+        {
             SetCameraToFullscreen(1, FullscreenRect, 0, FullscreenRect);
+            Cursor.lockState = CursorLockMode.Confined;
+        }
         if(Keyboard.current.f3Key.wasPressedThisFrame)
             SetCameraToFullscreen(0, new Rect(0, 0, 0.5f, 1), 0, new Rect(0.5f, 0, 0.5f, 1));
 

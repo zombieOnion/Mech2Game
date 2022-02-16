@@ -20,7 +20,7 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	void Awake () {
 		//här hugger vi objektets komponent Camera och sätter den i variabeln minimapCamera
 		minimapCamera = minimapCameraGO.GetComponent<Camera>();
-		radarSweeper = minimapCameraGO.transform.GetComponentInChildren<RadarSweepScript>();
+		radarSweeper = minimapCameraGO.transform.root.GetComponentInChildren<RadarSweepScript>();
 		minimapCamera.orthographicSize = camSize;
 		targetProcessor = gameObject.transform.root.GetComponentInChildren<RadarTargetComputer>();
 		mechShoot = gameObject.transform.root.GetComponentInChildren<MechShoot>();

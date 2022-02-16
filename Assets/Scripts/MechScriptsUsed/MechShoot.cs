@@ -65,8 +65,8 @@ public class MechShoot : MonoBehaviour {
         _panThisFrame = input.Get<Vector2>() * 0.125f;
         xRotation -= _panThisFrame.y * LookRotationSpeed;
         yRotation += _panThisFrame.x * LookRotationSpeed;
-        xRotation = Mathf.Clamp(xRotation, -40, 40);
-        yRotation = Mathf.Clamp(yRotation, -40, 40);
+        //xRotation = Mathf.Clamp(xRotation, transform.parent.rotation.x-40, transform.parent.rotation.x+40);
+        //yRotation = Mathf.Clamp(yRotation, transform.parent.rotation.y-40, transform.parent.rotation.y+40);
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 

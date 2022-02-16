@@ -11,7 +11,8 @@
                     "id": "9cc7a52d-b185-4ff9-b301-555773088682",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Fire1",
@@ -19,7 +20,8 @@
                     "id": "62e951fd-2e4f-4ea9-a013-d185daf9d96d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Look",
@@ -27,7 +29,8 @@
                     "id": "8802992a-152f-473c-b31c-e89182209155",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Fire2",
@@ -35,7 +38,8 @@
                     "id": "a3858add-b64b-41ab-8c26-0860c22ef78d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "ChangeWeapon",
@@ -43,7 +47,8 @@
                     "id": "f195206d-67de-4019-83f7-c0ed6de54023",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -224,7 +229,8 @@
                     "id": "3f024827-c976-4bf9-993b-316123425579",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "DecreaseMinimapResolution",
@@ -232,7 +238,8 @@
                     "id": "7d695515-08ba-48c6-92a0-a10f25d84bd1",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "PointClick1",
@@ -240,7 +247,8 @@
                     "id": "562d5dab-5958-413e-9e46-09a8a21970cf",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "PointClick2",
@@ -248,7 +256,8 @@
                     "id": "16bf1c09-3464-4549-a25b-d1929678e337",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "RadarSwitchPower",
@@ -256,7 +265,8 @@
                     "id": "31cf5ab1-c970-47b0-8fab-1826703d48df",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "TerrainMapSwitch",
@@ -264,7 +274,8 @@
                     "id": "542f3196-88d5-4451-8571-e0002d1b5e4f",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
