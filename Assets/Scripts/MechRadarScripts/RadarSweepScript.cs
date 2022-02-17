@@ -5,6 +5,7 @@ using UnityEngine;
 public class RadarSweepScript : MonoBehaviour
 {
     [SerializeField] public Transform RadarBlip;
+    public RadarHitList<Transform> HitList;
     private Transform radarSweepTransform;
     private Transform mechTransform;
     public float rotationSpeed;
@@ -25,7 +26,16 @@ public class RadarSweepScript : MonoBehaviour
         targetProcessor = gameObject.GetComponent<RadarTargetComputer>();
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        HitList = new RadarHitList<Transform>(300);
+        for (int i = 0; i < 300; i++)
+        {
+            var radarblip = Instantiate(RadarBlip, transform.position + Vector3.down*5, new Quaternion());
+            HitList.Add(radarblip);
+        }
+    }
+
     void Update()
     {
         if(!radarOn)
@@ -36,14 +46,18 @@ public class RadarSweepScript : MonoBehaviour
         
         RaycastHit[] hits;
         hits = Physics.BoxCastAll(radarSweepCollider.bounds.center, radarSweepTransform.localScale, radarSweepTransform.forward, radarSweepTransform.rotation, 500, RadarLayer);
-        int index = 0;
         foreach(RaycastHit hit in hits) {
-            if(hits.Length > 0 && hit.distance != 0) {
-                targetProcessor.AddRadarHit(Instantiate(RadarBlip, hit.point, new Quaternion()).transform);
-            }
-            index += 1;
-        } 
-        
+           if(hit.distance > 5) {
+                var nextHit = HitList.AdvanceNext();
+                var nextHitScript = nextHit.GetComponent<RadarBlipScript>();
+                nextHitScript.gameObject.SetActive(true);
+                nextHitScript.ResetAppearTime();
+                nextHit.position = hit.point;
+                nextHit.rotation = Quaternion.identity;
+                targetProcessor.AddRadarHit(nextHit);
+           }
+       } 
+
     }
 
     /*void FixedUpdate() {
@@ -66,14 +80,5 @@ public class RadarSweepScript : MonoBehaviour
             rotationSpeed = 90;
         else
             rotationSpeed = -90;
-    }
-
-    private void OnCollisionEnter(Collision collision) {
-        targetProcessor.AddRadarHit(Instantiate(RadarBlip, collision.GetContact(0).point, new Quaternion()).transform);
-    }
-
-    private void OnTriggerEnter(Collider other) {
-        targetProcessor.AddRadarHit(Instantiate(RadarBlip, other.transform.position, new Quaternion()).transform);
-
     }
 }

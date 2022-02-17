@@ -6,24 +6,36 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class RadarHitList <T> {
-    private int NextToAddIndex { get; set; } = 0;
-    private T[] RadarHits;
-    private int size;
+    protected int NextToAddIndex { get; set; } = 0;
+    protected T[] RadarHits;
+    protected int size;
 
     public RadarHitList(int size) {
         this.size = size;
         RadarHits = new T[size];
     }
 
-    public void Add(T newTransform) {
-        if(NextToAddIndex==size-1) {
-            NextToAddIndex = 0;
-        }
+    public void Add(T newTransform)
+    {
         RadarHits[NextToAddIndex] = newTransform;
         NextToAddIndex++;
+        if (NextToAddIndex==size) {
+            NextToAddIndex = 0;
+        }
     }
 
     public T GetCurrent() => NextToAddIndex == 0 ? RadarHits[size - 1] : RadarHits[NextToAddIndex-1];
+
+    public T AdvanceNext()
+    {
+        var current = GetCurrent();
+        NextToAddIndex++;
+        if (NextToAddIndex == size)
+        {
+            NextToAddIndex = 0;
+        }
+        return current;
+    }
     public List<T> GetLast(int amount) {
         List<T> returnList = new List<T>(amount);
         if(0 >= NextToAddIndex - amount) {

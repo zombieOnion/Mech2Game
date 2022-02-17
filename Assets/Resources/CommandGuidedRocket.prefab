@@ -131,7 +131,7 @@ MonoBehaviour:
   Damage: 40
   TravelSpeed: 50
   SelfDestructFloatTime: 30
-  RateOfFire: 3
+  RateOfFire: 5
   force: 0.1
 --- !u!1 &1888168945265562
 GameObject:

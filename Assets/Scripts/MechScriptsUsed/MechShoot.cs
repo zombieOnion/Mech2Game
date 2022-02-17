@@ -10,7 +10,8 @@ public class MechShoot : MonoBehaviour {
     Object varBullet;
     Object CommandGuidedRocket;
     Object selectedWeapon;
-    WeaponBase selectedWeaponBase;
+    public WeaponBase selectedWeaponBase;
+    private bool FireGun = false;
     List<Object> mechWeapons = new List<Object>();
     public float LookRotationSpeed = 1f;
     public Rigidbody rb;
@@ -18,6 +19,7 @@ public class MechShoot : MonoBehaviour {
     public Transform MechParent;
     public Transform CurrentTarget;
     public bool UseMouse = false;
+    public float TimeSenseFires = 0;
     float nextFire = 0.0f;
     private Vector2 _panThisFrame;
 
@@ -45,12 +47,23 @@ public class MechShoot : MonoBehaviour {
         if (CurrentTarget != null && lockTarget != null)
             lockTarget.SetTarget(CurrentTarget);
     }
+    
+    void Update()
+    {
+        if (FireGun && selectedWeaponBase.RateOfFire < nextFire)
+        {
+            FireMainGun();
+            nextFire = 0;
+            FireGun = false;
+        }
+        else
+        {
+            nextFire += Time.deltaTime;
+        }
+    }
 
     public void OnFire1() {
-        if(Time.time > nextFire) {
-            FireMainGun();
-            nextFire = Time.time + selectedWeaponBase.RateOfFire;
-        }
+        FireGun = true;
     }
 
     public void OnFire2() {
@@ -78,5 +91,6 @@ public class MechShoot : MonoBehaviour {
             weaponIndex += 1;
         selectedWeapon = mechWeapons[weaponIndex];
         selectedWeaponBase = (selectedWeapon as GameObject).GetComponent<WeaponBase>();
+        nextFire = selectedWeaponBase.RateOfFire+1f;
     }
 }

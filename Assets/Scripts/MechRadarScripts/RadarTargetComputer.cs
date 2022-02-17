@@ -6,7 +6,6 @@ using static PhysicalSpaceLibrary;
 
 public class RadarTargetComputer : MonoBehaviour
 {
-    public RadarHitList<Transform> HitList;
     private RadarSweepScript _radarSweep;
     private RadarTrackerScript _radarTracker;
     public List<Transform> Targets = new List<Transform>();
@@ -18,14 +17,11 @@ public class RadarTargetComputer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        HitList = new RadarHitList<Transform>(300);
         _radarSweep = gameObject.GetComponent<RadarSweepScript>();
         _radarTracker = gameObject.transform.parent.GetComponentInChildren<RadarTrackerScript>();
     }
 
-    public void AddRadarHit(Transform hit) {
-        HitList.Add(hit);
-        Transform radarHit = HitList.GetCurrent();
+    public void AddRadarHit(Transform radarHit) {
         if(radarHit == null) {
             _currentlyTrackedTarget = null;
             return;

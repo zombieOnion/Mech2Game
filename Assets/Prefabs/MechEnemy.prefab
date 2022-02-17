@@ -353,6 +353,8 @@ GameObject:
   - component: {fileID: 65577985664779300}
   - component: {fileID: 23780608516131898}
   - component: {fileID: 54926583147491992}
+  - component: {fileID: 8554912676101096570}
+  - component: {fileID: 912460294685778858}
   m_Layer: 0
   m_Name: Cannon
   m_TagString: Untagged
@@ -456,6 +458,37 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 64
   m_CollisionDetection: 0
+--- !u!114 &8554912676101096570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927623204560760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6498a847efbaab14b940c664be1e9289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LookRotationSpeed: 1
+  rb: {fileID: 0}
+  gunnerCam: {fileID: 0}
+  MechParent: {fileID: 4185401245404222}
+  CurrentTarget: {fileID: 0}
+  UseMouse: 0
+--- !u!114 &912460294685778858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927623204560760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e28e540eb69776428661ece0f717e13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerMech: {fileID: 0}
 --- !u!1001 &4797290497795258522
 PrefabInstance:
   m_ObjectHideFlags: 0
