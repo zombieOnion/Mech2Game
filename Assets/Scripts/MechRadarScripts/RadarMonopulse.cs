@@ -47,6 +47,7 @@ public class RadarMonopulse : MonoBehaviour
 
     public void SendMonoPulse()
     {
+        var lastRightLeftBalance = rightLeftBalance;
         RotateTransform(false);
         LobeHitsLeft = SendAndRecieveRadarPulse(HitListLeftLobe);
         RotateTransform(true);
@@ -80,6 +81,12 @@ public class RadarMonopulse : MonoBehaviour
             sideAngleAdjustDegree += sideAngleAdjustDegreeAdjust;
         else if (rightLeftBalance == 2 && sideAngleAdjustDegree > sideAngleAdjustDegreeLowest)
             sideAngleAdjustDegree -= sideAngleAdjustDegreeAdjust;
+
+        if(rightLeftBalance == 2 && lastRightLeftBalance == 0)
+            RotateTransform(true);
+        else if(rightLeftBalance == 2 && lastRightLeftBalance == 1)
+            RotateTransform(false);
+
 
         Quaternion q = transform.rotation;
         q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);

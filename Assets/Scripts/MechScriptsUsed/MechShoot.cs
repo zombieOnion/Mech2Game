@@ -43,6 +43,7 @@ public class MechShoot : MonoBehaviour {
 
     public void FireMainGun() {
         GameObject newRocket = Instantiate(selectedWeapon, transform.position + transform.forward, transform.rotation) as GameObject;
+        newRocket.GetComponent<Rigidbody>().AddForce(rb.transform.forward * 5, ForceMode.VelocityChange);
         ILockTarget lockTarget = newRocket.GetComponent<ILockTarget>();
         if (CurrentTarget != null && lockTarget != null)
             lockTarget.SetTarget(CurrentTarget);

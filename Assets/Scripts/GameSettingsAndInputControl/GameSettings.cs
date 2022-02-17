@@ -14,6 +14,11 @@ public class GameSettings : MonoBehaviour
     private void Start() {
         pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
         ewoInputCfg = EWOCamera.GetComponent<EWOInputConfiguration>();
+        SetCameraToFullscreen(0, FullscreenRect, 1, FullscreenRect);
+        Cursor.lockState = CursorLockMode.Locked;
+        pilotInputCfg.PlayerInput.ActivateInput();
+        ewoInputCfg.PlayerInput.DeactivateInput();
+        pilotInputCfg.SetPilotKeyboardMouse();
     }
     // Update is called once per frame
     void Update()
@@ -22,11 +27,17 @@ public class GameSettings : MonoBehaviour
         {
             SetCameraToFullscreen(0, FullscreenRect, 1, FullscreenRect);
             Cursor.lockState = CursorLockMode.Locked;
+            pilotInputCfg.PlayerInput.ActivateInput();
+            ewoInputCfg.PlayerInput.DeactivateInput();
+            pilotInputCfg.SetPilotKeyboardMouse();
         }
         if (Keyboard.current.f2Key.wasPressedThisFrame)
         {
             SetCameraToFullscreen(1, FullscreenRect, 0, FullscreenRect);
             Cursor.lockState = CursorLockMode.Confined;
+            pilotInputCfg.PlayerInput.DeactivateInput();
+            ewoInputCfg.PlayerInput.ActivateInput();
+            ewoInputCfg.SetEWOKeyboardMouse();
         }
         if(Keyboard.current.f3Key.wasPressedThisFrame)
             SetCameraToFullscreen(0, new Rect(0, 0, 0.5f, 1), 0, new Rect(0.5f, 0, 0.5f, 1));

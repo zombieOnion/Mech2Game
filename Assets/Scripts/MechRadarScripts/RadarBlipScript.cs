@@ -14,7 +14,7 @@ public class RadarBlipScript : MonoBehaviour
         DisappearTimer += Time.deltaTime;
         if (DisappearTimer >= DisappearTimerMax)
         {
-            transform.position = transform.position + Vector3.down * 10;
+            //transform.position = transform.position + Vector3.down * 10;
             gameObject.SetActive(false);
         }
     }
