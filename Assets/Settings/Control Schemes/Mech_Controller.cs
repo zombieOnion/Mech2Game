@@ -298,6 +298,24 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""IncreaseSweepSpeed"",
+                    ""type"": ""Button"",
+                    ""id"": ""7645a161-244e-4328-a9dd-4f6b25fd8a25"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DecreaseSweepSpeed"",
+                    ""type"": ""Button"",
+                    ""id"": ""9f4cdec1-26f1-47c6-a65a-13c3594191b4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -366,6 +384,28 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                     ""action"": ""PointClick2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21e506ee-4177-48a7-9db2-4453b532b119"",
+                    ""path"": ""<Keyboard>/numpadPlus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""IncreaseSweepSpeed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d090a7eb-f03b-4083-9e04-4c4770fd5112"",
+                    ""path"": ""<Keyboard>/numpadMinus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DecreaseSweepSpeed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -415,6 +455,8 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
         m_ElectronicWarfareOfficer_PointClick2 = m_ElectronicWarfareOfficer.FindAction("PointClick2", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_RadarSwitchPower = m_ElectronicWarfareOfficer.FindAction("RadarSwitchPower", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_TerrainMapSwitch = m_ElectronicWarfareOfficer.FindAction("TerrainMapSwitch", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_IncreaseSweepSpeed = m_ElectronicWarfareOfficer.FindAction("IncreaseSweepSpeed", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_DecreaseSweepSpeed = m_ElectronicWarfareOfficer.FindAction("DecreaseSweepSpeed", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -545,6 +587,8 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
     private readonly InputAction m_ElectronicWarfareOfficer_PointClick2;
     private readonly InputAction m_ElectronicWarfareOfficer_RadarSwitchPower;
     private readonly InputAction m_ElectronicWarfareOfficer_TerrainMapSwitch;
+    private readonly InputAction m_ElectronicWarfareOfficer_IncreaseSweepSpeed;
+    private readonly InputAction m_ElectronicWarfareOfficer_DecreaseSweepSpeed;
     public struct ElectronicWarfareOfficerActions
     {
         private @Mech_Controller m_Wrapper;
@@ -555,6 +599,8 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
         public InputAction @PointClick2 => m_Wrapper.m_ElectronicWarfareOfficer_PointClick2;
         public InputAction @RadarSwitchPower => m_Wrapper.m_ElectronicWarfareOfficer_RadarSwitchPower;
         public InputAction @TerrainMapSwitch => m_Wrapper.m_ElectronicWarfareOfficer_TerrainMapSwitch;
+        public InputAction @IncreaseSweepSpeed => m_Wrapper.m_ElectronicWarfareOfficer_IncreaseSweepSpeed;
+        public InputAction @DecreaseSweepSpeed => m_Wrapper.m_ElectronicWarfareOfficer_DecreaseSweepSpeed;
         public InputActionMap Get() { return m_Wrapper.m_ElectronicWarfareOfficer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -582,6 +628,12 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                 @TerrainMapSwitch.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnTerrainMapSwitch;
                 @TerrainMapSwitch.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnTerrainMapSwitch;
                 @TerrainMapSwitch.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnTerrainMapSwitch;
+                @IncreaseSweepSpeed.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnIncreaseSweepSpeed;
+                @IncreaseSweepSpeed.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnIncreaseSweepSpeed;
+                @IncreaseSweepSpeed.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnIncreaseSweepSpeed;
+                @DecreaseSweepSpeed.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseSweepSpeed;
+                @DecreaseSweepSpeed.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseSweepSpeed;
+                @DecreaseSweepSpeed.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseSweepSpeed;
             }
             m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface = instance;
             if (instance != null)
@@ -604,6 +656,12 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                 @TerrainMapSwitch.started += instance.OnTerrainMapSwitch;
                 @TerrainMapSwitch.performed += instance.OnTerrainMapSwitch;
                 @TerrainMapSwitch.canceled += instance.OnTerrainMapSwitch;
+                @IncreaseSweepSpeed.started += instance.OnIncreaseSweepSpeed;
+                @IncreaseSweepSpeed.performed += instance.OnIncreaseSweepSpeed;
+                @IncreaseSweepSpeed.canceled += instance.OnIncreaseSweepSpeed;
+                @DecreaseSweepSpeed.started += instance.OnDecreaseSweepSpeed;
+                @DecreaseSweepSpeed.performed += instance.OnDecreaseSweepSpeed;
+                @DecreaseSweepSpeed.canceled += instance.OnDecreaseSweepSpeed;
             }
         }
     }
@@ -642,5 +700,7 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
         void OnPointClick2(InputAction.CallbackContext context);
         void OnRadarSwitchPower(InputAction.CallbackContext context);
         void OnTerrainMapSwitch(InputAction.CallbackContext context);
+        void OnIncreaseSweepSpeed(InputAction.CallbackContext context);
+        void OnDecreaseSweepSpeed(InputAction.CallbackContext context);
     }
 }

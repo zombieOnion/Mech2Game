@@ -112,9 +112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4338e19dd2550cf4e992533584d9ee65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 20
+  Damage: 40
   TravelSpeed: 60
-  SelfDestructFloatTime: 30
+  SelfDestructFloatTime: 10
   RateOfFire: 0.3
 --- !u!54 &54733230553529924
 Rigidbody:
@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 4898053418591062}
   - component: {fileID: 198073856501431102}
   - component: {fileID: 199425184542895542}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: NullParticleCarrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1840659686636490}
   serializedVersion: 8
-  lengthInSec: 3
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -4905,7 +4905,6 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1019310eb6e4d46c49556bbaadb97446, type: 2}
   - {fileID: 2100000, guid: 1019310eb6e4d46c49556bbaadb97446, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

@@ -276,6 +276,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "IncreaseSweepSpeed",
+                    "type": "Button",
+                    "id": "7645a161-244e-4328-a9dd-4f6b25fd8a25",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DecreaseSweepSpeed",
+                    "type": "Button",
+                    "id": "9f4cdec1-26f1-47c6-a65a-13c3594191b4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -342,6 +360,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "PointClick2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21e506ee-4177-48a7-9db2-4453b532b119",
+                    "path": "<Keyboard>/numpadPlus",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "IncreaseSweepSpeed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d090a7eb-f03b-4083-9e04-4c4770fd5112",
+                    "path": "<Keyboard>/numpadMinus",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DecreaseSweepSpeed",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -8,12 +8,17 @@ public class RadarSweepScript : MonoBehaviour
     public RadarHitList<Transform> HitList;
     private Transform radarSweepTransform;
     private Transform mechTransform;
-    public float rotationSpeed;
     public float radarDistance;
     [SerializeField] public LayerMask RadarLayer;
     private RadarTargetComputer targetProcessor;
     private Collider radarSweepCollider;
     private bool radarOn = true;
+    private int blipCount = 1000;
+    private float blipTimeOut = 5;
+    public float SweepSpeed;
+    public float SweepSpeedChangeNumber = 60f;
+    public int MaxSweepSpeed = 360;
+    public int MinimumSweepSpeed = 30;
     public bool RadarOn { get => radarOn; set => radarOn = value; }
     private float xSweepRotationAngle;
     
@@ -28,20 +33,21 @@ public class RadarSweepScript : MonoBehaviour
 
     void Start()
     {
-        HitList = new RadarHitList<Transform>(300);
-        for (int i = 0; i < 300; i++)
+        HitList = new RadarHitList<Transform>(blipCount);
+        for (int i = 0; i < blipCount; i++)
         {
             var radarblip = Instantiate(RadarBlip, transform.position + Vector3.down*5, new Quaternion());
+            radarblip.GetComponent<RadarBlipScript>().DisappearTimerMax = blipTimeOut;
             HitList.Add(radarblip);
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if(!radarOn)
             return;
         //radarSweepTransform.eulerAngles -= new Vector3(0, rotationSpeed * Time.deltaTime, 0);
-        xSweepRotationAngle -= Time.deltaTime * rotationSpeed;
+        xSweepRotationAngle -= Time.fixedDeltaTime * SweepSpeed;
         radarSweepTransform.rotation = Quaternion.Euler(0, xSweepRotationAngle, 90);
         
         RaycastHit[] hits;
@@ -65,20 +71,20 @@ public class RadarSweepScript : MonoBehaviour
     }*/
 
     public void ChangeSweepDirection() {
-        rotationSpeed *= -1;
+        SweepSpeed *= -1;
     }
 
-    public void SetScanSweepSpeedFull() {
-        if(rotationSpeed > 0)
-            rotationSpeed = 180;
+    public void IncreaseSweepSpeed() {
+        if (MaxSweepSpeed <= SweepSpeed)
+            return;
         else
-            rotationSpeed = -180;
+            SweepSpeed += SweepSpeedChangeNumber;
     }
 
-    public void SetScanSweepSpeedHalf() {
-        if(rotationSpeed > 0)
-            rotationSpeed = 90;
+    public void DecreaseSweepSpeed() {
+        if (MinimumSweepSpeed >= SweepSpeed)
+            return;
         else
-            rotationSpeed = -90;
+            SweepSpeed -= SweepSpeedChangeNumber;
     }
 }

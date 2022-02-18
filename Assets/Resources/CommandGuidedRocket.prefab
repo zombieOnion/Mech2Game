@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 4628766280157856}
   - component: {fileID: 198583086342236892}
   - component: {fileID: 199448495764388852}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: NullParticleCarrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4906,7 +4906,6 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1019310eb6e4d46c49556bbaadb97446, type: 2}
   - {fileID: 2100000, guid: 1019310eb6e4d46c49556bbaadb97446, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

@@ -7276,9 +7276,37 @@ PrefabInstance:
       propertyPath: m_DynamicOccludee
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7796742849725980500, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7796742849802426272, guid: ac0551a3decc730418890d313f0919af, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7796742849802426273, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7796742849802426277, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: SweepSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7796742849802426277, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: rotationSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7796742849802426277, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: RadarLayer.m_Bits
+      value: 136
+      objectReference: {fileID: 0}
+    - target: {fileID: 7796742849802426277, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: SweepSpeedChangeNumber
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7796742849802426282, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: UnitLayermask.m_Bits
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7796742850099498772, guid: ac0551a3decc730418890d313f0919af, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7309,8 +7337,16 @@ PrefabInstance:
       value: 480
       objectReference: {fileID: 0}
     - target: {fileID: 7796742850615544827, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7796742850615544827, guid: ac0551a3decc730418890d313f0919af, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7796742851098710619, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: RadarLayer.m_Bits
+      value: 136
       objectReference: {fileID: 0}
     - target: {fileID: 7796742851210934157, guid: ac0551a3decc730418890d313f0919af, type: 3}
       propertyPath: far clip plane
@@ -7322,7 +7358,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7796742851210934157, guid: ac0551a3decc730418890d313f0919af, type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 255
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7796742851413612209, guid: ac0551a3decc730418890d313f0919af, type: 3}
       propertyPath: m_LocalPosition.z
