@@ -14,6 +14,11 @@ public class GameSettings : MonoBehaviour
     private void Start() {
         pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
         ewoInputCfg = EWOCamera.GetComponent<EWOInputConfiguration>();
+        Invoke("initStart", 0.2f);
+    }
+
+    private void initStart()
+    {
         SetCameraToFullscreen(0, FullscreenRect, 1, FullscreenRect);
         Cursor.lockState = CursorLockMode.Locked;
         pilotInputCfg.PlayerInput.ActivateInput();
