@@ -12,11 +12,11 @@ public class RadarTrackerScript : MonoBehaviour
     public RadarMonopulse LeftToRight;
     public RadarMonopulse UpToDown;
 
-    void Update() {
+    void FixedUpdate() {
         if (TrackingTarget)
         {
-            LeftToRight.SendMonoPulse();
-            UpToDown.SendMonoPulse();
+            LeftToRight.SearchAndTrack();
+            UpToDown.SearchAndTrack();
             UpdateTargetWithHits(LeftToRight);
             UpdateTargetWithHits(UpToDown);
         }

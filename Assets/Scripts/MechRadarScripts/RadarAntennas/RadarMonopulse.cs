@@ -45,7 +45,7 @@ public class RadarMonopulse : MonoBehaviour
         return lobeHits;
     }
 
-    public void SendMonoPulse()
+    public void SearchAndTrack()
     {
         var lastRightLeftBalance = rightLeftBalance;
         RotateTransform(false);
@@ -94,7 +94,7 @@ public class RadarMonopulse : MonoBehaviour
         if (rightLeftBalance == 3 && driftTime < driftMaxTime)
         {
             transform.Rotate(new Vector3(0, sideAngleAdjustDegree * targetDrift, 0));
-            driftTime += Time.deltaTime;
+            driftTime += Time.fixedDeltaTime;
         }
         else if (rightLeftBalance != 3)
             driftTime = 0f;
@@ -124,7 +124,7 @@ public class RadarMonopulse : MonoBehaviour
     {
         var lobeHits = Physics.BoxCastAll(localeCollider.bounds.center, transform.localScale, transform.forward, transform.rotation, 500, RadarLayer);
         if (lobeHits.Length < 1)
-            return null;
+            return new RaycastHit[0];
         foreach (var hit in lobeHits)
         {
             if(hit.distance != 0)
