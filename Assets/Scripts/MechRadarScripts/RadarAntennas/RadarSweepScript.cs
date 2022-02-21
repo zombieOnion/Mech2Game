@@ -54,7 +54,7 @@ public class RadarSweepScript : MonoBehaviour
             AddRadarHit(hit);
     }
 
-    public void AddRadarHit(Transform radarHit)
+    private void AddRadarHit(Transform radarHit)
     {
         Collider[] alreadyExistingRadarTargetsAtHitLocation = CheckForOverlap(radarHit, targetProcessor.TargetLayermask);
         if (alreadyExistingRadarTargetsAtHitLocation != null && alreadyExistingRadarTargetsAtHitLocation.Length > 0)

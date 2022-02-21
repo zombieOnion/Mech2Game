@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class RadarTargetComputer : MonoBehaviour
 {
-    private RadarSweepScript _radarSweep;
     private RadarTrackerScript _radarTracker;
     public List<Transform> Targets = new List<Transform>();
     [SerializeField] public Transform RadarTarget;
@@ -15,16 +14,10 @@ public class RadarTargetComputer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _radarSweep = gameObject.GetComponent<RadarSweepScript>();
         _radarTracker = gameObject.transform.parent.GetComponentInChildren<RadarTrackerScript>();
     }
 
-    public void DestroyTarget(Transform clickedTarget) {/*
-        if(clickedTarget.GetInstanceID() == CurrentlyTrackedTarget.GetInstanceID()) {
-            TrackingTarget = false;
-            OnTarget = false;
-            CurrentlyTrackedTarget = null;
-        }*/
+    public void DestroyTarget(Transform clickedTarget) {
         if (_radarTracker.TrackingTarget)
             _radarTracker.StopTracking();
         Targets.Remove(clickedTarget);
@@ -40,7 +33,8 @@ public class RadarTargetComputer : MonoBehaviour
         if (lockedTarget == null)
         {
             var trackedTarget = _radarTracker.StopTracking();
-            Targets.Add(trackedTarget.transform);
+            if(trackedTarget != null)
+                Targets.Add(trackedTarget.transform);
         }
         else
         {
