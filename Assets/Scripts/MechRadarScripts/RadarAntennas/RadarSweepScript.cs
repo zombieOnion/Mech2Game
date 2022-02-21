@@ -7,24 +7,20 @@ using static PhysicalSpaceLibrary;
 public class RadarSweepScript : MonoBehaviour
 {
     // general variables
-    private Transform radarSweepTransform;
     [SerializeField] public LayerMask RadarLayer;
-    private Transform mechTransform;
     private RadarTargetComputer targetProcessor;
     private bool radarOn = true;
     public bool RadarOn { get => radarOn; set => radarOn = value; }
     private RadarTargetScript _currentlyTrackedTarget = null; //cache variable for hits on the same targetc
 
     // cache variables and blips
-    [SerializeField] public Transform RadarBlip;
+    public SendRadarPulseAndCreateRadarEchoes PulseSender;
     public RadarHitList<Transform> HitList;
     private int blipCount = 1000;
     private float blipTimeOut = 5;
 
     // radar rotation, speed and distance variable
-    private Collider radarSweepCollider;
     private float xSweepRotationAngle;
-    public float radarDistance = 500;
     public float SweepSpeed;
     public float SweepSpeedChangeNumber = 60f;
     public int MaxSweepSpeed = 360;
@@ -36,21 +32,13 @@ public class RadarSweepScript : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        radarSweepTransform = transform;
-        radarSweepCollider = radarSweepTransform.GetComponent<Collider>();
-        mechTransform = transform.parent.parent;
         targetProcessor = gameObject.GetComponent<RadarTargetComputer>();
+        PulseSender = gameObject.GetComponent<SendRadarPulseAndCreateRadarEchoes>();
     }
 
     void Start()
     {
-        HitList = new RadarHitList<Transform>(blipCount);
-        for (int i = 0; i < blipCount; i++)
-        {
-            var radarblip = Instantiate(RadarBlip, transform.position + Vector3.down*5, new Quaternion());
-            radarblip.GetComponent<RadarBlipScript>().DisappearTimerMax = blipTimeOut;
-            HitList.Add(radarblip);
-        }
+        HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut);
     }
 
     public void FixedUpdate()
@@ -58,30 +46,12 @@ public class RadarSweepScript : MonoBehaviour
         if (!radarOn)
             return;
         xSweepRotationAngle -= Time.fixedDeltaTime * SweepSpeed;
-        radarSweepTransform.rotation = Quaternion.Euler(0, xSweepRotationAngle, 90);
-        var hits = SendAndRecieveRadarPulse(HitList);
+        transform.rotation = Quaternion.Euler(0, xSweepRotationAngle, 90);
+        var hits = PulseSender.SendAndRecieveRadarPulse(HitList);
         if (hits.Length == 0)
             return;
         foreach (var hit in hits.Select(hit => hit.transform).ToArray())
             AddRadarHit(hit);
-    }
-
-    private RaycastHit[] SendAndRecieveRadarPulse(RadarHitList<Transform> blipPool)
-    {
-        RaycastHit[] hits = Physics.BoxCastAll(radarSweepCollider.bounds.center, radarSweepTransform.localScale, radarSweepTransform.forward, radarSweepTransform.rotation, radarDistance, RadarLayer); 
-        if (hits.Length < 1)
-            return new RaycastHit[0];
-        foreach (RaycastHit hit in hits) {
-           if(hit.distance != 0) {
-                var nextHit = blipPool.AdvanceNext();
-                var nextHitScript = nextHit.GetComponent<RadarBlipScript>();
-                nextHitScript.gameObject.SetActive(true);
-                nextHitScript.ResetAppearTime();
-                nextHit.position = hit.point;
-                nextHit.rotation = Quaternion.identity;
-           }
-        }
-        return hits.Where(hit => hit.distance > 5).ToArray();
     }
 
     public void AddRadarHit(Transform radarHit)

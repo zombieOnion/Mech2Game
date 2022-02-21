@@ -5,55 +5,49 @@ using UnityEngine;
 
 public class RadarMonopulse : MonoBehaviour
 {
-    [SerializeField] public Transform RadarBlip;
-    [SerializeField] public LayerMask RadarLayer;
-    float sideAngleAdjustDegree = 1f;
-    const float sideAngleAdjustDegreeAdjust = 0.05f;
-    const float sideAngleAdjustDegreeMax = 2f;
-    const float sideAngleAdjustDegreeLowest = 0.3f;
-    private Collider localeCollider;
+    // General variables
+    public bool leftToRight = true;
     public RaycastHit[] LobeHitsLeft = null;
     public RaycastHit[] LobeHitsRight = null;
     public RadarHitList<Transform> HitListLeftLobe;
     public RadarHitList<Transform> HitListRightLobe;
+
+    // 
+    float sideAngleAdjustDegree = 1f;
+    const float sideAngleAdjustDegreeAdjust = 0.05f;
+    const float sideAngleAdjustDegreeMax = 2f;
+    const float sideAngleAdjustDegreeLowest = 0.3f;
     int targetDrift = 0; // -1 left, 1 right
     float driftTime = 0;
     public float driftMaxTime = 1;
     int rightLeftBalance = 0; //0 only left hit, 1 only right hit, 2 both hit, 3 both null
-    private Transform RadarBlipLeftLobe;
-    private Transform RadarBlipRightLobe;
 
-    public bool leftToRight = true;
+    // Blip settings
+    public SendRadarPulseAndCreateRadarEchoes PulseSender;
+    public float BlipTimeOut = 0.5f;
+    public int BlipSize = 20;
+
+    void Awake()
+    {
+        PulseSender = gameObject.GetComponent<SendRadarPulseAndCreateRadarEchoes>();
+    }
 
     void Start()
     {
-        localeCollider = gameObject.GetComponent<Collider>();
-        HitListLeftLobe = InstantiateRadarBlips(20);
-        HitListRightLobe = InstantiateRadarBlips(20);
+        HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, SetColourOfBlip);
+        HitListRightLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, SetColourOfBlip);
     }
 
-    private RadarHitList<Transform> InstantiateRadarBlips(int size)
-    {
-        var lobeHits = new RadarHitList<Transform>(size);
-        for (int i = 0; i < 50; i++)
-        {
-            var radarHit = Instantiate(RadarBlip, transform.position + Vector3.down * 5, new Quaternion());
-            radarHit.gameObject.GetComponent<RadarBlipScript>().DisappearTimerMax = 0.5f;
-            radarHit.gameObject.GetComponent<Renderer>().materials[0].color = leftToRight ? Color.blue : Color.yellow;
-            lobeHits.Add(radarHit);
-        }
-        return lobeHits;
-    }
 
     public void SearchAndTrack()
     {
         var lastRightLeftBalance = rightLeftBalance;
         RotateTransform(false);
-        LobeHitsLeft = SendAndRecieveRadarPulse(HitListLeftLobe);
+        LobeHitsLeft = PulseSender.SendAndRecieveRadarPulse(HitListLeftLobe);
         RotateTransform(true);
 
         RotateTransform(true);
-        LobeHitsRight = SendAndRecieveRadarPulse(HitListRightLobe);
+        LobeHitsRight = PulseSender.SendAndRecieveRadarPulse(HitListRightLobe);
         RotateTransform(false);
 
         if (LobeHitsLeft.Length > LobeHitsRight.Length)
@@ -120,26 +114,6 @@ public class RadarMonopulse : MonoBehaviour
         }
     }
 
-    private RaycastHit[] SendAndRecieveRadarPulse(RadarHitList<Transform> blipPool)
-    {
-        var lobeHits = Physics.BoxCastAll(localeCollider.bounds.center, transform.localScale, transform.forward, transform.rotation, 500, RadarLayer);
-        if (lobeHits.Length < 1)
-            return new RaycastHit[0];
-        foreach (var hit in lobeHits)
-        {
-            if(hit.distance != 0)
-            {
-                var nextHit = blipPool.AdvanceNext();
-                var nextHitScript = nextHit.GetComponent<RadarBlipScript>();
-                nextHitScript.gameObject.SetActive(true);
-                nextHitScript.gameObject.GetComponent<Renderer>().materials[0].color = leftToRight ? Color.blue : Color.yellow;
-                nextHitScript.ResetAppearTime();
-                nextHit.position = hit.point;
-                nextHit.rotation = Quaternion.identity;
-            }
-        }
-        return lobeHits.Where(hit => hit.distance > 5).ToArray();
-    }
+    private void SetColourOfBlip(RadarBlipScript blipScript) => blipScript.gameObject.GetComponent<Renderer>().materials[0].color = leftToRight? Color.blue : Color.yellow;
 
-    private Transform CreateRadarBlip() => Instantiate(RadarBlip, transform.position + Vector3.down * 3, new Quaternion());
 }

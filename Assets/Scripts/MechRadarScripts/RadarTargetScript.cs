@@ -45,6 +45,8 @@ public class RadarTargetScript : MonoBehaviour
 
     private void ProccessLatestHits() {
         var thisSweepHits = RadarHits.GetLast(_hitsReceivedInSweep).Where(hit => hit != null).ToList();
+        if(thisSweepHits.Count == 0)
+            return;
         Bounds hitBounds = new Bounds(thisSweepHits[0].position, Vector3.zero);
         thisSweepHits.ForEach(hit => hitBounds.Encapsulate(hit.position));
         this.transform.position = new Vector3(hitBounds.center.x, Terrain.activeTerrain.SampleHeight(this.transform.position)+0.5f, hitBounds.center.z);
