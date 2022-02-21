@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +20,19 @@ public class RadarSweepScript : MonoBehaviour
     private int blipCount = 1000;
     private float blipTimeOut = 5;
 
-    // radar rotation, speed and distance variable
+    // radar rotation and speed
     private float xSweepRotationAngle;
-    public float SweepSpeed;
-    public float SweepSpeedChangeNumber = 60f;
-    public int MaxSweepSpeed = 360;
+    public float SweepSpeedChangeNumber = 30f;
+    public int MaxSweepSpeed = 150;
     public int MinimumSweepSpeed = 30;
 
     // sector sweep and change direction
+    public float SweepSpeed;
+    public bool IsSectorSweeping { get; private set; } = false;
+    private float xSectorSweepStart = 45f;
+    private float xSectorSweepEnd = 90f;
+    private float xSectorSweepAngle = 45f;
 
-    
-    // Start is called before the first frame update
     void Awake()
     {
         targetProcessor = gameObject.GetComponent<RadarTargetComputer>();
@@ -45,8 +48,27 @@ public class RadarSweepScript : MonoBehaviour
     {
         if (!radarOn)
             return;
-        xSweepRotationAngle -= Time.fixedDeltaTime * SweepSpeed;
+        var lastXAngle = xSweepRotationAngle;
+        xSweepRotationAngle += (Time.fixedDeltaTime/2) * SweepSpeed;
         transform.rotation = Quaternion.Euler(0, xSweepRotationAngle, 90);
+        if(IsSectorSweeping)
+        {
+            if (xSweepRotationAngle > xSectorSweepEnd && SweepSpeed > 0)
+            {
+                xSweepRotationAngle = xSectorSweepEnd - 3f;
+                ChangeSweepDirection();
+            }
+            else if (xSweepRotationAngle < xSectorSweepStart && SweepSpeed < 0)
+            {
+                xSweepRotationAngle = xSectorSweepStart + 3f;
+                ChangeSweepDirection();
+            }
+        }
+        if (lastXAngle < 360f && xSweepRotationAngle > 360f)
+            xSweepRotationAngle = 0;
+        else if(lastXAngle > 0 && xSweepRotationAngle < 0)
+            xSweepRotationAngle = 360;
+
         var hits = PulseSender.SendAndRecieveRadarPulse(HitList);
         if (hits.Length == 0)
             return;
@@ -85,27 +107,68 @@ public class RadarSweepScript : MonoBehaviour
         }
     }
 
-    /*void FixedUpdate() {
-        radarSweepTransform.transform.position = new Vector3(mechTransform.position.x, mechTransform.position.y+1, transform.position.z);
-    }*/
-
     public void ChangeSweepDirection() {
         SweepSpeed *= -1;
     }
 
     public void IncreaseSweepSpeed() {
-        if (MaxSweepSpeed <= SweepSpeed)
+        if (Math.Abs(MaxSweepSpeed) <= Math.Abs(SweepSpeed))
             return;
         else
-            SweepSpeed += SweepSpeedChangeNumber;
+        {
+            if(SweepSpeed > 0)
+                SweepSpeed += SweepSpeedChangeNumber;
+            else
+                SweepSpeed -= SweepSpeedChangeNumber;
+        }   
     }
 
     public void DecreaseSweepSpeed() {
-        if (MinimumSweepSpeed >= SweepSpeed)
+        if (Math.Abs(MinimumSweepSpeed) >= Math.Abs(SweepSpeed))
             return;
         else
-            SweepSpeed -= SweepSpeedChangeNumber;
+        {
+            if (SweepSpeed > 0)
+                SweepSpeed -= SweepSpeedChangeNumber;
+            else
+                SweepSpeed += SweepSpeedChangeNumber;
+        }
     }
 
-
+    public void ToggleSectorSweep()
+    {
+        IsSectorSweeping = !IsSectorSweeping;
+        if(SweepSpeed < 0)
+            SweepSpeed = Math.Abs(SweepSpeed);
+    }
+    public void IncreaseSectorSweep()
+    {
+        if(xSectorSweepEnd+xSectorSweepAngle > 360)
+        {
+            xSectorSweepStart = 0;
+            xSectorSweepEnd = xSectorSweepAngle;
+        }
+        else
+        {
+            xSectorSweepStart += xSectorSweepAngle;
+            xSectorSweepEnd += xSectorSweepAngle;
+        }
+        if (SweepSpeed < 0)
+            SweepSpeed = SweepSpeed * -1;
+    }
+    public void DecreaseSectorSweep()
+    {
+        if (xSectorSweepStart-xSectorSweepAngle < 0)
+        {
+            xSectorSweepStart = 360-xSectorSweepAngle;
+            xSectorSweepEnd = 360;
+        }
+        else
+        {
+            xSectorSweepStart -= xSectorSweepAngle;
+            xSectorSweepEnd -= xSectorSweepAngle;
+        }
+        if (SweepSpeed > 0)
+            SweepSpeed = SweepSpeed * -1;
+    }
 }

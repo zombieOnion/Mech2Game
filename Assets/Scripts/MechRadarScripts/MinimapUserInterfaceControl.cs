@@ -73,6 +73,9 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	public void OnTerrainMapSwitch() => minimapCamera.cullingMask = minimapCamera.cullingMask == OnlyPlotLayermask ? PlotAndTerrainLayermask : OnlyPlotLayermask;
 	public void OnIncreaseSweepSpeed() => radarSweeper.IncreaseSweepSpeed();
 	public void OnDecreaseSweepSpeed() => radarSweeper.DecreaseSweepSpeed();
+	public void OnToggleSectorSweep() => radarSweeper.ToggleSectorSweep();
+	public void OnIncreaseSectorSweep() => radarSweeper.IncreaseSectorSweep();
+	public void OnDecreaseSectorSweep() => radarSweeper.DecreaseSectorSweep();
 
 
 }
