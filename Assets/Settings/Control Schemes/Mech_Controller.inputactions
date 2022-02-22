@@ -294,6 +294,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleSectorSweep",
+                    "type": "Button",
+                    "id": "b2d7bda2-ec4e-4e6e-9468-7d26b0fc01ff",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "IncreaseSectorSweep",
+                    "type": "Button",
+                    "id": "6814ce42-fe5e-44fe-977b-2ad14c57bf31",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DecreaseSectorSweep",
+                    "type": "Button",
+                    "id": "3bfb8558-28f7-4bff-aff2-50ba01d587ba",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -382,6 +409,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "DecreaseSweepSpeed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "875f58cc-ab19-41ba-864f-9c8aa9073421",
+                    "path": "<Keyboard>/numpad3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ToggleSectorSweep",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3a1e6314-d528-4617-b55d-5ea00a4f6af3",
+                    "path": "<Keyboard>/numpad4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "IncreaseSectorSweep",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6058c3ae-4c24-4b98-84cf-408fbba1b89e",
+                    "path": "<Keyboard>/numpad5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "DecreaseSectorSweep",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
