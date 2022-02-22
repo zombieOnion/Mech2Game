@@ -137,80 +137,67 @@ public class RadarSweepScript : MonoBehaviour
         if(SweepSpeed < 0)
             SweepSpeed = Math.Abs(SweepSpeed);
     }
-    public void IncreaseSectorSweep()
-    {
-        if (xSectorSweepStart + xSectorSweepAngle > 360f)
-        {
-            xSectorSweepStart = xSectorSweepStart + xSectorSweepAngle - 360f;
-        }
-        else
-        {
-            xSectorSweepStart += xSectorSweepAngle;
-        }
-
-        if (xSectorSweepEnd + xSectorSweepAngle > 360f)
-        {
-            xSectorSweepEnd = xSectorSweepEnd + xSectorSweepAngle - 360f;
-        }
-        else
-        {
-            xSectorSweepEnd += xSectorSweepAngle;
-        }
-    }
-    public void DecreaseSectorSweep()
-    {
-        if (xSectorSweepStart - xSectorSweepAngle < 0)
-        {
-            xSectorSweepStart = 360f + xSectorSweepStart - xSectorSweepAngle;
-        }
-        else
-        {
-            xSectorSweepStart -= xSectorSweepAngle;
-        }
-
-        if (xSectorSweepEnd - xSectorSweepAngle < 0)
-        {
-            xSectorSweepEnd = 360f + xSectorSweepEnd - xSectorSweepAngle;
-        }
-        else
-        {
-            xSectorSweepEnd -= xSectorSweepAngle;
-        }
-    }
-
     public void RotateSectorSweepForward()
     {
-        if (xSectorSweepStart + xSectorSweepAngle > 360f)
+        float rotateAngleDistance = 45;
+        if (xSectorSweepStart + rotateAngleDistance > 360f)
         {
-            xSectorSweepStart = xSectorSweepStart + xSectorSweepAngle - 360f;
+            xSectorSweepStart = xSectorSweepStart + rotateAngleDistance - 360f;
         }
         else
         {
-            xSectorSweepStart += xSectorSweepAngle;
+            xSectorSweepStart += rotateAngleDistance;
         }
 
-        if (xSectorSweepEnd + xSectorSweepAngle > 360f)
+        if (xSectorSweepEnd + rotateAngleDistance > 360f)
         {
-            xSectorSweepEnd = xSectorSweepEnd + xSectorSweepAngle - 360f;
+            xSectorSweepEnd = xSectorSweepEnd + rotateAngleDistance - 360f;
         }
         else
         {
-            xSectorSweepEnd += xSectorSweepAngle;
+            xSectorSweepEnd += rotateAngleDistance;
         }
     }
     public void RotateSectorSweepBackward()
     {
-        if (xSectorSweepStart - xSectorSweepAngle < 0)
+        float rotateAngleDistance = 45;
+        if (xSectorSweepStart - rotateAngleDistance < 0)
         {
-            xSectorSweepStart = 360 - xSectorSweepAngle;
-            xSectorSweepEnd = 360;
+            xSectorSweepStart = 360f + xSectorSweepStart - rotateAngleDistance;
         }
         else
         {
-            xSectorSweepStart -= xSectorSweepAngle;
-            xSectorSweepEnd -= xSectorSweepAngle;
+            xSectorSweepStart -= rotateAngleDistance;
         }
-        if (SweepSpeed > 0)
-            SweepSpeed = SweepSpeed * -1;
+
+        if (xSectorSweepEnd - rotateAngleDistance < 0)
+        {
+            xSectorSweepEnd = 360f + xSectorSweepEnd - rotateAngleDistance;
+        }
+        else
+        {
+            xSectorSweepEnd -= rotateAngleDistance;
+        }
+    }
+
+    public void IncreaseSectorSweep()
+    {
+        if (xSectorSweepAngle == 180)
+            return;
+        xSectorSweepAngle += 45;
+        if (xSectorSweepEnd + 45 > 360)
+            xSectorSweepEnd = xSectorSweepEnd - 360 + 45;
+        else
+            xSectorSweepEnd += 45;
+    }
+    public void DecreaseSectorSweep()
+    {
+        if (xSectorSweepAngle == 45)
+            return;
+        xSectorSweepAngle -= 45;
+        if (xSectorSweepEnd - 45 < 0)
+            xSectorSweepEnd = 360 + xSectorSweepEnd -  45;
+        else
+            xSectorSweepEnd -= 45;
     }
 }

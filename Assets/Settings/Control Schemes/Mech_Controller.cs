@@ -343,6 +343,24 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateSectorSweepForward"",
+                    ""type"": ""Button"",
+                    ""id"": ""6e03d651-f1dc-49a7-9317-e8aa6ed55c0c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateSectorSweepBackward"",
+                    ""type"": ""Button"",
+                    ""id"": ""4ecf7e07-9683-4db6-be9b-b5223725aa84"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -466,6 +484,28 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                     ""action"": ""DecreaseSectorSweep"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26c82476-c18f-46f8-94fc-de58c32d9c4a"",
+                    ""path"": ""<Keyboard>/numpad6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RotateSectorSweepForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""82eb2395-77ce-4838-8b10-428596799054"",
+                    ""path"": ""<Keyboard>/numpad7"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RotateSectorSweepBackward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -520,6 +560,8 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
         m_ElectronicWarfareOfficer_ToggleSectorSweep = m_ElectronicWarfareOfficer.FindAction("ToggleSectorSweep", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_IncreaseSectorSweep = m_ElectronicWarfareOfficer.FindAction("IncreaseSectorSweep", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_DecreaseSectorSweep = m_ElectronicWarfareOfficer.FindAction("DecreaseSectorSweep", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_RotateSectorSweepForward = m_ElectronicWarfareOfficer.FindAction("RotateSectorSweepForward", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_RotateSectorSweepBackward = m_ElectronicWarfareOfficer.FindAction("RotateSectorSweepBackward", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -655,6 +697,8 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
     private readonly InputAction m_ElectronicWarfareOfficer_ToggleSectorSweep;
     private readonly InputAction m_ElectronicWarfareOfficer_IncreaseSectorSweep;
     private readonly InputAction m_ElectronicWarfareOfficer_DecreaseSectorSweep;
+    private readonly InputAction m_ElectronicWarfareOfficer_RotateSectorSweepForward;
+    private readonly InputAction m_ElectronicWarfareOfficer_RotateSectorSweepBackward;
     public struct ElectronicWarfareOfficerActions
     {
         private @Mech_Controller m_Wrapper;
@@ -670,6 +714,8 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
         public InputAction @ToggleSectorSweep => m_Wrapper.m_ElectronicWarfareOfficer_ToggleSectorSweep;
         public InputAction @IncreaseSectorSweep => m_Wrapper.m_ElectronicWarfareOfficer_IncreaseSectorSweep;
         public InputAction @DecreaseSectorSweep => m_Wrapper.m_ElectronicWarfareOfficer_DecreaseSectorSweep;
+        public InputAction @RotateSectorSweepForward => m_Wrapper.m_ElectronicWarfareOfficer_RotateSectorSweepForward;
+        public InputAction @RotateSectorSweepBackward => m_Wrapper.m_ElectronicWarfareOfficer_RotateSectorSweepBackward;
         public InputActionMap Get() { return m_Wrapper.m_ElectronicWarfareOfficer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -712,6 +758,12 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                 @DecreaseSectorSweep.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseSectorSweep;
                 @DecreaseSectorSweep.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseSectorSweep;
                 @DecreaseSectorSweep.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnDecreaseSectorSweep;
+                @RotateSectorSweepForward.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRotateSectorSweepForward;
+                @RotateSectorSweepForward.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRotateSectorSweepForward;
+                @RotateSectorSweepForward.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRotateSectorSweepForward;
+                @RotateSectorSweepBackward.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRotateSectorSweepBackward;
+                @RotateSectorSweepBackward.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRotateSectorSweepBackward;
+                @RotateSectorSweepBackward.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRotateSectorSweepBackward;
             }
             m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface = instance;
             if (instance != null)
@@ -749,6 +801,12 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                 @DecreaseSectorSweep.started += instance.OnDecreaseSectorSweep;
                 @DecreaseSectorSweep.performed += instance.OnDecreaseSectorSweep;
                 @DecreaseSectorSweep.canceled += instance.OnDecreaseSectorSweep;
+                @RotateSectorSweepForward.started += instance.OnRotateSectorSweepForward;
+                @RotateSectorSweepForward.performed += instance.OnRotateSectorSweepForward;
+                @RotateSectorSweepForward.canceled += instance.OnRotateSectorSweepForward;
+                @RotateSectorSweepBackward.started += instance.OnRotateSectorSweepBackward;
+                @RotateSectorSweepBackward.performed += instance.OnRotateSectorSweepBackward;
+                @RotateSectorSweepBackward.canceled += instance.OnRotateSectorSweepBackward;
             }
         }
     }
@@ -792,5 +850,7 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
         void OnToggleSectorSweep(InputAction.CallbackContext context);
         void OnIncreaseSectorSweep(InputAction.CallbackContext context);
         void OnDecreaseSectorSweep(InputAction.CallbackContext context);
+        void OnRotateSectorSweepForward(InputAction.CallbackContext context);
+        void OnRotateSectorSweepBackward(InputAction.CallbackContext context);
     }
 }

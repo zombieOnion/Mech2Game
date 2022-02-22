@@ -54,7 +54,7 @@ public class RadarMonopulse : MonoBehaviour
             rightLeftBalance = 0;
         else if (LobeHitsRight.Length > LobeHitsLeft.Length)
             rightLeftBalance = 1;
-        else if (Mathf.Abs(LobeHitsRight.Length - LobeHitsLeft.Length) < 4)
+        else if (Mathf.Abs(LobeHitsRight.Length - LobeHitsLeft.Length) < 4 && (LobeHitsRight.Length > 0 && LobeHitsLeft.Length > 0))
             rightLeftBalance = 2;
         else
             rightLeftBalance = 3;

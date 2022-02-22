@@ -76,6 +76,8 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	public void OnToggleSectorSweep() => radarSweeper.ToggleSectorSweep();
 	public void OnIncreaseSectorSweep() => radarSweeper.IncreaseSectorSweep();
 	public void OnDecreaseSectorSweep() => radarSweeper.DecreaseSectorSweep();
+	public void OnRotateSectorSweepForward() => radarSweeper.RotateSectorSweepForward();
+	public void OnRotateSectorSweepBackward() => radarSweeper.RotateSectorSweepBackward();
 
 
 }

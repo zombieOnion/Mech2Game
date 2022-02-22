@@ -321,6 +321,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RotateSectorSweepForward",
+                    "type": "Button",
+                    "id": "6e03d651-f1dc-49a7-9317-e8aa6ed55c0c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RotateSectorSweepBackward",
+                    "type": "Button",
+                    "id": "4ecf7e07-9683-4db6-be9b-b5223725aa84",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -442,6 +460,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "DecreaseSectorSweep",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "26c82476-c18f-46f8-94fc-de58c32d9c4a",
+                    "path": "<Keyboard>/numpad6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RotateSectorSweepForward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "82eb2395-77ce-4838-8b10-428596799054",
+                    "path": "<Keyboard>/numpad7",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RotateSectorSweepBackward",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
