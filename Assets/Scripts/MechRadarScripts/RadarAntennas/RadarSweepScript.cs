@@ -108,7 +108,7 @@ public class RadarSweepScript : MonoBehaviour
     }
 
     public void IncreaseSweepSpeed() {
-        if (Math.Abs(MaxSweepSpeed) <= Math.Abs(SweepSpeed))
+        if (Math.Abs(MaxSweepSpeed) <= Math.Abs(SweepSpeed+SweepSpeedChangeNumber))
         {
             SweepSpeed = MaxSweepSpeed;
             return;
@@ -123,7 +123,7 @@ public class RadarSweepScript : MonoBehaviour
     }
 
     public void DecreaseSweepSpeed() {
-        if (Math.Abs(MinimumSweepSpeed) >= Math.Abs(SweepSpeed))
+        if (Math.Abs(MinimumSweepSpeed) >= Math.Abs(SweepSpeed- SweepSpeedChangeNumber))
         {
             SweepSpeed = MinimumSweepSpeed;
             return;
