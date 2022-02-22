@@ -29,9 +29,9 @@ public class RadarSweepScript : MonoBehaviour
     // sector sweep and change direction
     public float SweepSpeed;
     public bool IsSectorSweeping { get; private set; } = false;
-    private float xSectorSweepStart = 45f;
-    private float xSectorSweepEnd = 90f;
-    private float xSectorSweepAngle = 45f;
+    private float xSectorSweepStart = 315f;
+    private float xSectorSweepEnd = 45f;
+    private float xSectorSweepAngle = 90f;
 
     void Awake()
     {
@@ -49,25 +49,21 @@ public class RadarSweepScript : MonoBehaviour
         if (!radarOn)
             return;
         var lastXAngle = xSweepRotationAngle;
-        xSweepRotationAngle += (Time.fixedDeltaTime/2) * SweepSpeed;
+        xSweepRotationAngle += (Time.fixedDeltaTime/2f) * SweepSpeed;
         transform.rotation = Quaternion.Euler(0, xSweepRotationAngle, 90);
         if(IsSectorSweeping)
         {
-            if (xSweepRotationAngle > xSectorSweepEnd && SweepSpeed > 0)
+            if(360 < xSectorSweepStart + xSectorSweepAngle && 0 < xSweepRotationAngle && xSweepRotationAngle < xSectorSweepEnd)
             {
-                xSweepRotationAngle = xSectorSweepEnd - 3f;
-                ChangeSweepDirection();
+
             }
-            else if (xSweepRotationAngle < xSectorSweepStart && SweepSpeed < 0)
+            else if (xSweepRotationAngle > xSectorSweepStart+ xSectorSweepAngle || xSweepRotationAngle < xSectorSweepStart)
             {
-                xSweepRotationAngle = xSectorSweepStart + 3f;
-                ChangeSweepDirection();
+                xSweepRotationAngle = xSectorSweepStart;
             }
         }
-        if (lastXAngle < 360f && xSweepRotationAngle > 360f)
+        if (lastXAngle <= 360f && xSweepRotationAngle > 360f)
             xSweepRotationAngle = 0;
-        else if(lastXAngle > 0 && xSweepRotationAngle < 0)
-            xSweepRotationAngle = 360;
 
         var hits = PulseSender.SendAndRecieveRadarPulse(HitList);
         if (hits.Length == 0)
@@ -143,24 +139,70 @@ public class RadarSweepScript : MonoBehaviour
     }
     public void IncreaseSectorSweep()
     {
-        if(xSectorSweepEnd+xSectorSweepAngle > 360)
+        if (xSectorSweepStart + xSectorSweepAngle > 360f)
         {
-            xSectorSweepStart = 0;
-            xSectorSweepEnd = xSectorSweepAngle;
+            xSectorSweepStart = xSectorSweepStart + xSectorSweepAngle - 360f;
         }
         else
         {
             xSectorSweepStart += xSectorSweepAngle;
+        }
+
+        if (xSectorSweepEnd + xSectorSweepAngle > 360f)
+        {
+            xSectorSweepEnd = xSectorSweepEnd + xSectorSweepAngle - 360f;
+        }
+        else
+        {
             xSectorSweepEnd += xSectorSweepAngle;
         }
-        if (SweepSpeed < 0)
-            SweepSpeed = SweepSpeed * -1;
     }
     public void DecreaseSectorSweep()
     {
-        if (xSectorSweepStart-xSectorSweepAngle < 0)
+        if (xSectorSweepStart - xSectorSweepAngle < 0)
         {
-            xSectorSweepStart = 360-xSectorSweepAngle;
+            xSectorSweepStart = 360f + xSectorSweepStart - xSectorSweepAngle;
+        }
+        else
+        {
+            xSectorSweepStart -= xSectorSweepAngle;
+        }
+
+        if (xSectorSweepEnd - xSectorSweepAngle < 0)
+        {
+            xSectorSweepEnd = 360f + xSectorSweepEnd - xSectorSweepAngle;
+        }
+        else
+        {
+            xSectorSweepEnd -= xSectorSweepAngle;
+        }
+    }
+
+    public void RotateSectorSweepForward()
+    {
+        if (xSectorSweepStart + xSectorSweepAngle > 360f)
+        {
+            xSectorSweepStart = xSectorSweepStart + xSectorSweepAngle - 360f;
+        }
+        else
+        {
+            xSectorSweepStart += xSectorSweepAngle;
+        }
+
+        if (xSectorSweepEnd + xSectorSweepAngle > 360f)
+        {
+            xSectorSweepEnd = xSectorSweepEnd + xSectorSweepAngle - 360f;
+        }
+        else
+        {
+            xSectorSweepEnd += xSectorSweepAngle;
+        }
+    }
+    public void RotateSectorSweepBackward()
+    {
+        if (xSectorSweepStart - xSectorSweepAngle < 0)
+        {
+            xSectorSweepStart = 360 - xSectorSweepAngle;
             xSectorSweepEnd = 360;
         }
         else
