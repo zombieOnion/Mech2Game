@@ -27,10 +27,10 @@ public class RadarSweepScript : MonoBehaviour
     public int MinimumSweepSpeed = 30;
 
     // sector sweep and change direction
-    public float SweepSpeed;
+    public float SweepSpeed = 60;
     public bool IsSectorSweeping { get; private set; } = false;
-    private float xSectorSweepStart = 315f;
-    private float xSectorSweepEnd = 45f;
+    private float xSectorSweepStart = 0f;
+    private float xSectorSweepEnd = 90f;
     private float xSectorSweepAngle = 90f;
 
     void Awake()

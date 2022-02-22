@@ -13,10 +13,10 @@ public class RadarMonopulse : MonoBehaviour
     public RadarHitList<Transform> HitListRightLobe;
 
     // 
-    float sideAngleAdjustDegree = 1f;
+    float sideAngleAdjustDegree = 0.1f;
     const float sideAngleAdjustDegreeAdjust = 0.05f;
     const float sideAngleAdjustDegreeMax = 2f;
-    const float sideAngleAdjustDegreeLowest = 0.3f;
+    const float sideAngleAdjustDegreeLowest = 0.01f;
     int targetDrift = 0; // -1 left, 1 right
     float driftTime = 0;
     public float driftMaxTime = 1;

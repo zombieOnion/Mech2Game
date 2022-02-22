@@ -988,14 +988,16 @@ MonoBehaviour:
     Press
     numpad 2 to switch to see terrain, find the enemy mech!
 
-    Left click on the
-    enemy mech to create a radar target.
+    Press Numpad 3 to
+    activate sector sweep.
 
-    Then right click to hand the target
-    over to the faster tracker radar.
+    Left click on the enemy mech to create a radar target.
 
-    After you have achieved a target lock
-    and track, press F1 to switch to pilot mode.'
+    Then
+    right click to hand the target over to the faster tracker radar.
+
+    After you
+    have achieved a target lock and track, press F1 to switch to pilot mode.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7624,7 +7626,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7796742849802426277, guid: ac0551a3decc730418890d313f0919af, type: 3}
       propertyPath: SweepSpeed
-      value: 30
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 7796742849802426277, guid: ac0551a3decc730418890d313f0919af, type: 3}
       propertyPath: radarDistance
