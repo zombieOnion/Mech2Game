@@ -13,13 +13,13 @@ public class RadarMonopulse : MonoBehaviour
     public RadarHitList<Transform> HitListRightLobe;
 
     // 
-    float sideAngleAdjustDegree = 0.1f;
+    [SerializeField] float sideAngleAdjustDegree = 0.1f;
     const float sideAngleAdjustDegreeAdjust = 0.05f;
-    const float sideAngleAdjustDegreeMax = 2f;
+    const float sideAngleAdjustDegreeMax = 1f;
     const float sideAngleAdjustDegreeLowest = 0.01f;
     int targetDrift = 0; // -1 left, 1 right
     float driftTime = 0;
-    public float driftMaxTime = 1;
+    public float driftMaxTime = 0.2f;
     int rightLeftBalance = 0; //0 only left hit, 1 only right hit, 2 both hit, 3 both null
 
     // Blip settings
@@ -58,8 +58,9 @@ public class RadarMonopulse : MonoBehaviour
             rightLeftBalance = 2;
         else
             rightLeftBalance = 3;
+        Debug.Log($"left and right {rightLeftBalance} leftToRight {leftToRight.ToString()}");
 
-        Debug.Log($"left and right {rightLeftBalance}");
+        /*
         if (rightLeftBalance == 0)
         {
             RotateTransform(false);
@@ -70,29 +71,41 @@ public class RadarMonopulse : MonoBehaviour
             RotateTransform(true);
             targetDrift = 1;
         }
-
+        
         if (rightLeftBalance != 2 && sideAngleAdjustDegree < sideAngleAdjustDegreeMax)
             sideAngleAdjustDegree += sideAngleAdjustDegreeAdjust;
         else if (rightLeftBalance == 2 && sideAngleAdjustDegree > sideAngleAdjustDegreeLowest)
             sideAngleAdjustDegree -= sideAngleAdjustDegreeAdjust;
-
-        if(rightLeftBalance == 2 && lastRightLeftBalance == 0)
-            RotateTransform(true);
-        else if(rightLeftBalance == 2 && lastRightLeftBalance == 1)
+        */
+        if ((rightLeftBalance == 2 && lastRightLeftBalance == 0) || (lastRightLeftBalance == 1 && rightLeftBalance == 0)
+            || (rightLeftBalance == 0 && lastRightLeftBalance == 0))
+        {
+            if (sideAngleAdjustDegree > sideAngleAdjustDegreeLowest)
+                sideAngleAdjustDegree -= sideAngleAdjustDegreeAdjust;
             RotateTransform(false);
+        }
+        else if ((rightLeftBalance == 2 && lastRightLeftBalance == 1) || (lastRightLeftBalance == 0 && rightLeftBalance == 1)
+            || (rightLeftBalance == 1 && lastRightLeftBalance == 1))
+        {
+            if (sideAngleAdjustDegree > sideAngleAdjustDegreeLowest)
+                sideAngleAdjustDegree -= sideAngleAdjustDegreeAdjust;
+            RotateTransform(true);
+        }
+        else if (sideAngleAdjustDegree < sideAngleAdjustDegreeMax && rightLeftBalance != 2)
+            sideAngleAdjustDegree += sideAngleAdjustDegreeAdjust;
 
-
+        /*
         Quaternion q = transform.rotation;
         q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
         transform.rotation = q;
-        if (rightLeftBalance == 3 && driftTime < driftMaxTime)
+        if (rightLeftBalance == 3 && driftTime < driftMaxTime && targetDrift != 0)
         {
             transform.Rotate(new Vector3(0, sideAngleAdjustDegree * targetDrift, 0));
             driftTime += Time.fixedDeltaTime;
         }
         else if (rightLeftBalance != 3)
             driftTime = 0f;
-
+        */
 
     }
 
