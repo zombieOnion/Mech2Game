@@ -9,17 +9,18 @@ public class RadarMonopulse : MonoBehaviour
     public bool leftToRight = true;
     public RaycastHit[] LobeHitsLeft = null;
     public RaycastHit[] LobeHitsRight = null;
+    public RaycastHit[] LobeStraightAhead= null;
     public RadarHitList<Transform> HitListLeftLobe;
     public RadarHitList<Transform> HitListRightLobe;
-
+    public RadarHitList<Transform> HitListStraightAhead;
     // 
-    [SerializeField] float sideAngleAdjustDegree = 0.1f;
-    const float sideAngleAdjustDegreeAdjust = 0.05f;
-    const float sideAngleAdjustDegreeMax = 1f;
-    const float sideAngleAdjustDegreeLowest = 0.01f;
+    [SerializeField] float sideAngleAdjustDegree = 0.2f;
+    const float sideAngleAdjustDegreeAdjust = 0.6f;
+    const float sideAngleAdjustDegreeMax = 3f;
+    const float sideAngleAdjustDegreeLowest = 0.2f;
     int targetDrift = 0; // -1 left, 1 right
     float driftTime = 0;
-    public float driftMaxTime = 0.2f;
+    public float driftMaxTime = 0.8f;
     int rightLeftBalance = 0; //0 only left hit, 1 only right hit, 2 both hit, 3 both null
 
     // Blip settings
@@ -36,11 +37,14 @@ public class RadarMonopulse : MonoBehaviour
     {
         HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, SetColourOfBlip);
         HitListRightLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, SetColourOfBlip);
+        HitListStraightAhead = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, SetColourOfBlip);
     }
 
 
     public void SearchAndTrack()
     {
+        // SCAN SEGMENT
+        LobeStraightAhead = PulseSender.SendAndRecieveRadarPulse(HitListLeftLobe);
         var lastRightLeftBalance = rightLeftBalance;
         RotateTransform(false);
         LobeHitsLeft = PulseSender.SendAndRecieveRadarPulse(HitListLeftLobe);
@@ -58,7 +62,7 @@ public class RadarMonopulse : MonoBehaviour
             rightLeftBalance = 2;
         else
             rightLeftBalance = 3;
-        Debug.Log($"left and right {rightLeftBalance} leftToRight {leftToRight.ToString()}");
+        Debug.Log($"left and right {rightLeftBalance} leftToRight {leftToRight.ToString()} last {lastRightLeftBalance}");
 
         /*
         if (rightLeftBalance == 0)
@@ -77,27 +81,47 @@ public class RadarMonopulse : MonoBehaviour
         else if (rightLeftBalance == 2 && sideAngleAdjustDegree > sideAngleAdjustDegreeLowest)
             sideAngleAdjustDegree -= sideAngleAdjustDegreeAdjust;
         */
-        if ((rightLeftBalance == 2 && lastRightLeftBalance == 0) || (lastRightLeftBalance == 1 && rightLeftBalance == 0)
-            || (rightLeftBalance == 0 && lastRightLeftBalance == 0))
+
+        // ADJUST SEGMENT BASED ON SCAN
+        //0 only left hit, 1 only right hit, 2 both hit, 3 both null
+        if(LobeStraightAhead.Length > 0 )
         {
-            if (sideAngleAdjustDegree > sideAngleAdjustDegreeLowest)
-                sideAngleAdjustDegree -= sideAngleAdjustDegreeAdjust;
+            Debug.Log($"straight ahead leftToRight {leftToRight.ToString()}");
+            DecreaseSearchAngle();
+            DecreaseSearchAngle();
+        }
+        if((rightLeftBalance == 0 && lastRightLeftBalance == 0) || (lastRightLeftBalance == 3 && rightLeftBalance == 0))
+        {
+            //IncreaseSearchAngle();
             RotateTransform(false);
         }
-        else if ((rightLeftBalance == 2 && lastRightLeftBalance == 1) || (lastRightLeftBalance == 0 && rightLeftBalance == 1)
-            || (rightLeftBalance == 1 && lastRightLeftBalance == 1))
+        else if ((rightLeftBalance == 2 && lastRightLeftBalance == 0) || (lastRightLeftBalance == 2 && rightLeftBalance == 0))
         {
-            if (sideAngleAdjustDegree > sideAngleAdjustDegreeLowest)
-                sideAngleAdjustDegree -= sideAngleAdjustDegreeAdjust;
+            DecreaseSearchAngle();
+            targetDrift = -1;
+            RotateTransform(false);
+        }
+        else if((rightLeftBalance == 1 && lastRightLeftBalance == 1) || (lastRightLeftBalance == 3 && rightLeftBalance == 1))
+        {
+            //IncreaseSearchAngle();
             RotateTransform(true);
         }
-        else if (sideAngleAdjustDegree < sideAngleAdjustDegreeMax && rightLeftBalance != 2)
-            sideAngleAdjustDegree += sideAngleAdjustDegreeAdjust;
+        else if ((rightLeftBalance == 2 && lastRightLeftBalance == 1) || (lastRightLeftBalance == 2 && rightLeftBalance == 1))
+        {
+            DecreaseSearchAngle();
+            targetDrift = 1;
+            RotateTransform(true);
+        }
+        else if (rightLeftBalance != 2)
+        {
+            IncreaseSearchAngle();
+        }
 
-        /*
+        
         Quaternion q = transform.rotation;
         q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
         transform.rotation = q;
+        /*
         if (rightLeftBalance == 3 && driftTime < driftMaxTime && targetDrift != 0)
         {
             transform.Rotate(new Vector3(0, sideAngleAdjustDegree * targetDrift, 0));
@@ -107,6 +131,22 @@ public class RadarMonopulse : MonoBehaviour
             driftTime = 0f;
         */
 
+    }
+
+    public void DecreaseSearchAngle()
+    {
+        if (sideAngleAdjustDegree - sideAngleAdjustDegreeAdjust < sideAngleAdjustDegreeLowest)
+            sideAngleAdjustDegree = sideAngleAdjustDegreeLowest;
+        else
+            sideAngleAdjustDegree -= sideAngleAdjustDegreeAdjust;
+    }
+
+    public void IncreaseSearchAngle()
+    {
+        if (sideAngleAdjustDegree + sideAngleAdjustDegreeAdjust > sideAngleAdjustDegreeMax)
+            sideAngleAdjustDegree = sideAngleAdjustDegreeMax;
+        else
+            sideAngleAdjustDegree += sideAngleAdjustDegreeAdjust;
     }
 
     private void RotateTransform(bool increase)

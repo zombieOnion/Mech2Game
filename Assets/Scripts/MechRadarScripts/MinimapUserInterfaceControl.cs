@@ -38,7 +38,6 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 			return (worldPoint, clickedTarget[0]); 
 	}
 	public void OnPointClick1() {
-		Debug.Log("click1");
 		(Vector3 point, Collider target) = FindGroundAndScan();
 		if(target == null)
 			targetProcessor.CreateNewTarget(point);
@@ -47,7 +46,6 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	}
 
 	public void OnPointClick2() {
-		Debug.Log("click2");
 		(Vector3 _, Collider target) = FindGroundAndScan();
 		if (target == null)
 			return;

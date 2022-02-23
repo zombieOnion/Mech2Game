@@ -24,6 +24,11 @@ public class RadarTrackerScript : MonoBehaviour
 
     private void UpdateTargetWithHits(RadarMonopulse pulse)
     {
+        if (pulse.LobeStraightAhead != null && pulse.LobeStraightAhead.Length > 0)
+        {
+            foreach (var hit in pulse.LobeStraightAhead)
+                CurrentlyTrackedTarget.ReceiveNewRadarHitOnTarget(hit.transform);
+        }
         if (pulse.LobeHitsLeft != null && pulse.LobeHitsLeft.Length > 0)
         {
             foreach(var hit in pulse.LobeHitsLeft)
