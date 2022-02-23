@@ -15,7 +15,7 @@ public class RadarMonopulse : MonoBehaviour
     public RadarHitList<Transform> HitListStraightAhead;
     // 
     [SerializeField] float sideAngleAdjustDegree = 0.2f;
-    const float sideAngleAdjustDegreeAdjust = 0.6f;
+    const float sideAngleAdjustDegreeAdjust = 0.2f;
     const float sideAngleAdjustDegreeMax = 3f;
     const float sideAngleAdjustDegreeLowest = 0.2f;
     int targetDrift = 0; // -1 left, 1 right
@@ -92,7 +92,7 @@ public class RadarMonopulse : MonoBehaviour
         }
         if((rightLeftBalance == 0 && lastRightLeftBalance == 0) || (lastRightLeftBalance == 3 && rightLeftBalance == 0))
         {
-            //IncreaseSearchAngle();
+            IncreaseSearchAngle();
             RotateTransform(false);
         }
         else if ((rightLeftBalance == 2 && lastRightLeftBalance == 0) || (lastRightLeftBalance == 2 && rightLeftBalance == 0))
@@ -103,7 +103,7 @@ public class RadarMonopulse : MonoBehaviour
         }
         else if((rightLeftBalance == 1 && lastRightLeftBalance == 1) || (lastRightLeftBalance == 3 && rightLeftBalance == 1))
         {
-            //IncreaseSearchAngle();
+            IncreaseSearchAngle();
             RotateTransform(true);
         }
         else if ((rightLeftBalance == 2 && lastRightLeftBalance == 1) || (lastRightLeftBalance == 2 && rightLeftBalance == 1))
