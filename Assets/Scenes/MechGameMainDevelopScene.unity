@@ -986,10 +986,10 @@ MonoBehaviour:
   m_text: 'The red dots are radar echos, not only enemies return radar echos.
 
     Press
-    numpad 2 to switch to see terrain, find the enemy mech!
+    numpad 3 to activate sector sweep.
 
-    Press Numpad 3 to
-    activate sector sweep.
+    Press numpad 2 to switch to see terrain,
+    find the enemy mech!
 
     Left click on the enemy mech to create a radar target.
 
