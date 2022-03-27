@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class RadarBlipScript : MonoBehaviour
 {
-
+    public Guid radarSignature;
     private float DisappearTimer;
     public float DisappearTimerMax;
 

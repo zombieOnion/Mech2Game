@@ -8,7 +8,6 @@ using static PhysicalSpaceLibrary;
 public class RadarSweepScript : MonoBehaviour
 {
     // general variables
-    [SerializeField] public LayerMask RadarLayer;
     private RadarTargetComputer targetProcessor;
     private bool radarOn = true;
     public bool RadarOn { get => radarOn; set => radarOn = value; }
@@ -17,8 +16,9 @@ public class RadarSweepScript : MonoBehaviour
     // cache variables and blips
     public SendRadarPulseAndCreateRadarEchoes PulseSender;
     public RadarHitList<Transform> HitList;
-    private int blipCount = 1000;
-    private float blipTimeOut = 5;
+    protected int blipCount = 1000;
+    protected float blipTimeOut = 5;
+    public readonly Guid RadarSignature = new Guid();
 
     // radar rotation and speed
     private float xSweepRotationAngle;
@@ -41,7 +41,7 @@ public class RadarSweepScript : MonoBehaviour
 
     void Start()
     {
-        HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut);
+        CreateTargetCache();
     }
 
     public void FixedUpdate()
@@ -65,12 +65,21 @@ public class RadarSweepScript : MonoBehaviour
         if (lastXAngle <= 360f && xSweepRotationAngle > 360f)
             xSweepRotationAngle = 0;
 
-        var hits = PulseSender.SendAndRecieveRadarPulse(HitList);
+        var hits = SendAndCreateTargets();
         if (hits.Length == 0)
             return;
         foreach (var hit in hits.Select(hit => hit.transform).ToArray())
             AddRadarHit(hit);
     }
+    protected virtual void CreateTargetCache()
+    {
+        HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature);
+    }
+
+    protected virtual RaycastHit[] SendAndCreateTargets()
+    {
+        return PulseSender.SendAndRecieveRadarPulse(HitList);
+    } 
 
     private void AddRadarHit(Transform radarHit)
     {

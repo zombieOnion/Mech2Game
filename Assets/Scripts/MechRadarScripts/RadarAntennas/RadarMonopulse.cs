@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,7 @@ public class RadarMonopulse : MonoBehaviour
     public SendRadarPulseAndCreateRadarEchoes PulseSender;
     public float BlipTimeOut = 0.5f;
     public int BlipSize = 20;
+    public readonly Guid RadarSignature = new Guid();
 
     void Awake()
     {
@@ -35,9 +37,9 @@ public class RadarMonopulse : MonoBehaviour
 
     void Start()
     {
-        HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, SetColourOfBlip);
-        HitListRightLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, SetColourOfBlip);
-        HitListStraightAhead = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, SetColourOfBlip);
+        HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
+        HitListRightLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
+        HitListStraightAhead = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
     }
 
 
