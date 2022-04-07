@@ -7,11 +7,13 @@ using static PhysicalSpaceLibrary;
 
 public class MinimapUserInterfaceControl : MonoBehaviour {
 	//deklarera variabler: objektet, dess component, och variabeln camSize:
+	public readonly Guid MechRadarComputerSignature = new Guid();
 	public GameObject minimapCameraGO;
 	private Camera minimapCamera;
 	public float camSize;
 	private RadarSweepScript radarSweeper;
 	private RadarTargetComputer targetProcessor;
+	private RadarTrackerScript trackerScript;
 	private MechShoot mechShoot;
 	[SerializeField] public LayerMask OnlyPlotLayermask;
 	[SerializeField] public LayerMask PlotAndTerrainLayermask;
@@ -23,11 +25,18 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 		radarSweeper = minimapCameraGO.transform.root.GetComponentInChildren<RadarSweepScript>();
 		minimapCamera.orthographicSize = camSize;
 		targetProcessor = gameObject.transform.root.GetComponentInChildren<RadarTargetComputer>();
+		trackerScript = gameObject.transform.root.GetComponentInChildren<RadarTrackerScript>();
 		mechShoot = gameObject.transform.root.GetComponentInChildren<MechShoot>();
 		//camSize = minimapCamera.GetComponent<Camera>.orthographicSize;
 	}
 
-	private Vector3 GetClickedWorldPoint() => minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+    void Start()
+    {
+		targetProcessor.MechRadarComputerSignature = MechRadarComputerSignature;
+		trackerScript.MechRadarComputerSignature = MechRadarComputerSignature;
+	}
+
+    private Vector3 GetClickedWorldPoint() => minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 	private (Vector3, Collider) FindGroundAndScan() {
 		Vector3 worldPoint = GetClickedWorldPoint();
 		worldPoint.y = Terrain.activeTerrain.SampleHeight(transform.position);

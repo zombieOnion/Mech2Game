@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class RadarTrackerScript : MonoBehaviour
 {
+    public Guid MechRadarComputerSignature;
     [SerializeField] public Transform RadarBlip;
     public bool TrackingTarget = false;
     public RadarTargetScript CurrentlyTrackedTarget = null;
@@ -24,6 +25,8 @@ public class RadarTrackerScript : MonoBehaviour
 
     private void UpdateTargetWithHits(RadarMonopulse pulse)
     {
+        if (CurrentlyTrackedTarget == null)
+            return;
         if (pulse.LobeStraightAhead != null && pulse.LobeStraightAhead.Length > 0)
         {
             foreach (var hit in pulse.LobeStraightAhead)
@@ -42,6 +45,8 @@ public class RadarTrackerScript : MonoBehaviour
     }
 
     public void TrackTarget(RadarTargetScript target) {
+        if (target.MechRadarComputerSignature != MechRadarComputerSignature)
+            return;
         TrackingTarget = true;
         CurrentlyTrackedTarget = target;
         CurrentlyTrackedTarget.TrackerRadarIsOn = true;

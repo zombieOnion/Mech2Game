@@ -1,4 +1,5 @@
 Mattias:
-*Radarvarnare
+*Radarvarnare X
+*Fiender Mechs kan låsa spelaren X
 *Störsändare
 *Ändra om scenario text till Unity Events

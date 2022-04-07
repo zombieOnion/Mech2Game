@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class RadarTargetScript : MonoBehaviour
 {
+    public Guid MechRadarComputerSignature;
+    public Guid mechRadar;
     public bool StayActive = true;
     public bool TrackerRadarIsOn = false;
     public Transform TargetTransform = null;
@@ -19,7 +21,7 @@ public class RadarTargetScript : MonoBehaviour
     public int MaxRadarHitHistory = 50;
     public RadarHitList<Transform> RadarHits;
 
-    void Start() {
+    void Awake() {
         RadarHits = new RadarHitList<Transform>(MaxRadarHitHistory);
         _hitReceiverCountDown = _maxTimeWaitForNewHit;
     }

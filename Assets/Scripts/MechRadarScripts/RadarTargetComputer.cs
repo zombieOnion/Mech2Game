@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class RadarTargetComputer : MonoBehaviour
 {
+    public Guid MechRadarComputerSignature;
     private RadarTrackerScript _radarTracker;
     public List<Transform> Targets = new List<Transform>();
     [SerializeField] public Transform RadarTarget;
@@ -24,8 +25,11 @@ public class RadarTargetComputer : MonoBehaviour
         Destroy(clickedTarget.gameObject);
     }
 
-    public void CreateNewTarget(Vector3 position) {
-        Targets.Add(Instantiate(RadarTarget, position, new Quaternion()).transform);
+    public RadarTargetScript CreateNewTarget(Vector3 position) {
+        var newTarget = Instantiate(RadarTarget, position, new Quaternion());
+        newTarget.GetComponent<RadarTargetScript>().MechRadarComputerSignature = MechRadarComputerSignature;
+        Targets.Add(newTarget.transform);
+        return newTarget.GetComponent<RadarTargetScript>();
     }
 
     public void TrackTarget(RadarTargetScript target) {
