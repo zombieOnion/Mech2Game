@@ -37,6 +37,9 @@ public class RadarHitList <T> {
         return current;
     }
     public List<T> GetLast(int amount) {
+        if(amount > RadarHits.Length)
+            amount = RadarHits.Length;
+        //Debug.Log($"amount: {amount} NextToAddIndex: {NextToAddIndex} RadarHits: {RadarHits.Length}");
         List<T> returnList = new List<T>(amount);
         if(0 >= NextToAddIndex - amount) {
             for(int i = NextToAddIndex-1; i >= 0; i--) {
