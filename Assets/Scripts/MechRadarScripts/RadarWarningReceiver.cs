@@ -41,20 +41,28 @@ public class RadarWarningReceiver : MonoBehaviour
         RadarWarningReceiverUI.SetActive(true);
         RadarSignatureOfHit = (other.GetComponent<RadarBlipScript>()).radarSignature;
         countUpSenseHit = 0;
-        StartCoroutine(TurnOffRWR());
+        //StartCoroutine(TurnOffRWR());
     }
 
     private void Update()
     {
         countUpSenseHit += Time.deltaTime;
+        if (countUpSenseHit > maxRadarReciverTime)
+        {
+            RadarWarningReceiverUI.SetActive(false);
+            countUpSenseHit = 0;
+        }
         triggerActivationRestPeriodCount += Time.deltaTime;
     }
 
     private IEnumerator TurnOffRWR()
     {
         yield return new WaitForSeconds(radarHitTime);
-        if(countUpSenseHit > maxRadarReciverTime)
+        if (countUpSenseHit > maxRadarReciverTime)
+        {
             RadarWarningReceiverUI.SetActive(false);
+            countUpSenseHit = 0;
+        }
     }
 
     private void DrawRadarDirection(Vector3 dir)

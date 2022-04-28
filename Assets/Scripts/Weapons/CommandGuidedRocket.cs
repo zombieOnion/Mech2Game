@@ -36,7 +36,7 @@ public class CommandGuidedRocket : WeaponBase, ILockTarget {
 
         //get the angle between transform.forward and target delta
         float angleDiff = Vector3.Angle(transform.forward, targetDelta);
-        Debug.Log(angleDiff);
+        //Debug.Log(angleDiff);
         if(angleDiff > 20)
         {
             Destroy(gameObject, 5);
