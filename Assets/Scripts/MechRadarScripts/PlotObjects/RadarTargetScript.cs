@@ -7,7 +7,6 @@ using UnityEngine;
 public class RadarTargetScript : MonoBehaviour
 {
     public Guid MechRadarComputerSignature;
-    public Guid mechRadar;
     public bool StayActive = true;
     public bool TrackerRadarIsOn = false;
     public Transform TargetTransform = null;

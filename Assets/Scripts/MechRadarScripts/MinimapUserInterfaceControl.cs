@@ -7,13 +7,13 @@ using static PhysicalSpaceLibrary;
 
 public class MinimapUserInterfaceControl : MonoBehaviour {
 	//deklarera variabler: objektet, dess component, och variabeln camSize:
-	public readonly Guid MechRadarComputerSignature = new Guid();
+	public readonly Guid MechRadarComputerSignature = Guid.NewGuid();
 	public GameObject minimapCameraGO;
 	private Camera minimapCamera;
 	public float camSize;
 	private RadarSweepScript radarSweeper;
 	private RadarTargetComputer targetProcessor;
-	private RadarTrackerScript trackerScript;
+	//private RadarTrackerScript trackerScript;
 	private MechShoot mechShoot;
 	[SerializeField] public LayerMask OnlyPlotLayermask;
 	[SerializeField] public LayerMask PlotAndTerrainLayermask;
@@ -25,15 +25,15 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 		radarSweeper = minimapCameraGO.transform.root.GetComponentInChildren<RadarSweepScript>();
 		minimapCamera.orthographicSize = camSize;
 		targetProcessor = gameObject.transform.root.GetComponentInChildren<RadarTargetComputer>();
-		trackerScript = gameObject.transform.root.GetComponentInChildren<RadarTrackerScript>();
+		//trackerScript = gameObject.transform.root.GetComponentInChildren<RadarTrackerScript>();
 		mechShoot = gameObject.transform.root.GetComponentInChildren<MechShoot>();
+		targetProcessor.MechRadarComputerSignature = MechRadarComputerSignature;
 		//camSize = minimapCamera.GetComponent<Camera>.orthographicSize;
 	}
 
     void Start()
     {
-		targetProcessor.MechRadarComputerSignature = MechRadarComputerSignature;
-		trackerScript.MechRadarComputerSignature = MechRadarComputerSignature;
+		//trackerScript.MechRadarComputerSignature = MechRadarComputerSignature;
 	}
 
     private Vector3 GetClickedWorldPoint() => minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
@@ -85,6 +85,8 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	public void OnDecreaseSectorSweep() => radarSweeper.DecreaseSectorSweep();
 	public void OnRotateSectorSweepForward() => radarSweeper.RotateSectorSweepForward();
 	public void OnRotateSectorSweepBackward() => radarSweeper.RotateSectorSweepBackward();
+
+	public void OnJammTarget() => targetProcessor.JammTarget();
 
 
 }

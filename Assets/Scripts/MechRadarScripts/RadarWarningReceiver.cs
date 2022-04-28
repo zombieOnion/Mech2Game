@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -8,7 +9,12 @@ public class RadarWarningReceiver : MonoBehaviour
     LayerMask radarBlipsMask;
     LayerMask uiMask;
     public GameObject RadarWarningReceiverUI;
-    float radarHitTime = 2f;
+    float radarHitTime = 1f;
+    public Guid? RadarSignatureOfHit = null;
+    float maxRadarReciverTime = 2f;
+    float countUpSenseHit = 0f;
+    float triggerActivationRestPeriod = 0.2f;
+    float triggerActivationRestPeriodCount = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,21 +26,35 @@ public class RadarWarningReceiver : MonoBehaviour
     {
         if (other.gameObject.layer != radarBlipsMask || !other.name.Equals("RadarBlip(Clone)"))
             return;
+        if(triggerActivationRestPeriodCount < triggerActivationRestPeriod)
+            return;
+        else
+            triggerActivationRestPeriodCount = 0;
+
         Vector3 hit = new Vector3(other.transform.position.x, 1, other.transform.position.z);
         Vector3 org = new Vector3(transform.position.x, 1, transform.position.z);
-        Debug.Log(hit + " " + org);
+        //Debug.Log(hit + " " + org);
         Vector3 dir = (hit - org).normalized;
-        Debug.DrawLine(transform.position, transform.position + dir * 10, Color.red, Mathf.Infinity);
-        Debug.Log(other.name +" "+ dir);
+        //Debug.DrawLine(transform.position, transform.position + dir * 10, Color.red, Mathf.Infinity);
+        //Debug.Log(other.name +" "+ dir);
         DrawRadarDirection(dir);
         RadarWarningReceiverUI.SetActive(true);
+        RadarSignatureOfHit = (other.GetComponent<RadarBlipScript>()).radarSignature;
+        countUpSenseHit = 0;
         StartCoroutine(TurnOffRWR());
+    }
+
+    private void Update()
+    {
+        countUpSenseHit += Time.deltaTime;
+        triggerActivationRestPeriodCount += Time.deltaTime;
     }
 
     private IEnumerator TurnOffRWR()
     {
         yield return new WaitForSeconds(radarHitTime);
-        RadarWarningReceiverUI.SetActive(false);
+        if(countUpSenseHit > maxRadarReciverTime)
+            RadarWarningReceiverUI.SetActive(false);
     }
 
     private void DrawRadarDirection(Vector3 dir)

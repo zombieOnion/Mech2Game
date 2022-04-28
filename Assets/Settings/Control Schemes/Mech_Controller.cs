@@ -361,6 +361,15 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""JammTarget"",
+                    ""type"": ""Button"",
+                    ""id"": ""9519a42f-4172-4ce2-8026-1685c0890c2d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -506,6 +515,17 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                     ""action"": ""RotateSectorSweepBackward"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53deed56-74db-4d16-acff-cd0a95623066"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""JammTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -562,6 +582,7 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
         m_ElectronicWarfareOfficer_DecreaseSectorSweep = m_ElectronicWarfareOfficer.FindAction("DecreaseSectorSweep", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_RotateSectorSweepForward = m_ElectronicWarfareOfficer.FindAction("RotateSectorSweepForward", throwIfNotFound: true);
         m_ElectronicWarfareOfficer_RotateSectorSweepBackward = m_ElectronicWarfareOfficer.FindAction("RotateSectorSweepBackward", throwIfNotFound: true);
+        m_ElectronicWarfareOfficer_JammTarget = m_ElectronicWarfareOfficer.FindAction("JammTarget", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -699,6 +720,7 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
     private readonly InputAction m_ElectronicWarfareOfficer_DecreaseSectorSweep;
     private readonly InputAction m_ElectronicWarfareOfficer_RotateSectorSweepForward;
     private readonly InputAction m_ElectronicWarfareOfficer_RotateSectorSweepBackward;
+    private readonly InputAction m_ElectronicWarfareOfficer_JammTarget;
     public struct ElectronicWarfareOfficerActions
     {
         private @Mech_Controller m_Wrapper;
@@ -716,6 +738,7 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
         public InputAction @DecreaseSectorSweep => m_Wrapper.m_ElectronicWarfareOfficer_DecreaseSectorSweep;
         public InputAction @RotateSectorSweepForward => m_Wrapper.m_ElectronicWarfareOfficer_RotateSectorSweepForward;
         public InputAction @RotateSectorSweepBackward => m_Wrapper.m_ElectronicWarfareOfficer_RotateSectorSweepBackward;
+        public InputAction @JammTarget => m_Wrapper.m_ElectronicWarfareOfficer_JammTarget;
         public InputActionMap Get() { return m_Wrapper.m_ElectronicWarfareOfficer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -764,6 +787,9 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                 @RotateSectorSweepBackward.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRotateSectorSweepBackward;
                 @RotateSectorSweepBackward.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRotateSectorSweepBackward;
                 @RotateSectorSweepBackward.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnRotateSectorSweepBackward;
+                @JammTarget.started -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnJammTarget;
+                @JammTarget.performed -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnJammTarget;
+                @JammTarget.canceled -= m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface.OnJammTarget;
             }
             m_Wrapper.m_ElectronicWarfareOfficerActionsCallbackInterface = instance;
             if (instance != null)
@@ -807,6 +833,9 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
                 @RotateSectorSweepBackward.started += instance.OnRotateSectorSweepBackward;
                 @RotateSectorSweepBackward.performed += instance.OnRotateSectorSweepBackward;
                 @RotateSectorSweepBackward.canceled += instance.OnRotateSectorSweepBackward;
+                @JammTarget.started += instance.OnJammTarget;
+                @JammTarget.performed += instance.OnJammTarget;
+                @JammTarget.canceled += instance.OnJammTarget;
             }
         }
     }
@@ -852,5 +881,6 @@ public partial class @Mech_Controller : IInputActionCollection2, IDisposable
         void OnDecreaseSectorSweep(InputAction.CallbackContext context);
         void OnRotateSectorSweepForward(InputAction.CallbackContext context);
         void OnRotateSectorSweepBackward(InputAction.CallbackContext context);
+        void OnJammTarget(InputAction.CallbackContext context);
     }
 }

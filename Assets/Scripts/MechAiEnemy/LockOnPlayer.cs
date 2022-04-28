@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LockOnPlayer : MonoBehaviour
 {
-    public readonly Guid MechRadarComputerSignature = new Guid();
+    public readonly Guid MechRadarComputerSignature = Guid.NewGuid();
     [SerializeField] GameObject PlayerMech;
     RadarTrackerScript radarTrackerScript;
     RadarTargetComputer radarTargetComputerScript;

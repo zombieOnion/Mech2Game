@@ -28,7 +28,7 @@ public class RadarMonopulse : MonoBehaviour
     public SendRadarPulseAndCreateRadarEchoes PulseSender;
     public float BlipTimeOut = 0.5f;
     public int BlipSize = 20;
-    public readonly Guid RadarSignature = new Guid();
+    public readonly Guid RadarSignature = Guid.NewGuid();
 
     void Awake()
     {
@@ -64,7 +64,7 @@ public class RadarMonopulse : MonoBehaviour
             rightLeftBalance = 2;
         else
             rightLeftBalance = 3;
-        Debug.Log($"left and right {rightLeftBalance} leftToRight {leftToRight.ToString()} last {lastRightLeftBalance}");
+        //Debug.Log($"left and right {rightLeftBalance} leftToRight {leftToRight.ToString()} last {lastRightLeftBalance}");
 
         /*
         if (rightLeftBalance == 0)
@@ -88,7 +88,7 @@ public class RadarMonopulse : MonoBehaviour
         //0 only left hit, 1 only right hit, 2 both hit, 3 both null
         if(LobeStraightAhead.Length > 0 )
         {
-            Debug.Log($"straight ahead leftToRight {leftToRight.ToString()}");
+            //Debug.Log($"straight ahead leftToRight {leftToRight.ToString()}");
             DecreaseSearchAngle();
             DecreaseSearchAngle();
         }
