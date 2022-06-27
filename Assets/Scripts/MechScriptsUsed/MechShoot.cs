@@ -42,7 +42,7 @@ public class MechShoot : MonoBehaviour {
     }
 
     public void FireMainGun() {
-        GameObject newRocket = Instantiate(selectedWeapon, transform.position + transform.forward, transform.rotation) as GameObject;
+        GameObject newRocket = Instantiate(selectedWeapon, transform.position + transform.forward*2, transform.rotation) as GameObject;
         newRocket.GetComponent<Rigidbody>().AddForce(rb.transform.forward * 5, ForceMode.VelocityChange);
         ILockTarget lockTarget = newRocket.GetComponent<ILockTarget>();
         if (CurrentTarget != null && lockTarget != null)
@@ -61,6 +61,13 @@ public class MechShoot : MonoBehaviour {
         {
             nextFire += Time.deltaTime;
         }
+        xRotation -= _panThisFrame.y * LookRotationSpeed;
+        yRotation += _panThisFrame.x * LookRotationSpeed;
+        Debug.Log("x: "+ transform.parent.rotation.eulerAngles.x);
+        Debug.Log("y: "+transform.parent.rotation.eulerAngles.y);
+        xRotation = Mathf.Clamp(xRotation, transform.parent.rotation.eulerAngles.x - 20, transform.parent.rotation.eulerAngles.x + 20);
+        yRotation = Mathf.Clamp(yRotation, transform.parent.rotation.eulerAngles.y - 40, transform.parent.rotation.eulerAngles.y + 40);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 
     public void OnFire1() {
@@ -77,11 +84,6 @@ public class MechShoot : MonoBehaviour {
     }
     public void OnLook(InputValue input) {
         _panThisFrame = input.Get<Vector2>() * 0.125f;
-        xRotation -= _panThisFrame.y * LookRotationSpeed;
-        yRotation += _panThisFrame.x * LookRotationSpeed;
-        //xRotation = Mathf.Clamp(xRotation, transform.parent.rotation.x-40, transform.parent.rotation.x+40);
-        //yRotation = Mathf.Clamp(yRotation, transform.parent.rotation.y-40, transform.parent.rotation.y+40);
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 
     public void OnChangeWeapon() {
