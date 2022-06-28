@@ -26,7 +26,11 @@ public class RadarTrackerScript : MonoBehaviour
     private void UpdateTargetWithHits(RadarMonopulse pulse)
     {
         if (CurrentlyTrackedTarget == null)
+        {
+            TrackingTarget = false;
             return;
+        }
+            
         if (pulse.LobeStraightAhead != null && pulse.LobeStraightAhead.Length > 0)
         {
             foreach (var hit in pulse.LobeStraightAhead)
@@ -60,5 +64,10 @@ public class RadarTrackerScript : MonoBehaviour
         var previouslyTrackedTarget = CurrentlyTrackedTarget;
         CurrentlyTrackedTarget = null;
         return previouslyTrackedTarget;
+    }
+
+    public void OnDestroy()
+    {
+        Destroy(CurrentlyTrackedTarget.gameObject);
     }
 }

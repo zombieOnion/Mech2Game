@@ -41,6 +41,7 @@ public class MechShootAtPlayer : MonoBehaviour
     {
         if(radarTargetComputerScript == null) return;
         mechShoot.OnChangeWeapon();
+        gameObject.transform.LookAt(PlayerMech.transform.position);
         mechShoot.LockTarget(radarTargetComputerScript.CurrentlyTrackedTarget.transform);
         mechShoot.FireMainGun();
         mechShoot.OnChangeWeapon();

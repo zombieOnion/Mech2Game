@@ -69,4 +69,10 @@ public class RadarTargetComputer : MonoBehaviour
             IsJamming = false;
         }
     }
+
+    public void OnDestroy()
+    {
+        Targets.ForEach(x => Destroy(x.gameObject));
+        Targets.Clear();
+    }
 }

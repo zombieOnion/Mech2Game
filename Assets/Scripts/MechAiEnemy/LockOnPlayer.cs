@@ -17,7 +17,10 @@ public class LockOnPlayer : MonoBehaviour
         radarTargetComputerScript = gameObject.transform.parent.gameObject.GetComponentInChildren<RadarTargetComputer>();
         radarTrackerScript.MechRadarComputerSignature = MechRadarComputerSignature;
         radarTargetComputerScript.MechRadarComputerSignature = MechRadarComputerSignature;
+        gameObject.transform.LookAt(PlayerMech.transform.position);
         var playerTarget = radarTargetComputerScript.CreateNewTarget(PlayerMech.transform.position);
+        playerTarget.GetComponent<MeshRenderer>().enabled = false;
         radarTargetComputerScript.TrackTarget(playerTarget);
     }
+
 }

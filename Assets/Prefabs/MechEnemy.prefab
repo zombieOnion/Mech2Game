@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 54626018736626550}
   - component: {fileID: 90669760}
   - component: {fileID: 90669761}
+  - component: {fileID: 219970310476326771}
   m_Layer: 3
   m_Name: MechEnemy
   m_TagString: TestEnemy
@@ -313,7 +314,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &90669760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,6 +341,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrust: 1
   rb: {fileID: 0}
+--- !u!114 &219970310476326771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803561295360038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7635ac80112af48ad2797f3d0085dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DisableUiElements:
+  - {fileID: 0}
+  - {fileID: 0}
+  ActivateUiElements:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1927623204560760
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,12 +489,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6498a847efbaab14b940c664be1e9289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedWeaponBase: {fileID: 0}
   LookRotationSpeed: 1
   rb: {fileID: 0}
   gunnerCam: {fileID: 0}
   MechParent: {fileID: 4185401245404222}
   CurrentTarget: {fileID: 0}
   UseMouse: 0
+  TimeSenseFires: 0
 --- !u!114 &912460294685778858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,6 +510,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerMech: {fileID: 0}
+  ShootReloadTime: 1
 --- !u!1001 &4797290497795258522
 PrefabInstance:
   m_ObjectHideFlags: 0

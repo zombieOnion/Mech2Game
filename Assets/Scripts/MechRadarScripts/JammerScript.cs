@@ -35,16 +35,19 @@ public class JammerScript : MonoBehaviour
 
     public bool JammTarget()
     {
-        if (jammTargetGuid is null || jammingTargetScript is null) {
+        if (jammTargetGuid == null || jammingTargetScript == null) {
             Console.WriteLine("Trying to jamm without supplied radarSignature");
+            IsJamming = false;
             return false;
         }
         var heading = (jammingTargetScript.transform.position - gameObject.transform.root.position).normalized;
         var blip = JammingRadarBlips.AdvanceNext();
         var direction = jammingTargetScript.transform.position + heading;
 
-        var randomShootDispersionFactor = UnityEngine.Random.Range(-10, 10);
-        var newVector = new Vector3(gameObject.transform.position.x + randomShootDispersionFactor, gameObject.transform.position.y, gameObject.transform.position.z + randomShootDispersionFactor);
+        //var randomShootDispersionFactor = UnityEngine.Random.Range(-20, 20);
+        var newVector = new Vector3(gameObject.transform.position.x + UnityEngine.Random.Range(10, 60), 
+            gameObject.transform.position.y, 
+            gameObject.transform.position.z + UnityEngine.Random.Range(-30, 30));
         blip.transform.position = newVector + heading * 1 * blipCount;
         blip.gameObject.SetActive(true);
         blip.GetComponent<RadarBlipScript>().ResetAppearTime();

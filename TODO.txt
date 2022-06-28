@@ -1,5 +1,8 @@
 Mattias:
 *Radarvarnare X
 *Fiender Mechs kan låsa spelaren X
-*Störsändare
+*Störsändare X
 *Ändra om scenario text till Unity Events
+*Visa radarlock i pilotvyn X
+*Ny scen med terräng (byggnader, träd) som träffas av radar.
+*Infraröd och laser och motmedel i pilotvy

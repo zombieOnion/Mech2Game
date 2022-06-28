@@ -28,6 +28,6 @@ public class MechHealth : MonoBehaviour, IHealth
         print("Mech was destroyed");
         Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity, 1 << 8);
          foreach (Collider collider in hitColliders)
-            collider.gameObject.SetActive(false);
+            Destroy(collider.gameObject);
     }
 }
