@@ -5,13 +5,17 @@ using UnityEngine.InputSystem;
 
 public class GameSettings : MonoBehaviour
 {
+    public enum SceneCamera { MainCamera = 0, NavCamera = 1, Split = 2 };
+
     public Camera PilotCamera;
     public Camera EWOCamera;
+    public SceneCamera ActiveCamera = SceneCamera.MainCamera;
 
     public MechPilotInputConfiguration pilotInputCfg;
     public EWOInputConfiguration ewoInputCfg;
 
-    private void Start() {
+    private void Start()
+    {
         pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
         ewoInputCfg = EWOCamera.GetComponent<EWOInputConfiguration>();
         Invoke("initStart", 0.2f);
@@ -19,7 +23,8 @@ public class GameSettings : MonoBehaviour
 
     private void initStart()
     {
-        SetCameraToFullscreen(0, FullscreenRect, 1, FullscreenRect);
+        SecActiveCameras(SceneCamera.MainCamera);
+        SetCamerasSizes(FullscreenRect, FullscreenRect);
         Cursor.lockState = CursorLockMode.Locked;
         pilotInputCfg.PlayerInput.ActivateInput();
         ewoInputCfg.PlayerInput.DeactivateInput();
@@ -30,7 +35,8 @@ public class GameSettings : MonoBehaviour
     {
         if (Keyboard.current.f1Key.wasPressedThisFrame)
         {
-            SetCameraToFullscreen(0, FullscreenRect, 1, FullscreenRect);
+            SecActiveCameras(SceneCamera.MainCamera);
+            SetCamerasSizes(FullscreenRect, FullscreenRect);
             Cursor.lockState = CursorLockMode.Locked;
             pilotInputCfg.PlayerInput.ActivateInput();
             ewoInputCfg.PlayerInput.DeactivateInput();
@@ -38,26 +44,34 @@ public class GameSettings : MonoBehaviour
         }
         if (Keyboard.current.f2Key.wasPressedThisFrame)
         {
-            SetCameraToFullscreen(1, FullscreenRect, 0, FullscreenRect);
+            SecActiveCameras(SceneCamera.NavCamera);
+            SetCamerasSizes(FullscreenRect, FullscreenRect);
             Cursor.lockState = CursorLockMode.Confined;
             pilotInputCfg.PlayerInput.DeactivateInput();
             ewoInputCfg.PlayerInput.ActivateInput();
             ewoInputCfg.SetEWOKeyboardMouse();
         }
-        if(Keyboard.current.f3Key.wasPressedThisFrame)
-            SetCameraToFullscreen(0, new Rect(0, 0, 0.5f, 1), 0, new Rect(0.5f, 0, 0.5f, 1));
+        if (Keyboard.current.f3Key.wasPressedThisFrame)
+        {
+            SetCamerasSizes(new Rect(0, 0, 0.5f, 1), new Rect(0.5f, 0, 0.5f, 1));
+            SecActiveCameras(SceneCamera.Split);
+        }
+            
 
-        if(Keyboard.current.f5Key.wasPressedThisFrame) {
+        if (Keyboard.current.f5Key.wasPressedThisFrame)
+        {
             pilotInputCfg.PlayerInput.ActivateInput();
             ewoInputCfg.PlayerInput.DeactivateInput();
             pilotInputCfg.SetPilotKeyboardMouse();
         }
-        if(Keyboard.current.f6Key.wasPressedThisFrame) {
+        if (Keyboard.current.f6Key.wasPressedThisFrame)
+        {
             pilotInputCfg.PlayerInput.ActivateInput();
             ewoInputCfg.PlayerInput.DeactivateInput();
             pilotInputCfg.SetXboxController();
         }
-        if(Keyboard.current.f7Key.wasPressedThisFrame) {
+        if (Keyboard.current.f7Key.wasPressedThisFrame)
+        {
             pilotInputCfg.PlayerInput.DeactivateInput();
             ewoInputCfg.PlayerInput.ActivateInput();
             ewoInputCfg.SetEWOKeyboardMouse();
@@ -65,11 +79,33 @@ public class GameSettings : MonoBehaviour
     }
     private Rect FullscreenRect => new Rect(0, 0, 1, 1);
 
-    private void SetCameraToFullscreen(int pilotDisplay, Rect pilotRect, int ewoDisplay, Rect ewoRect) {
-        PilotCamera.targetDisplay = pilotDisplay;
-        EWOCamera.targetDisplay = ewoDisplay;
+    private void SetCamerasSizes(Rect pilotRect, Rect ewoRect)
+    {
         PilotCamera.rect = pilotRect;
         EWOCamera.rect = ewoRect;
+    }
+
+    private void SecActiveCameras(SceneCamera newActiveCamera)
+    {
+
+        switch (newActiveCamera)
+        {
+            case SceneCamera.MainCamera:
+                PilotCamera.enabled = true;
+                EWOCamera.enabled = false;
+                break;
+            case SceneCamera.NavCamera:
+                PilotCamera.enabled = false;
+                EWOCamera.enabled = true;
+                break;
+            case SceneCamera.Split:
+                PilotCamera.enabled = true;
+                EWOCamera.enabled = true;
+                break;
+            default:
+                break;
+        }
+
     }
 
 }

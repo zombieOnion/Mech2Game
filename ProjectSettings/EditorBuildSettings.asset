@@ -5,8 +5,17 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/InitBootStrap.unity
+    guid: 1e29378b4b38d48438958b3a1e6169be
+  - enabled: 1
+    path: Assets/Scenes/StartMenu.unity
+    guid: 1560c1a016702424db3c4c9b5d3201d8
+  - enabled: 1
+    path: Assets/Scenes/ScanJamKillLobby.unity
+    guid: b37d88dfde710934e92900366bc6e7e6
+  - enabled: 1
+    path: Assets/Scenes/MechGameMainDevelopScene.unity
+    guid: 3361f680b1873a04c9fe6aa523e02a28
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: fd594c50c45806b48954cadd97ca9b0f, type: 2}
