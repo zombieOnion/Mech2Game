@@ -63,14 +63,12 @@ public class MoveMech : NetworkBehaviour {
     [ServerRpc(RequireOwnership = false)]
     void SetNewTurnVectorServerRpc(Vector3 newTurn)
     {
-        Debug.Log($"NewTurn: {newTurn}");
         TurnVector = newTurn;
     }
 
     [ServerRpc(RequireOwnership = false)]
     void SetNewSpeedServerRpc(float newSpeed)
     {
-        Debug.Log($"NewSpeed: {newSpeed}");
         Speed = newSpeed;
     }
 
@@ -100,9 +98,10 @@ public class MoveMech : NetworkBehaviour {
     {
         if (!IsServer) return;
         Quaternion deltaRotation = Quaternion.Euler(TurnVector * Time.deltaTime);
-        rb.MoveRotation(rb.rotation * deltaRotation);
-
-        rb.MovePosition(transform.position + transform.forward * Speed * Time.deltaTime);
+        if(TurnVector.y != 0)
+            rb.MoveRotation(rb.rotation * deltaRotation);
+        if(Speed !=0)
+            rb.MovePosition(transform.position + transform.forward * Speed * Time.deltaTime);
 
         //rb.rotation = Quaternion.Euler(rb.rotation.eulerAngles + new Vector3(LookRotationSpeed * -Input.GetAxis("Mouse Y"), LookRotationSpeed * -Input.GetAxis("Mouse X"), 0f));
     }
