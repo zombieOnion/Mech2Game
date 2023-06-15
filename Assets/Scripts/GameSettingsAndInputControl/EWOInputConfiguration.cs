@@ -7,7 +7,7 @@ using UnityEngine.InputSystem.Users;
 public class EWOInputConfiguration : MonoBehaviour
 {
     public PlayerInput PlayerInput;
-    void Start() {
+    void Awake() {
         PlayerInput = GetComponent<PlayerInput>();
         //SetEWOKeyboardMouse();
     }

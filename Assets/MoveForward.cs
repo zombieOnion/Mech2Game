@@ -1,13 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class MoveForward : MonoBehaviour
+public class MoveForward : NetworkBehaviour
 {
     public float thrust;
     public Rigidbody rb;
-    void Start() {
+    void Awake() {
         rb = GetComponent<Rigidbody>();
-        rb.AddForce(rb.transform.forward * thrust, ForceMode.VelocityChange);
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (IsServer)
+        {
+            rb.AddForce(rb.transform.forward * thrust, ForceMode.VelocityChange);
+        }
     }
 }

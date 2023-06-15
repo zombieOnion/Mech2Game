@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameSettings : MonoBehaviour
+public class GameSettings : NetworkBehaviour
 {
     public enum SceneCamera { MainCamera = 0, NavCamera = 1, Split = 2 };
 
@@ -14,11 +15,24 @@ public class GameSettings : MonoBehaviour
     public MechPilotInputConfiguration pilotInputCfg;
     public EWOInputConfiguration ewoInputCfg;
 
-    private void Start()
+    private void Awake()
     {
         pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
         ewoInputCfg = EWOCamera.GetComponent<EWOInputConfiguration>();
-        Invoke("initStart", 0.2f);
+        initStart();
+    }
+    public override void OnNetworkSpawn()
+    {
+        if (IsClient && !IsServer)
+        {
+            Debug.Log("client gamesetting");
+            SecActiveCameras(SceneCamera.MainCamera);
+            pilotInputCfg.PlayerInput.ActivateInput();
+            pilotInputCfg.SetPilotKeyboardMouse();
+            //pilotInputCfg.PlayerInput.DeactivateInput();
+            //ewoInputCfg.PlayerInput.DeactivateInput();
+        }
+        base.OnNetworkSpawn();
     }
 
     private void initStart()
@@ -29,6 +43,7 @@ public class GameSettings : MonoBehaviour
         pilotInputCfg.PlayerInput.ActivateInput();
         ewoInputCfg.PlayerInput.DeactivateInput();
         pilotInputCfg.SetPilotKeyboardMouse();
+
     }
     // Update is called once per frame
     void Update()

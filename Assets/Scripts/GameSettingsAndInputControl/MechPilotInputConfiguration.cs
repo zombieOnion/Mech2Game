@@ -8,7 +8,7 @@ public class MechPilotInputConfiguration : MonoBehaviour
 {
     public PlayerInput PlayerInput;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         PlayerInput = GetComponent<PlayerInput>();
         //SetXboxController();

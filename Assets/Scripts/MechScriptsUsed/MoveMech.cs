@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
-public class MoveMech : MonoBehaviour {
+public class MoveMech : NetworkBehaviour {
     
     public float Speed = 0;
-    public float TurnSpeed = 0;
     public Vector3 TurnVector;
     public Rigidbody rb;
     public MovementEnum ForwardDirection;
@@ -41,12 +41,14 @@ public class MoveMech : MonoBehaviour {
     
     void Update()
     {
+        if (!IsClient) return;
         var newSidewaysDirection= DetermineMovementDirection(inputVec.x);
         if (HasMovemnetDirectionChanged(SidewaysDirection, newSidewaysDirection))
         {
             SidewaysDirection = newSidewaysDirection;
-            TurnSpeed = SidewaysSpeeds[(int)newSidewaysDirection];
-            TurnVector.Set(0, TurnSpeed, 0);
+            var turnSpeed = SidewaysSpeeds[(int)newSidewaysDirection];
+            TurnVector.Set(0, turnSpeed, 0);
+            SetNewTurnVectorServerRpc(TurnVector);
         }
 
         var newForwardDirection = DetermineMovementDirection(inputVec.y);
@@ -54,7 +56,22 @@ public class MoveMech : MonoBehaviour {
         {
             ForwardDirection = newForwardDirection;
             Speed = ForwardSpeeds[(int)newForwardDirection];
+            SetNewSpeedServerRpc(Speed);
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void SetNewTurnVectorServerRpc(Vector3 newTurn)
+    {
+        Debug.Log($"NewTurn: {newTurn}");
+        TurnVector = newTurn;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void SetNewSpeedServerRpc(float newSpeed)
+    {
+        Debug.Log($"NewSpeed: {newSpeed}");
+        Speed = newSpeed;
     }
 
     private MovementEnum DetermineMovementDirection(float axisFloat)
@@ -81,6 +98,7 @@ public class MoveMech : MonoBehaviour {
 
     void FixedUpdate()
     {
+        if (!IsServer) return;
         Quaternion deltaRotation = Quaternion.Euler(TurnVector * Time.deltaTime);
         rb.MoveRotation(rb.rotation * deltaRotation);
 

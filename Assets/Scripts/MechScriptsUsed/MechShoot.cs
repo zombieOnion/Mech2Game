@@ -1,18 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
-public class MechShoot : MonoBehaviour {
-    
-    Object varBullet;
-    Object CommandGuidedRocket;
-    Object selectedWeapon;
+public class MechShoot : NetworkBehaviour {
+
+    [SerializeField]
+    GameObject varBullet;
+    [SerializeField]
+    GameObject CommandGuidedRocket;
+    [SerializeField]
+    GameObject selectedWeapon;
     public WeaponBase selectedWeaponBase;
     private bool FireGun = false;
-    List<Object> mechWeapons = new List<Object>();
+    List<GameObject> mechWeapons = new List<GameObject>();
     public float LookRotationSpeed = 1f;
     public Rigidbody rb;
     public Camera gunnerCam;
@@ -27,9 +31,7 @@ public class MechShoot : MonoBehaviour {
     private float yRotation = 0f;
 
     void Awake() {
-        varBullet = Resources.Load("Rocket");
         mechWeapons.Add(varBullet);
-        CommandGuidedRocket = Resources.Load("CommandGuidedRocket");
         mechWeapons.Add(CommandGuidedRocket);
         selectedWeapon = mechWeapons.First();
         selectedWeaponBase = (selectedWeapon as GameObject).GetComponent<WeaponBase>();
@@ -41,8 +43,10 @@ public class MechShoot : MonoBehaviour {
         CurrentTarget = target;
     }
 
-    public void FireMainGun() {
+    [ServerRpc]
+    public void FireMainGunServerRpc() {
         GameObject newRocket = Instantiate(selectedWeapon, transform.position + transform.forward*2, transform.rotation) as GameObject;
+        newRocket.GetComponent<NetworkObject>().Spawn();
         newRocket.GetComponent<Rigidbody>().AddForce(rb.transform.forward * 5, ForceMode.VelocityChange);
         ILockTarget lockTarget = newRocket.GetComponent<ILockTarget>();
         if (CurrentTarget != null && lockTarget != null)
@@ -51,9 +55,10 @@ public class MechShoot : MonoBehaviour {
     
     void Update()
     {
+        if (!IsOwner) return;
         if (FireGun && selectedWeaponBase.RateOfFire < nextFire)
         {
-            FireMainGun();
+            FireMainGunServerRpc();
             nextFire = 0;
             FireGun = false;
         }

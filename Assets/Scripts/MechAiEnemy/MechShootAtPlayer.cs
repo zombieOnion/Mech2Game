@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class MechShootAtPlayer : MonoBehaviour
+public class MechShootAtPlayer : NetworkBehaviour
 {
     public GameObject PlayerMech;
     private MechShoot mechShoot;
@@ -11,7 +12,7 @@ public class MechShootAtPlayer : MonoBehaviour
     public float ShootReloadTime = 1f;
     float currentReloadTime = 0f;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         PlayerMech = GameObject.FindGameObjectsWithTag("Player")[0];
         mechShoot = gameObject.GetComponent<MechShoot>();
@@ -22,6 +23,7 @@ public class MechShootAtPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsServer) return;
         if (currentReloadTime > ShootReloadTime)
         {
             var randomShootDispersionFactorX = UnityEngine.Random.Range(-5, 5);
@@ -43,7 +45,7 @@ public class MechShootAtPlayer : MonoBehaviour
         mechShoot.OnChangeWeapon();
         gameObject.transform.LookAt(PlayerMech.transform.position);
         mechShoot.LockTarget(radarTargetComputerScript.CurrentlyTrackedTarget.transform);
-        mechShoot.FireMainGun();
+        mechShoot.FireMainGunServerRpc();
         mechShoot.OnChangeWeapon();
     }
 }
