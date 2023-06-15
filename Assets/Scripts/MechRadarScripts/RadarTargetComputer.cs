@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class RadarTargetComputer : MonoBehaviour
+public class RadarTargetComputer : NetworkBehaviour
 {
     public Guid MechRadarComputerSignature;
     private RadarTrackerScript _radarTracker;
@@ -35,11 +37,37 @@ public class RadarTargetComputer : MonoBehaviour
         Destroy(clickedTarget.gameObject);
     }
 
-    public RadarTargetScript CreateNewTarget(Vector3 position) {
+    public List<Transform> FindNewPlayerTargets(ulong networkObjectId)
+    {
+        //var playerGameObjects = NetworkManager.Singleton.SpawnManager.GetClientOwnedObjects(networkObjectId);
+        var playerGameObjects = FindObjectsOfType<RadarTargetScript>().Select(rts => rts.gameObject).ToList();
+        var playerGameObjectsNetworkIds = playerGameObjects.Select(x => x.GetComponent<NetworkObject>().NetworkObjectId).ToList();
+        Debug.Log($"radars: {playerGameObjects.Count()}");
+        var targetIDs = Targets.Select(t => t.gameObject.GetComponent<NetworkObject>().NetworkObjectId).ToList();
+        var newTargets = playerGameObjects.Where(x => !targetIDs.Contains(x.GetComponent<NetworkObject>().NetworkObjectId)).ToList();
+        Debug.Log($"new radars: {newTargets.Count()}");
+        return newTargets.Select(g => g.transform).ToList();
+    }
+
+    public GameObject FindGameObjectByNetworkObjectId(ulong networkObjectId)
+    {
+        return NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId].gameObject;
+    }
+
+    public void CreateNewTarget(Vector3 position) {
+        CreateNewTargetServerRpc(position);
+        var newTargets = FindNewPlayerTargets(NetworkManager.LocalClient.ClientId);
+        Targets.AddRange(newTargets);
+        //return newTarget.GetComponent<RadarTargetScript>();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void CreateNewTargetServerRpc(Vector3 position, ServerRpcParams serverRpcParams = default)
+    {
         var newTarget = Instantiate(RadarTarget, position, new Quaternion());
         newTarget.GetComponent<RadarTargetScript>().MechRadarComputerSignature = MechRadarComputerSignature;
-        Targets.Add(newTarget.transform);
-        return newTarget.GetComponent<RadarTargetScript>();
+        var clientId = serverRpcParams.Receive.SenderClientId;
+        newTarget.gameObject.GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
     }
 
     public void TrackTarget(RadarTargetScript target) {

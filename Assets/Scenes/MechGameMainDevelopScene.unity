@@ -8447,6 +8447,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7796742851210934157, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 191
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7796742850852326197, guid: ac0551a3decc730418890d313f0919af, type: 3}
     m_RemovedGameObjects: []
@@ -8464,6 +8468,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4786813082409493971, guid: 21efbbe562b00a2439a1977e563b60a4, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 349143778
+      objectReference: {fileID: 0}
     - target: {fileID: 8455763901918205866, guid: 21efbbe562b00a2439a1977e563b60a4, type: 3}
       propertyPath: m_RootOrder
       value: 15

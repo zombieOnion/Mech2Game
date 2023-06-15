@@ -78,7 +78,7 @@ public class MechShoot : NetworkBehaviour {
         oldyRotation = yRotation;
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc(RequireOwnership = false, Delivery = RpcDelivery.Unreliable)]
     void SetNewTurnVectorServerRpc(float newX, float newY)
     {
         xRotation = newX;

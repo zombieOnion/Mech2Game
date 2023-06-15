@@ -60,13 +60,13 @@ public class MoveMech : NetworkBehaviour {
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc(RequireOwnership = false, Delivery = RpcDelivery.Unreliable)]
     void SetNewTurnVectorServerRpc(Vector3 newTurn)
     {
         TurnVector = newTurn;
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc(RequireOwnership = false, Delivery = RpcDelivery.Unreliable)]
     void SetNewSpeedServerRpc(float newSpeed)
     {
         Speed = newSpeed;
