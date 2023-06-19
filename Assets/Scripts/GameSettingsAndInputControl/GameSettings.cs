@@ -11,6 +11,8 @@ public class GameSettings : NetworkBehaviour
     public Camera PilotCamera;
     public Camera EWOCamera;
     public SceneCamera ActiveCamera = SceneCamera.MainCamera;
+    [SerializeField] public GameObject MechPrefab;
+    [SerializeField] public GameObject EwoPrefab;
 
     public MechPilotInputConfiguration pilotInputCfg;
     public EWOInputConfiguration ewoInputCfg;
@@ -19,7 +21,7 @@ public class GameSettings : NetworkBehaviour
     {
         pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
         ewoInputCfg = EWOCamera.GetComponent<EWOInputConfiguration>();
-        initStart();
+        
     }
     public override void OnNetworkSpawn()
     {
@@ -31,6 +33,20 @@ public class GameSettings : NetworkBehaviour
             pilotInputCfg.SetPilotKeyboardMouse();
             //pilotInputCfg.PlayerInput.DeactivateInput();
             //ewoInputCfg.PlayerInput.DeactivateInput();
+        }
+        else if (IsServer)
+        {
+            GameObject mechGo = Instantiate(MechPrefab, new Vector3(250, 1.53f, 300), Quaternion.Euler(0, 45, 0));
+            PilotCamera = mechGo.transform.Find("Main Camera").GetComponent<Camera>();
+            pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
+            GameObject EwoGo = Instantiate(EwoPrefab, new Vector3(250, 20, 300), Quaternion.Euler(90, 0, -45));
+            EWOCamera = EwoGo.GetComponent<Camera>();
+            ewoInputCfg = EWOCamera.GetComponent<EWOInputConfiguration>();
+            EwoGo.GetComponent<MinimapUserInterfaceControl>().mechPlayer = mechGo;
+            mechGo.GetComponent<EwoGameObjectReference>().EwoRefeence = EwoGo;
+            mechGo.GetComponent<NetworkObject>().Spawn();
+            EwoGo.GetComponent<NetworkObject>().Spawn();
+            initStart();
         }
         base.OnNetworkSpawn();
     }

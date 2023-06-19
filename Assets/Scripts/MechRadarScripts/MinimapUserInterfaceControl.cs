@@ -17,6 +17,7 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	private MechShoot mechShoot;
 	[SerializeField] public LayerMask OnlyPlotLayermask;
 	[SerializeField] public LayerMask PlotAndTerrainLayermask;
+	[SerializeField] public GameObject mechPlayer;
 
 	// Use this for initialization
 	void Awake () {
@@ -24,16 +25,23 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 		minimapCamera = minimapCameraGO.GetComponent<Camera>();
 		radarSweeper = minimapCameraGO.transform.root.GetComponentInChildren<RadarSweepScript>();
 		minimapCamera.orthographicSize = camSize;
-		targetProcessor = gameObject.transform.root.GetComponentInChildren<RadarTargetComputer>();
-		//trackerScript = gameObject.transform.root.GetComponentInChildren<RadarTrackerScript>();
-		mechShoot = gameObject.transform.root.GetComponentInChildren<MechShoot>();
-		targetProcessor.MechRadarComputerSignature = MechRadarComputerSignature;
-		//camSize = minimapCamera.GetComponent<Camera>.orthographicSize;
+
 	}
 
-    void Start()
+	void Start()
+	{
+		targetProcessor = mechPlayer.transform.root.GetComponentInChildren<RadarTargetComputer>();
+		//trackerScript = gameObject.transform.root.GetComponentInChildren<RadarTrackerScript>();
+		mechShoot = mechPlayer.transform.root.GetComponentInChildren<MechShoot>();
+		targetProcessor.MechRadarComputerSignature = MechRadarComputerSignature;
+		//camSize = minimapCamera.GetComponent<Camera>.orthographicSize;}
+	}
+	
+	private void Update()
     {
-		//trackerScript.MechRadarComputerSignature = MechRadarComputerSignature;
+		var mechPos = mechPlayer.transform.position;
+		if(mechPos.x != transform.position.x || mechPos.y != transform.position.y)
+			transform.position = new Vector3(mechPos.x, transform.position.y, mechPos.z);
 	}
 
     private Vector3 GetClickedWorldPoint() => minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());

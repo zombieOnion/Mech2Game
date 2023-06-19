@@ -11,19 +11,42 @@ public class MechShootAtPlayer : NetworkBehaviour
     private RadarTrackerScript radarTargetComputerScript;
     public float ShootReloadTime = 1f;
     float currentReloadTime = 0f;
+    bool hasInit = false;
     // Start is called before the first frame update
     void Awake()
     {
-        PlayerMech = GameObject.FindGameObjectsWithTag("Player")[0];
         mechShoot = gameObject.GetComponent<MechShoot>();
         radarTargetComputerScript = gameObject.transform.parent.gameObject.GetComponentInChildren<RadarTrackerScript>();
+        tryInitShootPlayer();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        tryInitShootPlayer();
+        base.OnNetworkSpawn();
+    }
+
+    private void tryInitShootPlayer()
+    {
+        if (GameObject.FindGameObjectsWithTag("Player").Length > 0 && hasInit == false)
+            initShootPlayer();
+    }
+
+    private void initShootPlayer()
+    {
+        PlayerMech = GameObject.FindGameObjectsWithTag("Player")[0];
         PlayerMech.GetComponentInChildren<JammerScript>().JammedEnemy += FireGuidedMissile;
+        hasInit = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (!IsServer) return;
+        if (hasInit == false)
+            tryInitShootPlayer();
+        if (hasInit == false)
+            return;
         if (currentReloadTime > ShootReloadTime)
         {
             var randomShootDispersionFactorX = UnityEngine.Random.Range(-5, 5);

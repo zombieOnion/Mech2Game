@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
 
-public class RadarWarningReceiver : MonoBehaviour
+public class RadarWarningReceiver : NetworkBehaviour
 {
     LayerMask radarBlipsMask;
     LayerMask uiMask;
@@ -20,6 +21,11 @@ public class RadarWarningReceiver : MonoBehaviour
     {
         radarBlipsMask = LayerMask.NameToLayer("PLOT");
         uiMask = LayerMask.NameToLayer("UI");
+    }
+    public override void OnNetworkSpawn()
+    {
+        RadarWarningReceiverUI = transform.root.GetComponent<EwoGameObjectReference>().EwoRefeence.
+            transform.Find("Canvas nav/RWR").gameObject;
     }
 
     private void OnTriggerEnter(Collider other)
