@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 393801903450666769}
   - component: {fileID: 4786813082409493971}
   - component: {fileID: 6599020102350567525}
+  - component: {fileID: -3511207297616835203}
   m_Layer: 8
   m_Name: RadarTarget
   m_TagString: Untagged
@@ -176,3 +177,15 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &-3511207297616835203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8455763901918205870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52e39d9405a95cc4daa3ea0d26812a5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

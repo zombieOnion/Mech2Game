@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using static PhysicalSpaceLibrary;
 
-public class RadarSweepScript : MonoBehaviour
+public class RadarSweepScript : NetworkBehaviour
 {
     // general variables
     private RadarTargetComputer targetProcessor;
@@ -39,13 +40,20 @@ public class RadarSweepScript : MonoBehaviour
         PulseSender = gameObject.GetComponent<SendRadarPulseAndCreateRadarEchoes>();
     }
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        if(!IsServer)
+        {
+            base.OnNetworkSpawn();
+            return;
+        }
         CreateTargetCache();
+        base.OnNetworkSpawn();
     }
 
     public void FixedUpdate()
     {
+        if (!IsServer) return;
         if (!radarOn)
             return;
         var lastXAngle = xSweepRotationAngle;
@@ -64,12 +72,12 @@ public class RadarSweepScript : MonoBehaviour
         }
         if (lastXAngle <= 360f && xSweepRotationAngle > 360f)
             xSweepRotationAngle = 0;
-
         var hits = SendAndCreateTargets();
-        if (hits.Length == 0)
-            return;
-        foreach (var hit in hits.Select(hit => hit.transform).ToArray())
-            AddRadarHit(hit);
+        if (hits.Length > 0)
+        {
+            foreach (var hit in hits.Select(hit => hit.transform).ToArray())
+                AddRadarHit(hit);
+        }
     }
     protected virtual void CreateTargetCache()
     {

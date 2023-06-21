@@ -9,9 +9,15 @@ public class ChangeUiTextOnDesttroy : MonoBehaviour
 
     private void OnDestroy()
     {
-        foreach (GameObject go in DisableUiElements)
-            go.SetActive(false);
-        foreach (GameObject go2 in ActivateUiElements)
-            go2.SetActive(true);
+        if (DisableUiElements != null)
+        {
+            foreach (GameObject go in DisableUiElements)
+                go.SetActive(false);
+        }
+        if (ActivateUiElements != null)
+        {
+            foreach (GameObject go2 in ActivateUiElements)
+                go2.SetActive(true);
+        }
     }
 }

@@ -16,7 +16,16 @@ public class RadarWarningReceiver : NetworkBehaviour
     float countUpSenseHit = 0f;
     float triggerActivationRestPeriod = 0.2f;
     float triggerActivationRestPeriodCount = 0f;
+    private GameObjectUtilityFunctions utility;
+    private EwoGameObjectReference ewoRefScript = null;
+
     // Start is called before the first frame update
+
+    void Awake()
+    {
+        utility = FindAnyObjectByType<GameObjectUtilityFunctions>();
+        ewoRefScript = transform.root.GetComponent<EwoGameObjectReference>();
+    }
     void Start()
     {
         radarBlipsMask = LayerMask.NameToLayer("PLOT");
@@ -24,8 +33,19 @@ public class RadarWarningReceiver : NetworkBehaviour
     }
     public override void OnNetworkSpawn()
     {
+        if (!IsServer)
+        {
+            base.OnNetworkSpawn();
+            return;
+        }
         RadarWarningReceiverUI = transform.root.GetComponent<EwoGameObjectReference>().EwoRefeence.
             transform.Find("Canvas nav/RWR").gameObject;
+        base.OnNetworkSpawn();
+    }
+
+    private void OnEwoGoIdChanged(ulong previous, ulong current)
+    {
+        RadarWarningReceiverUI = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav/RWR").gameObject;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -52,6 +72,7 @@ public class RadarWarningReceiver : NetworkBehaviour
 
     private void Update()
     {
+        if (!IsServer) return;
         countUpSenseHit += Time.deltaTime;
         if (countUpSenseHit > maxRadarReciverTime)
         {

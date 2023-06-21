@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
-public class RadarMonopulse : MonoBehaviour
+public class RadarMonopulse : NetworkBehaviour
 {
     // General variables
     public bool leftToRight = true;
@@ -35,11 +36,13 @@ public class RadarMonopulse : MonoBehaviour
         PulseSender = gameObject.GetComponent<SendRadarPulseAndCreateRadarEchoes>();
     }
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        if (!IsServer) return;
         HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
         HitListRightLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
         HitListStraightAhead = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
+        base.OnNetworkSpawn();
     }
 
 

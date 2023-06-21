@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class RadarTrackerScript : MonoBehaviour
+public class RadarTrackerScript : NetworkBehaviour
 {
     public Guid MechRadarComputerSignature;
     [SerializeField] public Transform RadarBlip;
@@ -12,8 +13,15 @@ public class RadarTrackerScript : MonoBehaviour
     [SerializeField] public LayerMask RadarLayer;
     public RadarMonopulse LeftToRight;
     public RadarMonopulse UpToDown;
+    private GameObjectUtilityFunctions _utility;
+
+    private void Awake()
+    {
+        _utility = transform.root.GetComponent<GameObjectUtilityFunctions>();
+    }
 
     void FixedUpdate() {
+        if (!IsServer) return;
         if (TrackingTarget)
         {
             LeftToRight.SearchAndTrack();
@@ -49,8 +57,16 @@ public class RadarTrackerScript : MonoBehaviour
     }
 
     public void TrackTarget(RadarTargetScript target) {
-        if (target.MechRadarComputerSignature != MechRadarComputerSignature)
-            return;
+        //if (target.MechRadarComputerSignature != MechRadarComputerSignature)
+        //    return;
+        LookAtNewTargetServerRpc(target.GetComponent<NetworkObject>().NetworkObjectId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void LookAtNewTargetServerRpc(ulong targetNetObId, ServerRpcParams serverRpcParams = default)
+    {
+        var targetGo = _utility.FindPlayerGameObjectByNetworkObjectId(targetNetObId, serverRpcParams.Receive.SenderClientId);
+        var target = targetGo.GetComponent<RadarTargetScript>();
         TrackingTarget = true;
         CurrentlyTrackedTarget = target;
         CurrentlyTrackedTarget.TrackerRadarIsOn = true;
@@ -60,14 +76,29 @@ public class RadarTrackerScript : MonoBehaviour
     public RadarTargetScript StopTracking()
     {
         TrackingTarget = false;
+        if (CurrentlyTrackedTarget == null)
+            return null;
         CurrentlyTrackedTarget.TrackerRadarIsOn=false;
         var previouslyTrackedTarget = CurrentlyTrackedTarget;
         CurrentlyTrackedTarget = null;
         return previouslyTrackedTarget;
     }
 
+    [ServerRpc]
+    public void StopTrackingServerRpc()
+    {
+        TrackingTarget = false;
+        if (CurrentlyTrackedTarget == null)
+            return;
+        CurrentlyTrackedTarget.TrackerRadarIsOn = false;
+        var previouslyTrackedTarget = CurrentlyTrackedTarget;
+        CurrentlyTrackedTarget = null;
+        return;
+    }
+
     public void OnDestroy()
     {
         Destroy(CurrentlyTrackedTarget.gameObject);
+        base.OnDestroy();
     }
 }

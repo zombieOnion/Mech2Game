@@ -8,6 +8,7 @@ using UnityEngine;
 public class RadarTargetComputer : NetworkBehaviour
 {
     public Guid MechRadarComputerSignature;
+    private GameObjectUtilityFunctions _utility;
     private RadarTrackerScript _radarTracker;
     private JammerScript _jammer;
     private RadarWarningReceiver _radarWarningReceiver;
@@ -20,6 +21,7 @@ public class RadarTargetComputer : NetworkBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        _utility = transform.root.GetComponent<GameObjectUtilityFunctions>();
         _radarTracker = gameObject.transform.parent.GetComponentInChildren<RadarTrackerScript>();
         _radarWarningReceiver = gameObject.transform.parent.GetComponentInChildren<RadarWarningReceiver>();
         _jammer = gameObject.GetComponent<JammerScript>();
@@ -30,11 +32,25 @@ public class RadarTargetComputer : NetworkBehaviour
         _radarTracker.MechRadarComputerSignature = MechRadarComputerSignature;
     }
 
+    public override void OnNetworkDespawn()
+    {
+        Targets.ForEach(x => Destroy(x.gameObject));
+        Targets.Clear();
+        base.OnNetworkDespawn();
+    }
+
     public void DestroyTarget(Transform clickedTarget) {
         if (_radarTracker.TrackingTarget)
             _radarTracker.StopTracking();
         Targets.Remove(clickedTarget);
-        Destroy(clickedTarget.gameObject);
+        DestroyTargetServerRpc(clickedTarget.GetComponent<NetworkBehaviour>().NetworkObjectId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyTargetServerRpc(ulong networkObjectId, ServerRpcParams serverRpcParams = default)
+    {
+        var targetToDestroy = _utility.FindPlayerGameObjectByNetworkObjectId(networkObjectId, serverRpcParams.Receive.SenderClientId);
+        Destroy(targetToDestroy);
     }
 
     public List<Transform> FindNewPlayerTargets(ulong networkObjectId)
@@ -49,15 +65,10 @@ public class RadarTargetComputer : NetworkBehaviour
         return newTargets.Select(g => g.transform).ToList();
     }
 
-    public GameObject FindGameObjectByNetworkObjectId(ulong networkObjectId)
-    {
-        return NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId].gameObject;
-    }
-
     public void CreateNewTarget(Vector3 position) {
         CreateNewTargetServerRpc(position);
-        var newTargets = FindNewPlayerTargets(NetworkManager.LocalClient.ClientId);
-        Targets.AddRange(newTargets);
+        //var newTargets = _utility.FindNewPlayerComponents(NetworkManager.LocalClient.ClientId, Targets);
+        //Targets.AddRange(newTargets);
         //return newTarget.GetComponent<RadarTargetScript>();
     }
 
@@ -68,8 +79,23 @@ public class RadarTargetComputer : NetworkBehaviour
         newTarget.GetComponent<RadarTargetScript>().MechRadarComputerSignature = MechRadarComputerSignature;
         var clientId = serverRpcParams.Receive.SenderClientId;
         newTarget.gameObject.GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
+
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
+        CreateNewTargetClientRpc(newTarget.gameObject.GetComponent<NetworkObject>().NetworkObjectId);
     }
 
+    [ClientRpc]
+    private void CreateNewTargetClientRpc(ulong newTargetNetObjId, ClientRpcParams clientRpcParams = default)
+    {
+        var newTarget = _utility.FindTypeByNetworkId<RadarTargetScript>(newTargetNetObjId);
+        Targets.Add(newTarget.transform);
+    }
     public void TrackTarget(RadarTargetScript target) {
         var lockedTarget = Targets.Find(t => t.transform.GetInstanceID() == target.transform.GetInstanceID());
         if (lockedTarget == null)
@@ -82,7 +108,7 @@ public class RadarTargetComputer : NetworkBehaviour
         {
             Targets.Remove(lockedTarget.transform);
             _radarTracker.TrackTarget(target);
-        }
+        } 
     }
 
     public void JammTarget()
@@ -98,9 +124,4 @@ public class RadarTargetComputer : NetworkBehaviour
         }
     }
 
-    public void OnDestroy()
-    {
-        Targets.ForEach(x => Destroy(x.gameObject));
-        Targets.Clear();
-    }
 }

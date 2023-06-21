@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
-public class SendRadarPulseAndCreateRadarEchoes : MonoBehaviour
+public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
 {
     [SerializeField] public Transform RadarBlip;
     [SerializeField] public LayerMask RadarLayer;
@@ -12,7 +13,7 @@ public class SendRadarPulseAndCreateRadarEchoes : MonoBehaviour
     private Collider localeCollider;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         localeCollider = gameObject.GetComponent<Collider>();
     }
@@ -24,12 +25,12 @@ public class SendRadarPulseAndCreateRadarEchoes : MonoBehaviour
         {
             var radarHit = Instantiate(RadarBlip, transform.position + Vector3.down * 5, new Quaternion());
             var blipScript = radarHit.gameObject.GetComponent<RadarBlipScript>();
-            blipScript.DisappearTimerMax = disappearTime;
             blipScript.radarSignature = signature;
             if (modifyBlip != null)
                 modifyBlip(blipScript);
             lobeHits.Add(radarHit);
-            radarHit.gameObject.SetActive(false);
+            radarHit.GetComponent<NetworkObject>().Spawn();
+            blipScript.DisappearTimerMax.Value = disappearTime;
         }
         return lobeHits;
     }
@@ -45,10 +46,10 @@ public class SendRadarPulseAndCreateRadarEchoes : MonoBehaviour
             {
                 var nextHit = blipPool.AdvanceNext();
                 var nextHitScript = nextHit.GetComponent<RadarBlipScript>();
-                nextHitScript.gameObject.SetActive(true);
+                nextHitScript.ResetAppearTime();
+                nextHitScript.ResetAppearTimeClientRpc();
                 if (modifyBlip != null)
                     modifyBlip(nextHitScript, hit);
-                nextHitScript.ResetAppearTime();
                 nextHit.position = hit.point;
                 nextHit.rotation = Quaternion.identity;
             }

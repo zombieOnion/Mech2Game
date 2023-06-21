@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static PhysicalSpaceLibrary;
 
-public class MinimapUserInterfaceControl : MonoBehaviour {
+public class MinimapUserInterfaceControl : NetworkBehaviour {
 	//deklarera variabler: objektet, dess component, och variabeln camSize:
 	public readonly Guid MechRadarComputerSignature = Guid.NewGuid();
 	public GameObject minimapCameraGO;
@@ -15,13 +16,16 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 	private RadarTargetComputer targetProcessor;
 	//private RadarTrackerScript trackerScript;
 	private MechShoot mechShoot;
+	private GameObjectUtilityFunctions utility;
 	[SerializeField] public LayerMask OnlyPlotLayermask;
 	[SerializeField] public LayerMask PlotAndTerrainLayermask;
-	[SerializeField] public GameObject mechPlayer;
+	[SerializeField] public GameObject mechPlayer = null;
+	[SerializeField] public NetworkVariable<ulong> mechPlayerId;
 
 	// Use this for initialization
 	void Awake () {
 		//här hugger vi objektets komponent Camera och sätter den i variabeln minimapCamera
+		utility = gameObject.GetComponent<GameObjectUtilityFunctions>();
 		minimapCamera = minimapCameraGO.GetComponent<Camera>();
 		radarSweeper = minimapCameraGO.transform.root.GetComponentInChildren<RadarSweepScript>();
 		minimapCamera.orthographicSize = camSize;
@@ -30,21 +34,68 @@ public class MinimapUserInterfaceControl : MonoBehaviour {
 
 	void Start()
 	{
-		targetProcessor = mechPlayer.transform.root.GetComponentInChildren<RadarTargetComputer>();
+		//targetProcessor = mechPlayer.transform.root.GetComponentInChildren<RadarTargetComputer>();
 		//trackerScript = gameObject.transform.root.GetComponentInChildren<RadarTrackerScript>();
-		mechShoot = mechPlayer.transform.root.GetComponentInChildren<MechShoot>();
-		targetProcessor.MechRadarComputerSignature = MechRadarComputerSignature;
+		//mechShoot = mechPlayer.transform.root.GetComponentInChildren<MechShoot>();
+		//targetProcessor.MechRadarComputerSignature = MechRadarComputerSignature;
 		//camSize = minimapCamera.GetComponent<Camera>.orthographicSize;}
 	}
-	
+
+	public void OnMechPlayerIdChange(ulong oldValue, ulong newValue)
+    {
+		mechPlayer = utility.FindGameObjectByNetworkObjectId(newValue);
+		InitScript();
+	}
+
+	public override void OnNetworkSpawn()
+	{
+		if(IsClient && NetworkManager.Singleton.LocalClientId == 1)
+        {
+			gameObject.GetComponent<Camera>().enabled = true;
+			Cursor.lockState = CursorLockMode.Confined;
+			var ewoInputCfg = gameObject.GetComponent<EWOInputConfiguration>();
+			ewoInputCfg.enabled = true;
+			ewoInputCfg.PlayerInput.enabled = true;
+			ewoInputCfg.PlayerInput.ActivateInput();
+			ewoInputCfg.SetEWOKeyboardMouse();
+		}
+		if (!IsServer)
+		{
+			mechPlayerId.OnValueChanged += OnMechPlayerIdChange;
+			base.OnNetworkSpawn();
+			return;
+		}
+		InitScript();
+		base.OnNetworkSpawn();
+	}
+
+	public override void OnNetworkDespawn()
+	{
+		if (!IsServer)
+		{
+			mechPlayerId.OnValueChanged -= OnMechPlayerIdChange;
+		}
+		base.OnNetworkDespawn();
+	}
+
+	private void InitScript()
+    {
+		targetProcessor = mechPlayer.transform.root.GetComponentInChildren<RadarTargetComputer>();
+		mechShoot = mechPlayer.transform.root.GetComponentInChildren<MechShoot>();
+		targetProcessor.MechRadarComputerSignature = MechRadarComputerSignature;
+	}
+
 	private void Update()
     {
+		if (!IsServer) return;
+		if(mechPlayer == null) return;
 		var mechPos = mechPlayer.transform.position;
 		if(mechPos.x != transform.position.x || mechPos.y != transform.position.y)
 			transform.position = new Vector3(mechPos.x, transform.position.y, mechPos.z);
 	}
 
-    private Vector3 GetClickedWorldPoint() => minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+
+	private Vector3 GetClickedWorldPoint() => minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 	private (Vector3, Collider) FindGroundAndScan() {
 		Vector3 worldPoint = GetClickedWorldPoint();
 		worldPoint.y = Terrain.activeTerrain.SampleHeight(transform.position);

@@ -547,6 +547,7 @@ GameObject:
   - component: {fileID: 990411720832554801}
   - component: {fileID: -158250710267312049}
   - component: {fileID: 1325935229041841759}
+  - component: {fileID: 4263944559521864548}
   m_Layer: 6
   m_Name: EwoPlayerPrefab
   m_TagString: Untagged
@@ -568,7 +569,7 @@ Transform:
   m_Children:
   - {fileID: 8599071305443782232}
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: -45}
 --- !u!20 &1691165664768648808
 Camera:
@@ -577,7 +578,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7024881565013398139}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
@@ -642,6 +643,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 480
   mechPlayer: {fileID: 0}
+  mechPlayerId:
+    m_InternalValue: 0
 --- !u!114 &6122684931437014509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,7 +696,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7024881565013398139}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
@@ -831,6 +834,18 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &4263944559521864548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7024881565013398139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52e39d9405a95cc4daa3ea0d26812a5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8860908477912802556
 GameObject:
   m_ObjectHideFlags: 0
