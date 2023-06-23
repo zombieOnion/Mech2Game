@@ -51,6 +51,20 @@ public class RadarSweepScript : NetworkBehaviour
         base.OnNetworkSpawn();
     }
 
+    private void Update()
+    {
+        /*if (IsServer)
+        {
+            countRadarBlipsClientRpc(FindObjectsOfType<RadarBlipScript>().Count());
+        }*/
+    }
+
+    [ClientRpc]
+    public void countRadarBlipsClientRpc(int blips)
+    {
+        Debug.Log(blips);
+    }
+
     public void FixedUpdate()
     {
         if (!IsServer) return;
@@ -75,7 +89,7 @@ public class RadarSweepScript : NetworkBehaviour
         var hits = SendAndCreateTargets();
         if (hits.Length > 0)
         {
-            foreach (var hit in hits.Select(hit => hit.transform).ToArray())
+            foreach (var hit in hits)
                 AddRadarHit(hit);
         }
     }
@@ -84,7 +98,7 @@ public class RadarSweepScript : NetworkBehaviour
         HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature);
     }
 
-    protected virtual RaycastHit[] SendAndCreateTargets()
+    protected virtual Transform[] SendAndCreateTargets()
     {
         return PulseSender.SendAndRecieveRadarPulse(HitList);
     } 

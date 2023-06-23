@@ -18,7 +18,7 @@ public class AreaTriggerScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.name.Equals("Mech1"))
+        if (!other.name.Equals("PlayerMech(Clone)"))
             return;
         Destroy(gameObject);
     }

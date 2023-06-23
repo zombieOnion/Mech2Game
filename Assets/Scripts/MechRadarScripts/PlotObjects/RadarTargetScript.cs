@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
-public class RadarTargetScript : MonoBehaviour
+public class RadarTargetScript : NetworkBehaviour
 {
     public Guid MechRadarComputerSignature;
     public bool StayActive = true;
@@ -17,7 +18,7 @@ public class RadarTargetScript : MonoBehaviour
 
     private float DisappearTimer;
     public float DisappearTimerMax;
-    public int MaxRadarHitHistory = 50;
+    public int MaxRadarHitHistory = 100;
     public RadarHitList<Transform> RadarHits;
 
     void Awake() {
@@ -26,7 +27,8 @@ public class RadarTargetScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {
+    void FixedUpdate() {
+        if (!IsServer) return;
         if(_radarHitModeStatus==1) {
             _hitReceiverCountDown += Time.deltaTime;
             if(TrackerRadarIsOn || _hitReceiverCountDown >= _maxTimeWaitForNewHit) {

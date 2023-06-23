@@ -26,8 +26,7 @@ public class MinimapUserInterfaceControl : NetworkBehaviour {
 	void Awake () {
 		//här hugger vi objektets komponent Camera och sätter den i variabeln minimapCamera
 		utility = gameObject.GetComponent<GameObjectUtilityFunctions>();
-		minimapCamera = minimapCameraGO.GetComponent<Camera>();
-		radarSweeper = minimapCameraGO.transform.root.GetComponentInChildren<RadarSweepScript>();
+		minimapCamera = gameObject.GetComponent<Camera>();
 		minimapCamera.orthographicSize = camSize;
 
 	}
@@ -83,6 +82,7 @@ public class MinimapUserInterfaceControl : NetworkBehaviour {
 		targetProcessor = mechPlayer.transform.root.GetComponentInChildren<RadarTargetComputer>();
 		mechShoot = mechPlayer.transform.root.GetComponentInChildren<MechShoot>();
 		targetProcessor.MechRadarComputerSignature = MechRadarComputerSignature;
+		radarSweeper = mechPlayer.transform.root.Find("RadarSweep").GetComponent<RadarSweepScript>();
 	}
 
 	private void Update()
@@ -95,9 +95,8 @@ public class MinimapUserInterfaceControl : NetworkBehaviour {
 	}
 
 
-	private Vector3 GetClickedWorldPoint() => minimapCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-	private (Vector3, Collider) FindGroundAndScan() {
-		Vector3 worldPoint = GetClickedWorldPoint();
+	private Vector3 GetClickedWorldPoint(Vector3 point) => minimapCamera.ScreenToWorldPoint(point);
+	private (Vector3, Collider) FindGroundAndScan(Vector3 worldPoint) {
 		worldPoint.y = Terrain.activeTerrain.SampleHeight(transform.position);
 		var clickedTarget = CheckForOverlap(worldPoint, targetProcessor.RadarTarget, targetProcessor.TargetLayermask);
 		if(clickedTarget.Length < 1)
@@ -106,20 +105,39 @@ public class MinimapUserInterfaceControl : NetworkBehaviour {
 			return (worldPoint, clickedTarget[0]); 
 	}
 	public void OnPointClick1() {
-		(Vector3 point, Collider target) = FindGroundAndScan();
-		if(target == null)
-			targetProcessor.CreateNewTarget(point);
+		Vector3 userClicked = Mouse.current.position.ReadValue();
+		Vector3 clickedWorldPoint = GetClickedWorldPoint(userClicked);
+		OnPointClick1ServerRpc(clickedWorldPoint);
+	}
+
+    [ServerRpc(RequireOwnership = false)]
+	public void OnPointClick1ServerRpc(Vector3 userClicked, ServerRpcParams serverRpcAttribute = default)
+	{
+		var clientId = serverRpcAttribute.Receive.SenderClientId;
+		(Vector3 point, Collider target) = FindGroundAndScan(userClicked);
+		if (target == null)
+			targetProcessor.CreateNewTarget(point, clientId);
 		else
 			targetProcessor.DestroyTarget(target.transform);
 	}
 
+
 	public void OnPointClick2() {
-		(Vector3 _, Collider target) = FindGroundAndScan();
+		Vector3 userClicked = Mouse.current.position.ReadValue();
+		Vector3 clickedWorldPoint = GetClickedWorldPoint(userClicked);
+		OnPointClick2ServerRpc(clickedWorldPoint);
+	}
+    [ServerRpc(RequireOwnership = false)]
+	public void OnPointClick2ServerRpc(Vector3 userClicked, ServerRpcParams serverRpcAttribute = default)
+	{
+		var clientId = serverRpcAttribute.Receive.SenderClientId;
+		(Vector3 _, Collider target) = FindGroundAndScan(userClicked);
 		if (target == null)
 			return;
 		targetProcessor.TrackTarget(target.GetComponent<RadarTargetScript>());
 		mechShoot.LockTarget(target.transform);
 	}
+
 
 	public void OnIncreaseMinimapResolution() {
 		camSize = camSize + 10;
@@ -135,17 +153,36 @@ public class MinimapUserInterfaceControl : NetworkBehaviour {
 		Debug.Log(camSize);
 	}
 
-    public void OnRadarSwitchPower() => radarSweeper.RadarOn = !radarSweeper.RadarOn;
-	public void OnTerrainMapSwitch() => minimapCamera.cullingMask = minimapCamera.cullingMask == OnlyPlotLayermask ? PlotAndTerrainLayermask : OnlyPlotLayermask;
-	public void OnIncreaseSweepSpeed() => radarSweeper.IncreaseSweepSpeed();
-	public void OnDecreaseSweepSpeed() => radarSweeper.DecreaseSweepSpeed();
-	public void OnToggleSectorSweep() => radarSweeper.ToggleSectorSweep();
-	public void OnIncreaseSectorSweep() => radarSweeper.IncreaseSectorSweep();
-	public void OnDecreaseSectorSweep() => radarSweeper.DecreaseSectorSweep();
-	public void OnRotateSectorSweepForward() => radarSweeper.RotateSectorSweepForward();
-	public void OnRotateSectorSweepBackward() => radarSweeper.RotateSectorSweepBackward();
-
-	public void OnJammTarget() => targetProcessor.JammTarget();
+	public void OnRadarSwitchPower() => OnRadarSwitchPowerServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnRadarSwitchPowerServerRpc() => radarSweeper.RadarOn = !radarSweeper.RadarOn;
+	public void OnTerrainMapSwitch() => OnTerrainMapSwitchServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnTerrainMapSwitchServerRpc() => minimapCamera.cullingMask = minimapCamera.cullingMask == OnlyPlotLayermask ? PlotAndTerrainLayermask : OnlyPlotLayermask;
+	public void OnIncreaseSweepSpeed() => OnIncreaseSweepSpeedServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnIncreaseSweepSpeedServerRpc() => radarSweeper.IncreaseSweepSpeed();
+	public void OnDecreaseSweepSpeed() => OnDecreaseSweepSpeedServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnDecreaseSweepSpeedServerRpc() => radarSweeper.DecreaseSweepSpeed();
+	public void OnToggleSectorSweep() => OnToggleSectorSweepServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnToggleSectorSweepServerRpc() => radarSweeper.ToggleSectorSweep();
+	public void OnIncreaseSectorSweep() => OnIncreaseSectorSweepServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnIncreaseSectorSweepServerRpc() => radarSweeper.IncreaseSectorSweep();
+	public void OnDecreaseSectorSweep() => OnDecreaseSectorSweepServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnDecreaseSectorSweepServerRpc() => radarSweeper.DecreaseSectorSweep();
+	public void OnRotateSectorSweepForward() => OnRotateSectorSweepForwardServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnRotateSectorSweepForwardServerRpc() => radarSweeper.RotateSectorSweepForward();
+	public void OnRotateSectorSweepBackward() => OnRotateSectorSweepBackwardServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnRotateSectorSweepBackwardServerRpc() => radarSweeper.RotateSectorSweepBackward();
+	public void OnJammTarget() => OnJammTargetServerRpc();
+	[ServerRpc(RequireOwnership = false)]
+	public void OnJammTargetServerRpc() => targetProcessor.JammTarget();
 
 
 }

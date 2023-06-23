@@ -11,6 +11,7 @@ public class CommandGuidedRocket : WeaponBase, ILockTarget {
     
     // Update is called once per frame
     void FixedUpdate () {
+        if (!IsServer) return;
         if(Target != null) {
             HomeInOnTarget();
         }

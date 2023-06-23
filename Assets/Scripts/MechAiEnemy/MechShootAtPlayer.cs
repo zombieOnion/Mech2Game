@@ -17,12 +17,11 @@ public class MechShootAtPlayer : NetworkBehaviour
     {
         mechShoot = gameObject.GetComponent<MechShoot>();
         radarTargetComputerScript = gameObject.transform.parent.gameObject.GetComponentInChildren<RadarTrackerScript>();
-        tryInitShootPlayer();
     }
 
     public override void OnNetworkSpawn()
     {
-        tryInitShootPlayer();
+        if (!IsServer) return;
         base.OnNetworkSpawn();
     }
 
@@ -35,6 +34,8 @@ public class MechShootAtPlayer : NetworkBehaviour
     private void initShootPlayer()
     {
         PlayerMech = GameObject.FindGameObjectsWithTag("Player")[0];
+        if(radarTargetComputerScript)
+            transform.root.GetComponentInChildren<LockOnPlayer>().Init(PlayerMech);
         PlayerMech.GetComponentInChildren<JammerScript>().JammedEnemy += FireGuidedMissile;
         hasInit = true;
     }
@@ -65,6 +66,7 @@ public class MechShootAtPlayer : NetworkBehaviour
     void FireGuidedMissile(object sender, EventArgs e)
     {
         if(radarTargetComputerScript == null) return;
+        transform.root.GetComponentInChildren<LockOnPlayer>().ReEngagePlayer();
         mechShoot.OnChangeWeapon();
         gameObject.transform.LookAt(PlayerMech.transform.position);
         mechShoot.LockTarget(radarTargetComputerScript.CurrentlyTrackedTarget.transform);

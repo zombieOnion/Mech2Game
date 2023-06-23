@@ -48,4 +48,16 @@ public class GameObjectUtilityFunctions : MonoBehaviour
         var networkObjId = networkObject.GetComponent<NetworkObject>().NetworkObjectId;
         return playersNetworkObject.FirstOrDefault(pno => pno.NetworkObjectId == networkObjectId)?.gameObject;
     }
+
+    public ClientRpcParams CreateSrvParaWithClientId(ulong clientId)
+    {
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
+        return clientRpcParams;
+    }
 }

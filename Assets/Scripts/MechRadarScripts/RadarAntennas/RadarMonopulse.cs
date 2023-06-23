@@ -9,9 +9,9 @@ public class RadarMonopulse : NetworkBehaviour
 {
     // General variables
     public bool leftToRight = true;
-    public RaycastHit[] LobeHitsLeft = null;
-    public RaycastHit[] LobeHitsRight = null;
-    public RaycastHit[] LobeStraightAhead= null;
+    public Transform[] LobeHitsLeft = null;
+    public Transform[] LobeHitsRight = null;
+    public Transform[] LobeStraightAhead= null;
     public RadarHitList<Transform> HitListLeftLobe;
     public RadarHitList<Transform> HitListRightLobe;
     public RadarHitList<Transform> HitListStraightAhead;

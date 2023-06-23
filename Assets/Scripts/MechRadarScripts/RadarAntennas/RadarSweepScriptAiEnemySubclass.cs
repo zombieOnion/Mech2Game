@@ -26,7 +26,7 @@ public class RadarSweepScriptAiEnemySubclass : RadarSweepScript
         HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature, hideAiBlips);
     }
 
-    protected override RaycastHit[] SendAndCreateTargets()
+    protected override Transform[] SendAndCreateTargets()
     {
         return PulseSender.SendAndRecieveRadarPulse(HitList, onlyBlipOnPlayer);
     }

@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
-public class JammerScript : MonoBehaviour
+public class JammerScript : NetworkBehaviour
 {
     public RadarHitList<Transform> JammingRadarBlips;
     public event EventHandler JammedEnemy;
@@ -16,7 +17,7 @@ public class JammerScript : MonoBehaviour
     public bool IsJamming { set; get; }
     private Guid? jammTargetGuid = Guid.Empty;
     private RadarTargetScript jammingTargetScript = null;
-    private RadarTargetScript[] paintedTargetOnUs = null;
+    private List<RadarTargetScript> paintedTargetOnUs = null;
     private int blipCount = 2;
     void Awake()
     {
@@ -25,11 +26,17 @@ public class JammerScript : MonoBehaviour
 
     public void SetUpJamming(Guid? radarSignature, RadarTargetScript targetToJamm)
     {
+        if(!radarSignature.HasValue)
+        {
+            IsJamming = false;
+            jammingTargetScript = null;
+            return;
+        }
         jammTargetGuid = radarSignature;
         jammingTargetScript = targetToJamm;
         JammingRadarBlips = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, jammTargetGuid.Value);
         Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity, 1 << 8);
-        paintedTargetOnUs = hitColliders.Select( c => c.gameObject.GetComponent<RadarTargetScript>()).ToArray();
+        paintedTargetOnUs = hitColliders.Select( c => c.gameObject.GetComponent<RadarTargetScript>()).ToList();
         JammedEnemy?.Invoke(this, EventArgs.Empty);
     }
 
@@ -50,9 +57,16 @@ public class JammerScript : MonoBehaviour
             gameObject.transform.position.z + UnityEngine.Random.Range(-30, 30));
         blip.transform.position = newVector + heading * 1 * blipCount;
         blip.gameObject.SetActive(true);
+        blip.GetComponent<RadarBlipScript>().DisappearTimerMax.Value = 3f;
         blip.GetComponent<RadarBlipScript>().ResetAppearTime();
-
-        foreach(var target in paintedTargetOnUs)
+        // TODO efter att målet har flyttat sig så hittar vi det inte längre och kan då inte skicka in fler störmål
+        // Koll varje gång efter nya mål och ifall de fortfarande har oss som mål, uppdatera listan
+        Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity, 1 << 8);
+        var newTargets = hitColliders.Select(c => c.gameObject.GetComponent<RadarTargetScript>()).ToList();
+        newTargets = newTargets.Where(t => !paintedTargetOnUs.Contains(t)).ToList();
+        paintedTargetOnUs.AddRange(newTargets);
+        paintedTargetOnUs = paintedTargetOnUs.Where(p => p != null).ToList();
+        foreach (var target in paintedTargetOnUs)
         {
             target.ReceiveNewRadarHitOnTarget(blip);
         }
@@ -66,6 +80,7 @@ public class JammerScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!IsServer) return;
         if (IsJamming) JammTarget();
     }
 

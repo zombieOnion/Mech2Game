@@ -1262,7 +1262,7 @@ MonoBehaviour:
   PilotCamera: {fileID: 0}
   EWOCamera: {fileID: 2080845370}
   ActiveCamera: 0
-  MechPrefab: {fileID: 7131863719960574163, guid: ac0551a3decc730418890d313f0919af, type: 3}
+  MechPrefab: {fileID: 4500059927678632198, guid: ac0551a3decc730418890d313f0919af, type: 3}
   EwoPrefab: {fileID: 7024881565013398139, guid: ed52af2b0ead6054d8d55e7f2fbedd30, type: 3}
   pilotInputCfg: {fileID: 0}
   ewoInputCfg: {fileID: 2080845366}
@@ -7103,7 +7103,6 @@ MonoBehaviour:
   ActivateUiElements:
   - {fileID: 1576507372}
   - {fileID: 1346681737}
-  - {fileID: 0}
 --- !u!65 &1851584990
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7529,6 +7528,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 219970310476326771, guid: 6ae6bad03cc9fc744b25829443fc4439, type: 3}
+      propertyPath: DisableUiElements.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 219970310476326771, guid: 6ae6bad03cc9fc744b25829443fc4439, type: 3}
       propertyPath: DisableUiElements.Array.data[0]
       value: 
       objectReference: {fileID: 329930771}
@@ -7631,6 +7634,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3410746131192848057, guid: ac0551a3decc730418890d313f0919af, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4500059927678632198, guid: ac0551a3decc730418890d313f0919af, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -7826,6 +7833,10 @@ PrefabInstance:
       value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 2592515531652097828, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
+      propertyPath: DisableUiElements.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2592515531652097828, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
       propertyPath: DisableUiElements.Array.data[0]
       value: 
       objectReference: {fileID: 1576507372}
@@ -7887,7 +7898,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3214608601521043397, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9055358669915373021, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
       propertyPath: GlobalObjectIdHash
