@@ -258,6 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RadarWarningReceiverUI: {fileID: 0}
+  RadarWarningLinePreFab: {fileID: 8724049807939667109, guid: eebae4d6fcbe7ce4aa640235f37bc015, type: 3}
 --- !u!65 &6736835085301201660
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -423,6 +424,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftToRight: 1
+  LobeHitsLeft: []
+  LobeHitsRight: []
+  LobeStraightAhead: []
   sideAngleAdjustDegree: 0.2
   driftMaxTime: 0.8
   PulseSender: {fileID: 142358356428247644}
@@ -441,6 +445,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftToRight: 0
+  LobeHitsLeft: []
+  LobeHitsRight: []
+  LobeStraightAhead: []
   sideAngleAdjustDegree: 0.2
   driftMaxTime: 0.8
   PulseSender: {fileID: 142358356428247644}

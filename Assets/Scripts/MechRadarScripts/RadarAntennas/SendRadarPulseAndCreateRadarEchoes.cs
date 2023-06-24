@@ -20,10 +20,15 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
 
     public RadarHitList<Transform> InstantiateRadarBlips(int size, float disappearTime, Guid signature, Action<RadarBlipScript> modifyBlip = null)
     {
+        return InstantiateRadarBlipsGeneral(size, disappearTime, transform.position + Vector3.down * 5, signature, RadarBlip, modifyBlip);
+    }
+
+    public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Guid signature, Transform preFab, Action < RadarBlipScript> modifyBlip = null )
+    {
         var lobeHits = new RadarHitList<Transform>(size);
         for (int i = 0; i < size; i++)
         {
-            var radarHit = Instantiate(RadarBlip, transform.position + Vector3.down * 5, new Quaternion());
+            var radarHit = Instantiate(preFab, pos, new Quaternion());
             var blipScript = radarHit.gameObject.GetComponent<RadarBlipScript>();
             blipScript.radarSignature = signature;
             if (modifyBlip != null)

@@ -9,6 +9,9 @@ public class RadarWarningReceiver : NetworkBehaviour
 {
     LayerMask radarBlipsMask;
     LayerMask uiMask;
+
+    public RadarHitList<Transform> LineGos { get; private set; }
+
     public GameObject RadarWarningReceiverUI;
     float radarHitTime = 1f;
     public Guid? RadarSignatureOfHit = null;
@@ -18,6 +21,9 @@ public class RadarWarningReceiver : NetworkBehaviour
     float triggerActivationRestPeriodCount = 0f;
     private GameObjectUtilityFunctions utility;
     private EwoGameObjectReference ewoRefScript = null;
+    private Transform canvasGo;
+    private GameObject ewoGoId;
+    [SerializeField] GameObject RadarWarningLinePreFab;
 
     // Start is called before the first frame update
 
@@ -38,18 +44,31 @@ public class RadarWarningReceiver : NetworkBehaviour
             base.OnNetworkSpawn();
             return;
         }
-        RadarWarningReceiverUI = transform.root.GetComponent<EwoGameObjectReference>().EwoRefeence.
-            transform.Find("Canvas nav/RWR").gameObject;
+        LineGos = InstantiateRadarLineGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
+        transform.root.GetComponent<EwoGameObjectReference>().EwoRefeenceId.OnValueChanged += OnEwoGoIdChanged;
+        base.OnNetworkSpawn();
+    }
+    public override void OnNetworkDespawn()
+    {
+        if (!IsServer)
+        {
+            base.OnNetworkSpawn();
+            return;
+        }
+        transform.root.GetComponent<EwoGameObjectReference>().EwoRefeenceId.OnValueChanged -= OnEwoGoIdChanged;
         base.OnNetworkSpawn();
     }
 
     private void OnEwoGoIdChanged(ulong previous, ulong current)
     {
-        RadarWarningReceiverUI = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav/RWR").gameObject;
+        canvasGo = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav(Clone)");
+        ewoGoId = utility.FindGameObjectByNetworkObjectId(current);
+        RadarWarningReceiverUI = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav(Clone)/RWR").gameObject;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!IsServer) return;
         if (other.gameObject.layer != radarBlipsMask || !other.name.Equals("RadarBlip(Clone)"))
             return;
         if(triggerActivationRestPeriodCount < triggerActivationRestPeriod)
@@ -94,15 +113,25 @@ public class RadarWarningReceiver : NetworkBehaviour
 
     private void DrawRadarDirection(Vector3 dir)
     {
-        GameObject lineGO = new GameObject();
-        lineGO.layer = uiMask;
-        lineGO.transform.parent = RadarWarningReceiverUI.gameObject.transform;
-        lineGO.transform.position = RadarWarningReceiverUI.gameObject.transform.position;
-        var currentLineRenderer = lineGO.AddComponent<LineRenderer>();
-        currentLineRenderer.startWidth = 3;
-        currentLineRenderer.endWidth = 3;
         Vector3 offsetFromText = new Vector3(0, 0, -20);
+        var lineGo = LineGos.AdvanceNext();
+        lineGo.GetComponent<RadarWarningLineScript>().ResetTimer();
+        var currentLineRenderer = lineGo.GetComponent<LineRenderer>();
         currentLineRenderer.SetPositions(new Vector3[] { RadarWarningReceiverUI.transform.position + offsetFromText, RadarWarningReceiverUI.transform.position + offsetFromText + dir * 20 });
-        Destroy(lineGO, radarHitTime);
+        lineGo.GetComponent<NetworkObject>().TrySetParent(canvasGo, true);
+    }
+
+    public RadarHitList<Transform> InstantiateRadarLineGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)
+    {
+        var lobeHits = new RadarHitList<Transform>(size);
+        for (int i = 0; i < size; i++)
+        {
+            var radarHit = Instantiate(preFab, pos, new Quaternion());
+            var blipScript = radarHit.gameObject.GetComponent<RadarWarningLineScript>();
+            lobeHits.Add(radarHit);
+            radarHit.GetComponent<NetworkObject>().Spawn();
+            blipScript.DisappearTimerMax.Value = disappearTime;
+        }
+        return lobeHits;
     }
 }
