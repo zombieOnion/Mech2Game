@@ -1,23 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class ChangeUiTextOnDesttroy : MonoBehaviour
+public class ChangeUiTextOnDesttroy : NetworkBehaviour
 {
     public GameObject[] DisableUiElements;
     public GameObject[] ActivateUiElements;
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         if (DisableUiElements != null)
         {
             foreach (GameObject go in DisableUiElements)
+            {
                 go.SetActive(false);
+                
+            }
         }
         if (ActivateUiElements != null)
         {
-            foreach (GameObject go2 in ActivateUiElements)
-                go2.SetActive(true);
+            foreach (GameObject go in ActivateUiElements)
+            {
+                go.SetActive(true);
+            }
         }
+        base.OnDestroy();
     }
 }
