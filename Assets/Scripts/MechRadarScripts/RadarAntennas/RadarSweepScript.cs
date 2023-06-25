@@ -96,6 +96,10 @@ public class RadarSweepScript : NetworkBehaviour
     protected virtual void CreateTargetCache()
     {
         HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature);
+        foreach (var hit in HitList.GetLast(HitList.Size))
+        {
+            hit.GetComponent<NetworkObject>().TrySetParent(transform, true);
+        }
     }
 
     protected virtual Transform[] SendAndCreateTargets()

@@ -7,11 +7,13 @@ using UnityEngine;
 
 public class RadarHitList <T> {
     protected int NextToAddIndex { get; set; } = 0;
+    public int Size { get => size; private set => size = value; }
+
     protected T[] RadarHits;
-    protected int size;
+    private int size;
 
     public RadarHitList(int size) {
-        this.size = size;
+        this.Size = size;
         RadarHits = new T[size];
     }
 
@@ -19,18 +21,18 @@ public class RadarHitList <T> {
     {
         RadarHits[NextToAddIndex] = newTransform;
         NextToAddIndex++;
-        if (NextToAddIndex==size) {
+        if (NextToAddIndex==Size) {
             NextToAddIndex = 0;
         }
     }
 
-    public T GetCurrent() => NextToAddIndex == 0 ? RadarHits[size - 1] : RadarHits[NextToAddIndex-1];
+    public T GetCurrent() => NextToAddIndex == 0 ? RadarHits[Size - 1] : RadarHits[NextToAddIndex-1];
 
     public T AdvanceNext()
     {
         var current = GetCurrent();
         NextToAddIndex++;
-        if (NextToAddIndex == size)
+        if (NextToAddIndex == Size)
         {
             NextToAddIndex = 0;
         }
@@ -46,7 +48,7 @@ public class RadarHitList <T> {
                 returnList.Add(RadarHits[i]);
             }
             int amountLeft = System.Math.Abs(NextToAddIndex - amount);
-            for(int i = size-1; i > size-1-amountLeft; i--) {
+            for(int i = Size-1; i > Size-1-amountLeft; i--) {
                 returnList.Add(RadarHits[i]);
             }
         }

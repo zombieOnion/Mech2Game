@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class RadarWarningLineScript : MonoBehaviour
+public class RadarWarningLineScript : NetworkBehaviour, EnableDisableRendererInterface
 {
-    private float DisappearTimer;
-    public NetworkVariable<float> DisappearTimerMax;
     private LineRenderer lineRenderer;
 
     void Awake()
@@ -14,19 +12,20 @@ public class RadarWarningLineScript : MonoBehaviour
         lineRenderer = gameObject.GetComponent<LineRenderer>();
     }
 
-    void Update()
+    public void EnableRenderer()
     {
-        DisappearTimer += Time.deltaTime;
-        if (DisappearTimer >= DisappearTimerMax.Value)
-        {
-            //transform.position = transform.position + Vector3.down * 10;
-            lineRenderer.enabled = false;
-        }
-        else
-        {
-            lineRenderer.enabled = true;
-        }
+        lineRenderer.enabled = true;
     }
 
-    public void ResetTimer() { DisappearTimer = 0; }
+    public void DisableRenderer()
+    {
+        lineRenderer.enabled = false;
+    }
+
+    [ClientRpc]
+    public void ResetPosClientRpc(Vector3 start, Vector3 end)
+    {
+        var currentLineRenderer = gameObject.GetComponent<LineRenderer>();
+        currentLineRenderer.SetPositions(new Vector3[] { start, end });
+    }
 }

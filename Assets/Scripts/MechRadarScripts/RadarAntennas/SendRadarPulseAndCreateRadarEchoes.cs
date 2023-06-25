@@ -25,17 +25,14 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
 
     public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Guid signature, Transform preFab, Action < RadarBlipScript> modifyBlip = null )
     {
-        var lobeHits = new RadarHitList<Transform>(size);
-        for (int i = 0; i < size; i++)
+        var lobeHits = DisappearTimerScript.InstantiateRadarBlipsGeneral(size, disappearTime, pos, preFab);
+        foreach (var radarHit in lobeHits.GetLast(size))
         {
-            var radarHit = Instantiate(preFab, pos, new Quaternion());
             var blipScript = radarHit.gameObject.GetComponent<RadarBlipScript>();
             blipScript.radarSignature = signature;
             if (modifyBlip != null)
                 modifyBlip(blipScript);
             lobeHits.Add(radarHit);
-            radarHit.GetComponent<NetworkObject>().Spawn();
-            blipScript.DisappearTimerMax.Value = disappearTime;
         }
         return lobeHits;
     }
@@ -52,8 +49,9 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
             {
                 var nextHit = blipPool.AdvanceNext();
                 var nextHitScript = nextHit.GetComponent<RadarBlipScript>();
-                nextHitScript.ResetAppearTime();
-                nextHitScript.ResetAppearTimeClientRpc();
+                var rendererControlScript = nextHit.GetComponent<DisappearTimerScript>();
+                rendererControlScript.ResetAppearTimer();
+                rendererControlScript.ResetAppearTimerClientRpc();
                 if (modifyBlip != null)
                     modifyBlip(nextHitScript, hit);
                 nextHit.position = hit.point;

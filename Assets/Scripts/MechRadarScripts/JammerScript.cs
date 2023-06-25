@@ -57,8 +57,8 @@ public class JammerScript : NetworkBehaviour
             gameObject.transform.position.z + UnityEngine.Random.Range(-30, 30));
         blip.transform.position = newVector + heading * 1 * blipCount;
         blip.gameObject.SetActive(true);
-        blip.GetComponent<RadarBlipScript>().DisappearTimerMax.Value = 3f;
-        blip.GetComponent<RadarBlipScript>().ResetAppearTime();
+        blip.GetComponent<DisappearTimerScript>().DisappearTimerMax.Value = 3f;
+        blip.GetComponent<DisappearTimerScript>().ResetAppearTimer();
         // TODO efter att målet har flyttat sig så hittar vi det inte längre och kan då inte skicka in fler störmål
         // Koll varje gång efter nya mål och ifall de fortfarande har oss som mål, uppdatera listan
         Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity, 1 << 8);

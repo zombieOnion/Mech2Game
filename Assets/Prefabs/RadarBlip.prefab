@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 258881356751230060}
   - component: {fileID: 2023128081275435445}
   - component: {fileID: 8766042252108408914}
+  - component: {fileID: -4218736199749761341}
   m_Layer: 6
   m_Name: RadarBlip
   m_TagString: Untagged
@@ -173,3 +174,23 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 0
   SlerpPosition: 0
+--- !u!114 &-4218736199749761341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991437818032701527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6422eb089410591489cf7a67d820ada5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DisappearTimerMax:
+    m_InternalValue: 0
+  EnableRendering:
+    m_PersistentCalls:
+      m_Calls: []
+  DisableRendering:
+    m_PersistentCalls:
+      m_Calls: []

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class RadarBlipScript : NetworkBehaviour
+public class RadarBlipScript : NetworkBehaviour, EnableDisableRendererInterface
 {
     public Guid radarSignature;
     public ulong clientID;
@@ -19,31 +19,15 @@ public class RadarBlipScript : NetworkBehaviour
         meshRenderer = gameObject.GetComponent<MeshRenderer>();
         boxCollider = gameObject.GetComponent<BoxCollider>();
     }
-
-    void Update()
+    public void EnableRenderer()
     {
-        DisappearTimer += Time.deltaTime;
-        if (DisappearTimer >= DisappearTimerMax.Value)
-        {
-            //transform.position = transform.position + Vector3.down * 10;
-            meshRenderer.enabled = false;
-            boxCollider.enabled = false;
-        }
-        else
-        {
-            meshRenderer.enabled = true;
-            boxCollider.enabled = true;
-        }
+        meshRenderer.enabled = true;
+        boxCollider.enabled = true;
     }
 
-    public void ResetAppearTime()
+    public void DisableRenderer()
     {
-        DisappearTimer = 0;
-    }
-
-    [ClientRpc]
-    public void ResetAppearTimeClientRpc()
-    {
-        DisappearTimer = 0;
+        meshRenderer.enabled = false;
+        boxCollider.enabled = false;
     }
 }

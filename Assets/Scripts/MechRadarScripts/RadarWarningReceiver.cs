@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class RadarWarningReceiver : NetworkBehaviour
     private Transform canvasGo;
     private GameObject ewoGoId;
     [SerializeField] GameObject RadarWarningLinePreFab;
+    private string RadarWarnerText = null;
 
     // Start is called before the first frame update
 
@@ -44,7 +46,7 @@ public class RadarWarningReceiver : NetworkBehaviour
             base.OnNetworkSpawn();
             return;
         }
-        LineGos = InstantiateRadarLineGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
+        LineGos = DisappearTimerScript.InstantiateRadarBlipsGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
         transform.root.GetComponent<EwoGameObjectReference>().EwoRefeenceId.OnValueChanged += OnEwoGoIdChanged;
         base.OnNetworkSpawn();
     }
@@ -61,9 +63,12 @@ public class RadarWarningReceiver : NetworkBehaviour
 
     private void OnEwoGoIdChanged(ulong previous, ulong current)
     {
-        canvasGo = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav(Clone)");
+        if (!IsServer) return;
+        canvasGo = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav");
         ewoGoId = utility.FindGameObjectByNetworkObjectId(current);
-        RadarWarningReceiverUI = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav(Clone)/RWR").gameObject;
+        RadarWarningReceiverUI = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav/RWR").gameObject;
+        RadarWarningReceiverUI.GetComponent<TextMeshProUGUI>().enabled = false;
+        RadarWarningReceiverUI.GetComponent<DisappearTimerScript>().DisappearTimerMax.Value = 2f;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -75,7 +80,7 @@ public class RadarWarningReceiver : NetworkBehaviour
             return;
         else
             triggerActivationRestPeriodCount = 0;
-
+        RadarSignatureOfHit = (other.GetComponent<RadarBlipScript>()).radarSignature;
         Vector3 hit = new Vector3(other.transform.position.x, 1, other.transform.position.z);
         Vector3 org = new Vector3(transform.position.x, 1, transform.position.z);
         //Debug.Log(hit + " " + org);
@@ -83,21 +88,13 @@ public class RadarWarningReceiver : NetworkBehaviour
         //Debug.DrawLine(transform.position, transform.position + dir * 10, Color.red, Mathf.Infinity);
         //Debug.Log(other.name +" "+ dir);
         DrawRadarDirection(dir);
-        RadarWarningReceiverUI.SetActive(true);
-        RadarSignatureOfHit = (other.GetComponent<RadarBlipScript>()).radarSignature;
-        countUpSenseHit = 0;
+        RadarWarningReceiverUI.GetComponent<DisappearTimerScript>().ResetAppearTimer();
+        RadarWarningReceiverUI.GetComponent<DisappearTimerScript>().ResetAppearTimerClientRpc();
         //StartCoroutine(TurnOffRWR());
     }
 
     private void Update()
     {
-        if (!IsServer) return;
-        countUpSenseHit += Time.deltaTime;
-        if (countUpSenseHit > maxRadarReciverTime)
-        {
-            RadarWarningReceiverUI.SetActive(false);
-            countUpSenseHit = 0;
-        }
         triggerActivationRestPeriodCount += Time.deltaTime;
     }
 
@@ -106,7 +103,7 @@ public class RadarWarningReceiver : NetworkBehaviour
         yield return new WaitForSeconds(radarHitTime);
         if (countUpSenseHit > maxRadarReciverTime)
         {
-            RadarWarningReceiverUI.SetActive(false);
+            RadarWarningReceiverUI.GetComponent<MeshRenderer>().enabled = false;
             countUpSenseHit = 0;
         }
     }
@@ -115,23 +112,11 @@ public class RadarWarningReceiver : NetworkBehaviour
     {
         Vector3 offsetFromText = new Vector3(0, 0, -20);
         var lineGo = LineGos.AdvanceNext();
-        lineGo.GetComponent<RadarWarningLineScript>().ResetTimer();
+        lineGo.GetComponent<DisappearTimerScript>().ResetAppearTimer();
+        lineGo.GetComponent<DisappearTimerScript>().ResetAppearTimerClientRpc();
         var currentLineRenderer = lineGo.GetComponent<LineRenderer>();
         currentLineRenderer.SetPositions(new Vector3[] { RadarWarningReceiverUI.transform.position + offsetFromText, RadarWarningReceiverUI.transform.position + offsetFromText + dir * 20 });
-        lineGo.GetComponent<NetworkObject>().TrySetParent(canvasGo, true);
-    }
-
-    public RadarHitList<Transform> InstantiateRadarLineGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)
-    {
-        var lobeHits = new RadarHitList<Transform>(size);
-        for (int i = 0; i < size; i++)
-        {
-            var radarHit = Instantiate(preFab, pos, new Quaternion());
-            var blipScript = radarHit.gameObject.GetComponent<RadarWarningLineScript>();
-            lobeHits.Add(radarHit);
-            radarHit.GetComponent<NetworkObject>().Spawn();
-            blipScript.DisappearTimerMax.Value = disappearTime;
-        }
-        return lobeHits;
+        lineGo.GetComponent<RadarWarningLineScript>().ResetPosClientRpc(RadarWarningReceiverUI.transform.position + offsetFromText, RadarWarningReceiverUI.transform.position + offsetFromText + dir * 20);
+        lineGo.GetComponent<NetworkObject>().TrySetParent(ewoGoId, true);
     }
 }

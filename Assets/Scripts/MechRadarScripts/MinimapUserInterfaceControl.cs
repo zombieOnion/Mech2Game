@@ -42,6 +42,7 @@ public class MinimapUserInterfaceControl : NetworkBehaviour {
 
 	public void OnMechPlayerIdChange(ulong oldValue, ulong newValue)
     {
+		if (!IsServer) return;
 		mechPlayer = utility.FindGameObjectByNetworkObjectId(newValue);
 		InitScript();
 	}
