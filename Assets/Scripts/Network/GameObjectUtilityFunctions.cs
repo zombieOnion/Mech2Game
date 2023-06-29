@@ -49,7 +49,7 @@ public class GameObjectUtilityFunctions : MonoBehaviour
         return playersNetworkObject.FirstOrDefault(pno => pno.NetworkObjectId == networkObjectId)?.gameObject;
     }
 
-    public ClientRpcParams CreateSrvParaWithClientId(ulong clientId)
+    public static ClientRpcParams CreateSrvParaWithClientId(ulong clientId)
     {
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {

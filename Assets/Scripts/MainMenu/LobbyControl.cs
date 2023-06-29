@@ -17,15 +17,19 @@ public class LobbyControl : NetworkBehaviour
     public TMP_Text LobbyText;
     private bool m_AllPlayersInLobby;
 
-    private Dictionary<ulong, bool> m_ClientsInLobby;
+    private Dictionary<ulong, int> m_ClientsInLobby;
     private string m_UserLobbyStatusText;
+    private GameObjectUtilityFunctions utility;
+    private SpawnPlayerManager spawnPlayerManager;
 
     public override void OnNetworkSpawn()
     {
-        m_ClientsInLobby = new Dictionary<ulong, bool>();
+        utility = GetComponent<GameObjectUtilityFunctions>();
+        spawnPlayerManager = FindAnyObjectByType<SpawnPlayerManager>();
+        m_ClientsInLobby = new Dictionary<ulong, int>();
 
         //Always add ourselves to the list at first
-        m_ClientsInLobby.Add(NetworkManager.LocalClientId, false);
+        m_ClientsInLobby.Add(NetworkManager.LocalClientId, 0);
 
         //If we are hosting, then handle the server side for detecting when clients have connected
         //and when their lobby scenes are finished loading.
@@ -60,10 +64,21 @@ public class LobbyControl : NetworkBehaviour
         foreach (var clientLobbyStatus in m_ClientsInLobby)
         {
             m_UserLobbyStatusText += "PLAYER_" + clientLobbyStatus.Key + "          ";
-            if (clientLobbyStatus.Value)
-                m_UserLobbyStatusText += "(READY)\n";
-            else
-                m_UserLobbyStatusText += "(NOT READY)\n";
+            switch (clientLobbyStatus.Value)
+            {
+                case 0:
+                    m_UserLobbyStatusText += "(NOT READY)\n";
+                    break;
+                case 1:
+                    m_UserLobbyStatusText += "(PILOT READY)\n";
+                    break;
+                case 2:
+                    m_UserLobbyStatusText += "(EWO READY)\n";
+                    break;
+                default:
+                    m_UserLobbyStatusText += "(NOT READY)\n";
+                    break;
+            }
         }
     }
 
@@ -98,7 +113,7 @@ public class LobbyControl : NetworkBehaviour
         {
             if (!m_ClientsInLobby.ContainsKey(clientId))
             {
-                m_ClientsInLobby.Add(clientId, false);
+                m_ClientsInLobby.Add(clientId, 0);
                 GenerateUserStatsForLobby();
             }
 
@@ -116,7 +131,7 @@ public class LobbyControl : NetworkBehaviour
     {
         if (IsServer)
         {
-            if (!m_ClientsInLobby.ContainsKey(clientId)) m_ClientsInLobby.Add(clientId, false);
+            if (!m_ClientsInLobby.ContainsKey(clientId)) m_ClientsInLobby.Add(clientId, 0);
             GenerateUserStatsForLobby();
 
             UpdateAndCheckPlayersInLobby();
@@ -131,7 +146,7 @@ public class LobbyControl : NetworkBehaviour
     /// <param name="clientId"></param>
     /// <param name="isReady"></param>
     [ClientRpc]
-    private void SendClientReadyStatusUpdatesClientRpc(ulong clientId, bool isReady)
+    private void SendClientReadyStatusUpdatesClientRpc(ulong clientId, int isReady)
     {
         if (!IsServer)
         {
@@ -153,7 +168,7 @@ public class LobbyControl : NetworkBehaviour
         {
             var allPlayersAreReady = true;
             foreach (var clientLobbyStatus in m_ClientsInLobby)
-                if (!clientLobbyStatus.Value)
+                if (clientLobbyStatus.Value == 0)
 
                     //If some clients are still loading into the lobby scene then this is false
                     allPlayersAreReady = false;
@@ -167,6 +182,7 @@ public class LobbyControl : NetworkBehaviour
                 //Remove our scene loaded callback
                 SceneTransitionHandler.sceneTransitionHandler.OnClientLoadedScene -= ClientLoadedScene;
 
+                SceneTransitionHandler.sceneTransitionHandler.gameState = new GameState(m_ClientsInLobby);
                 //Transition to the ingame scene
                 SceneTransitionHandler.sceneTransitionHandler.SwitchScene(m_InGameSceneName);
             }
@@ -177,16 +193,31 @@ public class LobbyControl : NetworkBehaviour
     ///     PlayerIsReady
     ///     Tied to the Ready button in the InvadersLobby scene
     /// </summary>
-    public void PlayerIsReady()
+    public void PilotIsReady()
     {
-        m_ClientsInLobby[NetworkManager.Singleton.LocalClientId] = true;
+        m_ClientsInLobby[NetworkManager.Singleton.LocalClientId] = 1;
         if (IsServer)
         {
             UpdateAndCheckPlayersInLobby();
         }
         else
         {
-            OnClientIsReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+            OnClientIsReadyServerRpc(NetworkManager.Singleton.LocalClientId, 1);
+        }
+
+        GenerateUserStatsForLobby();
+    }
+
+    public void EwoIsReady()
+    {
+        m_ClientsInLobby[NetworkManager.Singleton.LocalClientId] = 2;
+        if (IsServer)
+        {
+            UpdateAndCheckPlayersInLobby();
+        }
+        else
+        {
+            OnClientIsReadyServerRpc(NetworkManager.Singleton.LocalClientId, 2);
         }
 
         GenerateUserStatsForLobby();
@@ -198,11 +229,11 @@ public class LobbyControl : NetworkBehaviour
     /// </summary>
     /// <param name="clientid">clientId that is ready</param>
     [ServerRpc(RequireOwnership = false)]
-    private void OnClientIsReadyServerRpc(ulong clientid)
+    private void OnClientIsReadyServerRpc(ulong clientid, int playerMode)
     {
         if (m_ClientsInLobby.ContainsKey(clientid))
         {
-            m_ClientsInLobby[clientid] = true;
+            m_ClientsInLobby[clientid] = playerMode;
             UpdateAndCheckPlayersInLobby();
             GenerateUserStatsForLobby();
         }

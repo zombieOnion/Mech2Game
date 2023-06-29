@@ -11,6 +11,11 @@ public class SceneTransitionHandler : NetworkBehaviour
     public string DefaultMainMenu = "StartMenu";
 
     [HideInInspector]
+    public delegate void EventCompleteSceneDelegateHandler(string sceneName);
+    [HideInInspector]
+    public event EventCompleteSceneDelegateHandler OnEventLoadedScene;
+
+    [HideInInspector]
     public delegate void ClientLoadedSceneDelegateHandler(ulong clientId);
     [HideInInspector]
     public event ClientLoadedSceneDelegateHandler OnClientLoadedScene;
@@ -19,6 +24,8 @@ public class SceneTransitionHandler : NetworkBehaviour
     public delegate void SceneStateChangedDelegateHandler(SceneStates newState);
     [HideInInspector]
     public event SceneStateChangedDelegateHandler OnSceneStateChanged;
+
+    public GameState gameState;
 
     private int m_numberOfClientLoaded;
 
@@ -93,7 +100,7 @@ public class SceneTransitionHandler : NetworkBehaviour
     public void RegisterCallbacks()
     {
         NetworkManager.Singleton.SceneManager.OnLoadComplete += OnLoadComplete;
-
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnEventComplete;
     }
 
     /// <summary>
@@ -119,6 +126,11 @@ public class SceneTransitionHandler : NetworkBehaviour
         OnClientLoadedScene?.Invoke(clientId);
     }
 
+    private void OnEventComplete(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        OnEventLoadedScene?.Invoke(sceneName);
+    }
+
     public bool AllClientsAreLoaded()
     {
         return m_numberOfClientLoaded == NetworkManager.Singleton.ConnectedClients.Count;
@@ -131,7 +143,9 @@ public class SceneTransitionHandler : NetworkBehaviour
     public void ExitAndLoadStartMenu()
     {
         NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnLoadComplete;
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= OnEventComplete;
         OnClientLoadedScene = null;
+        OnEventLoadedScene = null;
         SetSceneState(SceneStates.Start);
         SceneManager.LoadScene(1);
     }

@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 1342130982168451709}
   - component: {fileID: 7480861366805671021}
   - component: {fileID: 5201527267198751221}
+  - component: {fileID: 5130740265857721647}
   m_Layer: 6
   m_Name: EwoPlayerPrefab
   m_TagString: Untagged
@@ -462,6 +463,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52e39d9405a95cc4daa3ea0d26812a5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5130740265857721647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632856752478138634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8689896a0b5cb004692cba44bc701142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3453778241888224839

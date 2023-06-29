@@ -51,13 +51,13 @@ public class MinimapUserInterfaceControl : NetworkBehaviour {
 	{
 		if(IsClient && NetworkManager.Singleton.LocalClientId == 1)
         {
-			gameObject.GetComponent<Camera>().enabled = true;
+			/*gameObject.GetComponent<Camera>().enabled = true;
 			Cursor.lockState = CursorLockMode.Confined;
 			var ewoInputCfg = gameObject.GetComponent<EWOInputConfiguration>();
 			ewoInputCfg.enabled = true;
 			ewoInputCfg.PlayerInput.enabled = true;
 			ewoInputCfg.PlayerInput.ActivateInput();
-			ewoInputCfg.SetEWOKeyboardMouse();
+			ewoInputCfg.SetEWOKeyboardMouse();*/
 		}
 		if (!IsServer)
 		{

@@ -16,26 +16,19 @@ public class GameSettings : NetworkBehaviour
 
     public MechPilotInputConfiguration pilotInputCfg;
     public EWOInputConfiguration ewoInputCfg;
+    private GameObjectUtilityFunctions utility;
 
     private void Awake()
     {
+        utility = GetComponent<GameObjectUtilityFunctions>();
         //pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
         //ewoInputCfg = EWOCamera.GetComponent<EWOInputConfiguration>();
         
     }
     public override void OnNetworkSpawn()
     {
-        if (IsHost)
-        {
-            /*Debug.Log("client gamesetting");
-            SecActiveCameras(SceneCamera.MainCamera);
-            pilotInputCfg.PlayerInput.ActivateInput();
-            pilotInputCfg.SetPilotKeyboardMouse();*/
-            //pilotInputCfg.PlayerInput.DeactivateInput();
-            //ewoInputCfg.PlayerInput.DeactivateInput();
-        }
         if (IsServer)
-        {
+        {/*
             GameObject mechGo = Instantiate(MechPrefab, new Vector3(250, 1.53f, 300), Quaternion.Euler(0, 45, 0));
             PilotCamera = mechGo.transform.Find("Main Camera").GetComponent<Camera>();
             pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
@@ -49,11 +42,30 @@ public class GameSettings : NetworkBehaviour
             EwoGo.GetComponent<MinimapUserInterfaceControl>().mechPlayerId.Value = mechGo.GetComponent<NetworkObject>().NetworkObjectId;
             mechGo.GetComponent<EwoGameObjectReference>().EwoRefeenceId.Value = EwoGo.GetComponent<NetworkObject>().NetworkObjectId;
             //initStart();
+            */
         }
         base.OnNetworkSpawn();
     }
 
-    private void initStart()
+    public void initCameras(GameObject mechGo, GameObject EwoGo)
+    {
+        PilotCamera = mechGo.transform.Find("Main Camera").GetComponent<Camera>();
+        pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
+        EWOCamera = EwoGo.GetComponent<Camera>();
+        ewoInputCfg = EWOCamera.GetComponent<EWOInputConfiguration>();
+    }
+
+    private void SetPilotActive()
+    {
+        SecActiveCameras(SceneCamera.MainCamera);
+        pilotInputCfg.PlayerInput.ActivateInput();
+        pilotInputCfg.SetPilotKeyboardMouse();
+        pilotInputCfg.PlayerInput.DeactivateInput();
+        ewoInputCfg.PlayerInput.DeactivateInput();
+
+    }
+
+    private void SetEwoActive()
     {
         SecActiveCameras(SceneCamera.MainCamera);
         SetCamerasSizes(FullscreenRect, FullscreenRect);
@@ -63,6 +75,40 @@ public class GameSettings : NetworkBehaviour
         pilotInputCfg.SetPilotKeyboardMouse();
 
     }
+
+    [ClientRpc]
+    public void SetPilotActive2ClientRpc(NetworkObjectReference goNetId, ClientRpcParams clientRpcParams = default)
+    {
+        Debug.Log("SetPilo1");
+        if (goNetId.TryGet(out NetworkObject targetObject))
+        {
+            // deal damage or something to target object.
+            targetObject.GetComponentInChildren<Camera>().enabled = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            var pilotInputCfg = targetObject.GetComponent<MechPilotInputConfiguration>();
+            pilotInputCfg.enabled = true;
+            pilotInputCfg.PlayerInput.enabled = true;
+            pilotInputCfg.PlayerInput.ActivateInput();
+            pilotInputCfg.SetPilotKeyboardMouse();
+        }
+    }
+
+    [ClientRpc]
+    public void SetEwoActive2ClientRpc(NetworkObjectReference goNetId, ClientRpcParams clientRpcParams = default)
+    {
+        Debug.Log("SetEwo1");
+        if (goNetId.TryGet(out NetworkObject targetObject))
+        {
+            targetObject.GetComponent<Camera>().enabled = true;
+            Cursor.lockState = CursorLockMode.Confined;
+            var ewoInputCfg = targetObject.GetComponent<EWOInputConfiguration>();
+            ewoInputCfg.enabled = true;
+            ewoInputCfg.PlayerInput.enabled = true;
+            ewoInputCfg.PlayerInput.ActivateInput();
+            ewoInputCfg.SetEWOKeyboardMouse();
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {

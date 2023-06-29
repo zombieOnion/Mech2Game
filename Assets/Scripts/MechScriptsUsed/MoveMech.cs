@@ -42,14 +42,14 @@ public class MoveMech : NetworkBehaviour {
     public override void OnNetworkSpawn()
     {
         if (IsClient && NetworkManager.Singleton.LocalClientId == 0)
-        {
+        {/*
             gameObject.GetComponentInChildren<Camera>().enabled = true;
             Cursor.lockState = CursorLockMode.Locked;
             var pilotInputCfg = gameObject.GetComponent<MechPilotInputConfiguration>();
             pilotInputCfg.enabled = true;
             pilotInputCfg.PlayerInput.enabled = true;
             pilotInputCfg.PlayerInput.ActivateInput();
-            pilotInputCfg.SetPilotKeyboardMouse();
+            pilotInputCfg.SetPilotKeyboardMouse();*/
         }
         base.OnNetworkSpawn();
     }
