@@ -11,8 +11,6 @@ public class GameSettings : NetworkBehaviour
     public Camera PilotCamera;
     public Camera EWOCamera;
     public SceneCamera ActiveCamera = SceneCamera.MainCamera;
-    [SerializeField] public GameObject MechPrefab;
-    [SerializeField] public GameObject EwoPrefab;
 
     public MechPilotInputConfiguration pilotInputCfg;
     public EWOInputConfiguration ewoInputCfg;

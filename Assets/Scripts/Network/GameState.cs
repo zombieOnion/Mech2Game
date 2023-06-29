@@ -6,11 +6,11 @@ public class GameState
 {
     public readonly Dictionary<ulong, int[]> ClientsWithRoles;
 
-    public GameState(Dictionary<ulong, int[]> clients, int teamSize)
+    public GameState(Dictionary<ulong, int[]> clients, int mechCount)
     {
         ClientsWithRoles = clients;
-        TeamSize = teamSize;
+        MechCount = mechCount;
     }
 
-    public int TeamSize { get; }
+    public int MechCount { get; }
 }

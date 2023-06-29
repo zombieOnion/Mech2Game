@@ -4,6 +4,8 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Linq;
 
 public class LobbyControl : NetworkBehaviour
 {
@@ -14,7 +16,7 @@ public class LobbyControl : NetworkBehaviour
     [SerializeField]
     private int m_MinimumPlayerCount = 2;
     [SerializeField]
-    private int m_TeamSize = 1;
+    private int mechCount = 1;
 
     public TMP_Text LobbyText;
     private bool m_AllPlayersInLobby;
@@ -179,13 +181,15 @@ public class LobbyControl : NetworkBehaviour
             //Only if all players are ready
             if (allPlayersAreReady)
             {
+                if (m_ClientsInLobby.Any(x => x.Value[1] == 2))
+                    mechCount = 2;
                 //Remove our client connected callback
                 NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnectedCallback;
 
                 //Remove our scene loaded callback
                 SceneTransitionHandler.sceneTransitionHandler.OnClientLoadedScene -= ClientLoadedScene;
 
-                SceneTransitionHandler.sceneTransitionHandler.gameState = new GameState(m_ClientsInLobby, m_TeamSize);
+                SceneTransitionHandler.sceneTransitionHandler.gameState = new GameState(m_ClientsInLobby, mechCount);
                 //Transition to the ingame scene
                 SceneTransitionHandler.sceneTransitionHandler.SwitchScene(m_InGameSceneName);
             }
