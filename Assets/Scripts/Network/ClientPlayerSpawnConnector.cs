@@ -25,11 +25,11 @@ public class ClientPlayerSpawnConnector : NetworkBehaviour
             var objNet = gameObject.GetComponent<NetworkObject>();
             if (isMech && !isEwo)
             {
-                spawner.ClientHasSpawnedPlayerObjectServerRpc(0, objNet);
+                spawner.ClientHasSpawnedPlayerObjectServerRpc(1, objNet);
             }
             else if (!isMech && isEwo)
             {
-                spawner.ClientHasSpawnedPlayerObjectServerRpc(1, objNet);
+                spawner.ClientHasSpawnedPlayerObjectServerRpc(2, objNet);
             }
         }
         base.OnNetworkSpawn();

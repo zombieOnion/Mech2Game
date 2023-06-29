@@ -63,9 +63,9 @@ public class SpawnPlayerManager : NetworkBehaviour
         var clientRpcArgs = GameObjectUtilityFunctions.CreateSrvParaWithClientId(serverRpcAttribute.Receive.SenderClientId);
         var playerVal = gameState.ClientsWithRoles[clientId];
 
-        if (playerType == 0 && clientId == 0)
+        if (playerType == 1 && playerType == playerVal[0])
             gameSetting.SetPilotActive2ClientRpc(networkObjectRef, clientRpcArgs);
-        else if (playerType == 1 && clientId == 1)
+        else if (playerType == 2 && playerType == playerVal[0])
             gameSetting.SetEwoActive2ClientRpc(networkObjectRef, clientRpcArgs);
     }
 }
