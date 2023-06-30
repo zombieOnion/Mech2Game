@@ -80,14 +80,26 @@ public class GameSettings : NetworkBehaviour
         Debug.Log("SetPilo1");
         if (goNetId.TryGet(out NetworkObject targetObject))
         {
+            PilotCamera = targetObject.transform.Find("Main Camera").GetComponent<Camera>();
             // deal damage or something to target object.
             targetObject.GetComponentInChildren<Camera>().enabled = true;
             Cursor.lockState = CursorLockMode.Locked;
-            var pilotInputCfg = targetObject.GetComponent<MechPilotInputConfiguration>();
+            pilotInputCfg = targetObject.GetComponent<MechPilotInputConfiguration>();
             pilotInputCfg.enabled = true;
             pilotInputCfg.PlayerInput.enabled = true;
             pilotInputCfg.PlayerInput.ActivateInput();
             pilotInputCfg.SetPilotKeyboardMouse();
+        }
+    }
+
+    [ClientRpc]
+    public void SetPilotGoClientRpc(NetworkObjectReference goNetId, ClientRpcParams clientRpcParams = default)
+    {
+        Debug.Log("SetPilo2");
+        if (goNetId.TryGet(out NetworkObject targetObject))
+        {
+            PilotCamera = targetObject.transform.Find("Main Camera").GetComponent<Camera>();
+            pilotInputCfg = targetObject.GetComponent<MechPilotInputConfiguration>();
         }
     }
 
@@ -97,13 +109,25 @@ public class GameSettings : NetworkBehaviour
         Debug.Log("SetEwo1");
         if (goNetId.TryGet(out NetworkObject targetObject))
         {
+            EWOCamera = targetObject.GetComponent<Camera>();
             targetObject.GetComponent<Camera>().enabled = true;
             Cursor.lockState = CursorLockMode.Confined;
-            var ewoInputCfg = targetObject.GetComponent<EWOInputConfiguration>();
+            ewoInputCfg = targetObject.GetComponent<EWOInputConfiguration>();
             ewoInputCfg.enabled = true;
             ewoInputCfg.PlayerInput.enabled = true;
             ewoInputCfg.PlayerInput.ActivateInput();
             ewoInputCfg.SetEWOKeyboardMouse();
+        }
+    }
+
+    [ClientRpc]
+    public void SetEwoGoClientRpc(NetworkObjectReference goNetId, ClientRpcParams clientRpcParams = default)
+    {
+        Debug.Log("SetEwo2");
+        if (goNetId.TryGet(out NetworkObject targetObject))
+        {
+            EWOCamera = targetObject.GetComponent<Camera>();
+            ewoInputCfg = targetObject.GetComponent<EWOInputConfiguration>();
         }
     }
 

@@ -70,11 +70,16 @@ public class SpawnPlayerManager : NetworkBehaviour
         Debug.Log($"Client spawned rpc: {serverRpcAttribute.Receive.SenderClientId} {playerType} {networkObjectRef.NetworkObjectId}");
         var clientRpcArgs = GameObjectUtilityFunctions.CreateSrvParaWithClientId(serverRpcAttribute.Receive.SenderClientId);
         var playerVal = gameState.ClientsWithRoles[clientId];
-        if (playerVal[0] != playerType || playerVal[1] != team)
+        if (playerVal[1] != team)
             return;
         if (playerType == 1 && playerType == playerVal[0])
             gameSetting.SetPilotActive2ClientRpc(networkObjectRef, clientRpcArgs);
         else if (playerType == 2 && playerType == playerVal[0])
             gameSetting.SetEwoActive2ClientRpc(networkObjectRef, clientRpcArgs);
+
+        if (playerType == 1 && playerType != playerVal[0])
+            gameSetting.SetPilotGoClientRpc(networkObjectRef, clientRpcArgs);
+        else if (playerType == 2 && playerType != playerVal[0])
+            gameSetting.SetEwoGoClientRpc(networkObjectRef, clientRpcArgs);
     }
 }
