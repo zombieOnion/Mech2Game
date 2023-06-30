@@ -28,7 +28,7 @@ public class RadarMonopulse : NetworkBehaviour
     // Blip settings
     public SendRadarPulseAndCreateRadarEchoes PulseSender;
     public float BlipTimeOut = 0.5f;
-    public int BlipSize = 20;
+    public int BlipSize = 10;
     public readonly Guid RadarSignature = Guid.NewGuid();
 
     void Awake()
@@ -42,6 +42,9 @@ public class RadarMonopulse : NetworkBehaviour
         HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
         HitListRightLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
         HitListStraightAhead = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
+        SendRadarPulseAndCreateRadarEchoes.SerParentList(HitListLeftLobe, gameObject.transform);
+        SendRadarPulseAndCreateRadarEchoes.SerParentList(HitListRightLobe, gameObject.transform);
+        SendRadarPulseAndCreateRadarEchoes.SerParentList(HitListStraightAhead, gameObject.transform);
         base.OnNetworkSpawn();
     }
 

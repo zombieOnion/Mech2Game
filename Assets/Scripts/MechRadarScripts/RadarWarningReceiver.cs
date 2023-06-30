@@ -47,6 +47,7 @@ public class RadarWarningReceiver : NetworkBehaviour
             return;
         }
         LineGos = DisappearTimerScript.InstantiateRadarBlipsGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
+        SendRadarPulseAndCreateRadarEchoes.SerParentList(LineGos, gameObject.transform);
         transform.root.GetComponent<EwoGameObjectReference>().EwoRefeenceId.OnValueChanged += OnEwoGoIdChanged;
         base.OnNetworkSpawn();
     }

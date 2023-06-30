@@ -17,7 +17,7 @@ public class RadarSweepScript : NetworkBehaviour
     // cache variables and blips
     public SendRadarPulseAndCreateRadarEchoes PulseSender;
     public RadarHitList<Transform> HitList;
-    protected int blipCount = 1000;
+    protected int blipCount = 100;
     protected float blipTimeOut = 5;
     public readonly Guid RadarSignature = new Guid();
 
@@ -49,14 +49,6 @@ public class RadarSweepScript : NetworkBehaviour
         }
         CreateTargetCache();
         base.OnNetworkSpawn();
-    }
-
-    private void Update()
-    {
-        /*if (IsServer)
-        {
-            countRadarBlipsClientRpc(FindObjectsOfType<RadarBlipScript>().Count());
-        }*/
     }
 
     [ClientRpc]
@@ -96,10 +88,7 @@ public class RadarSweepScript : NetworkBehaviour
     protected virtual void CreateTargetCache()
     {
         HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature);
-        foreach (var hit in HitList.GetLast(HitList.Size))
-        {
-            hit.GetComponent<NetworkObject>().TrySetParent(transform, true);
-        }
+        SendRadarPulseAndCreateRadarEchoes.SerParentList(HitList, gameObject.transform);
     }
 
     protected virtual Transform[] SendAndCreateTargets()

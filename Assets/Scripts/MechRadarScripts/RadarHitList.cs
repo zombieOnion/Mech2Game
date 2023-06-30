@@ -8,6 +8,7 @@ using UnityEngine;
 public class RadarHitList <T> {
     protected int NextToAddIndex { get; set; } = 0;
     public int Size { get => size; private set => size = value; }
+    public T[] RadarHitsEXPOSED { get => RadarHits; }
 
     protected T[] RadarHits;
     private int size;

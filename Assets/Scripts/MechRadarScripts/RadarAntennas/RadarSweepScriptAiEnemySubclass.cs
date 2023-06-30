@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class RadarSweepScriptAiEnemySubclass : RadarSweepScript
@@ -15,7 +16,8 @@ public class RadarSweepScriptAiEnemySubclass : RadarSweepScript
         //blip.GetComponent<Renderer>().enabled = false;
         if(hit.transform.root.gameObject.tag != "Player")
         {
-            blip.gameObject.SetActive(false);
+            var blipScript = blip.GetComponent<DisappearTimerScript>();
+            blipScript.DisappearTimerMax.Value = 0;
             return;
         }
         blip.gameObject.GetComponent<Renderer>().materials[0].color = Color.magenta;
@@ -24,6 +26,7 @@ public class RadarSweepScriptAiEnemySubclass : RadarSweepScript
     protected override void CreateTargetCache()
     {
         HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature, hideAiBlips);
+        SendRadarPulseAndCreateRadarEchoes.SerParentList(HitList, gameObject.transform);
     }
 
     protected override Transform[] SendAndCreateTargets()

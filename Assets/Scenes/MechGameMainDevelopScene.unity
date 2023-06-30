@@ -1007,8 +1007,6 @@ MonoBehaviour:
   PilotCamera: {fileID: 0}
   EWOCamera: {fileID: 0}
   ActiveCamera: 0
-  MechPrefab: {fileID: 3300963444738806369, guid: ac0551a3decc730418890d313f0919af, type: 3}
-  EwoPrefab: {fileID: 1632856752478138634, guid: ed52af2b0ead6054d8d55e7f2fbedd30, type: 3}
   pilotInputCfg: {fileID: 0}
   ewoInputCfg: {fileID: 0}
 --- !u!4 &1156891099

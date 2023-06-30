@@ -10,21 +10,47 @@ public class DisappearTimerScript : NetworkBehaviour
     public NetworkVariable<float> DisappearTimerMax;
     private bool doneWithUpdate = false;
     private bool hasEnabled = false;
-    
-    void Update()
+    private IEnumerator coroutine;
+
+    public override void OnNetworkSpawn()
     {
-        if (doneWithUpdate) return;
+        //If we are hosting, then handle the server side for detecting when clients have connected
+        //and when their lobby scenes are finished loading.
+        if (IsServer)
+        {
+            coroutine = CheckDisappear();
+            StartCoroutine(coroutine);
+        }
+        base.OnNetworkSpawn();
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        //If we are hosting, then handle the server side for detecting when clients have connected
+        //and when their lobby scenes are finished loading.
+        if (IsServer)
+        {
+            StopCoroutine(coroutine);
+        }
+        base.OnNetworkDespawn();
+    }
+
+
+    IEnumerator CheckDisappear()
+    {
+        if (doneWithUpdate) yield return new WaitForSeconds(1f);
         DisappearTimer += Time.deltaTime;
         if (DisappearTimer >= DisappearTimerMax.Value && hasEnabled)
         {
             DisableRenderer();
             doneWithUpdate = true;
         }
-        else if(!hasEnabled)
+        else if (!hasEnabled)
         {
             EnableRenderer();
             hasEnabled = true;
         }
+        yield return new WaitForSeconds(.5f);
     }
 
     private void EnableRenderer()
@@ -67,3 +93,4 @@ public class DisappearTimerScript : NetworkBehaviour
     }
 
 }
+

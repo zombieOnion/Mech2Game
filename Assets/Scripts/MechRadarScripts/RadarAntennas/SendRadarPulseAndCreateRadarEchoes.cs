@@ -62,4 +62,12 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
         return blipHits.ToArray();
         //return lobeHits.Where(hit => hit.distance > 5).ToArray();
     }
+
+    public static void SerParentList(RadarHitList<Transform> HitList, Transform parent)
+    {
+        foreach (var hit in HitList.GetLast(HitList.Size))
+        {
+            hit.GetComponent<NetworkObject>().TrySetParent(parent.root, true);
+        }
+    }
 }
