@@ -59,16 +59,6 @@ public class DisappearTimerScript : NetworkBehaviour
         Destroy(gameObject);
     }
 
-    private void EnableRenderer()
-    {
-        gameObject.GetComponent<EnableDisableRendererInterface>().EnableRenderer();
-    }
-
-    private void DisableRenderer()
-    {
-        gameObject.GetComponent<EnableDisableRendererInterface>().DisableRenderer();
-    }
-
     public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)
     {
         var lobeHits = new RadarHitList<Transform>(size);

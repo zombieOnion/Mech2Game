@@ -1,17 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
-public class RadarBlipScript : NetworkBehaviour, EnableDisableRendererInterface
+public class RadarBlipScript : MonoBehaviour, EnableDisableRendererInterface
 {
     public Guid radarSignature;
-    public ulong clientID;
     public ulong CreatorId;
     private MeshRenderer meshRenderer;
     private BoxCollider boxCollider;
-    public GameObject prefab;
 
     // Update is called once per frame
     private void Awake()
@@ -20,11 +17,6 @@ public class RadarBlipScript : NetworkBehaviour, EnableDisableRendererInterface
         boxCollider = gameObject.GetComponent<BoxCollider>();
     }
 
-    public override void OnNetworkSpawn()
-    {
-        clientID = GetComponent<NetworkObject>().OwnerClientId;
-        base.OnNetworkSpawn();
-    }
     public void EnableRenderer()
     {
         meshRenderer.enabled = true;

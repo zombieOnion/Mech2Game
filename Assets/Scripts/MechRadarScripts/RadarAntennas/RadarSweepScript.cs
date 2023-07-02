@@ -16,6 +16,7 @@ public class RadarSweepScript : NetworkBehaviour
 
     // cache variables and blips
     public SendRadarPulseAndCreateRadarEchoes PulseSender;
+    [SerializeField] GameObject RadarBlipLocalePreFab;
     public RadarHitList<Transform> HitList;
     protected int blipCount = 100;
     protected float blipTimeOut = 5;
@@ -33,6 +34,11 @@ public class RadarSweepScript : NetworkBehaviour
     private float xSectorSweepStart = 0f;
     private float xSectorSweepEnd = 90f;
     private float xSectorSweepAngle = 90f;
+    private NetworkObjectPoolSpawner spawner;
+    private SpawnPlayerManager playerSpawnManager;
+    private ClientRpcParams clientRpcParams;
+    private bool hasCreatedClientRpcParams;
+    private bool playerSpawningIsDone = false;
 
     void Awake()
     {
@@ -42,14 +48,30 @@ public class RadarSweepScript : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if(!IsServer)
+        CreateTargetCache();
+        if (!IsServer)
         {
-            base.OnNetworkSpawn();
+            base.OnNetworkDespawn();
             return;
         }
-        //CreateTargetCache();
-        base.OnNetworkSpawn();
+        spawner = FindAnyObjectByType<NetworkObjectPoolSpawner>();
+        playerSpawnManager = FindAnyObjectByType<SpawnPlayerManager>();
+        playerSpawnManager.AllPlayersHaveSpawned.OnValueChanged += OnAllPlayerSpawnedValueChanged;
+        base.OnNetworkDespawn();
     }
+
+    public override void OnNetworkDespawn()
+    {
+        if (!IsServer)
+        {
+            playerSpawnManager.AllPlayersHaveSpawned.OnValueChanged -= OnAllPlayerSpawnedValueChanged;
+            base.OnNetworkDespawn();
+            return;
+        }
+        base.OnNetworkDespawn();
+    }
+
+    private void OnAllPlayerSpawnedValueChanged(bool oldValue, bool newValue) => playerSpawningIsDone = newValue;
 
     [ClientRpc]
     public void countRadarBlipsClientRpc(int blips)
@@ -59,7 +81,7 @@ public class RadarSweepScript : NetworkBehaviour
 
     public void FixedUpdate()
     {
-        if (!IsServer) return;
+        if (!IsServer || !playerSpawningIsDone) return;
         if (!radarOn)
             return;
         var lastXAngle = xSweepRotationAngle;
@@ -79,21 +101,30 @@ public class RadarSweepScript : NetworkBehaviour
         if (lastXAngle <= 360f && xSweepRotationAngle > 360f)
             xSweepRotationAngle = 0;
         var hits = SendAndCreateTargets();
+        if (hasCreatedClientRpcParams == false)
+        {
+            var clientId = playerSpawnManager.ClientsObject[gameObject.transform.root.GetComponent<NetworkObject>().NetworkObjectId];
+            clientRpcParams = GameObjectUtilityFunctions.CreateSrvParaWithClientId(clientId);
+            hasCreatedClientRpcParams = true;
+        }
         if (hits.Length > 0)
         {
             foreach (var hit in hits)
+            {
                 AddRadarHit(hit);
+                CreateLocaleRadarBlipClientRpc(hit.transform.position, clientRpcParams);
+            }
         }
     }
     protected virtual void CreateTargetCache()
-    {
-        HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature, GetComponent<NetworkObject>().NetworkObjectId);
-        SendRadarPulseAndCreateRadarEchoes.SerParentList(HitList, gameObject.transform);
+    { //RadarSignature
+        var currentPos = transform.position;
+        HitList = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneral(blipCount, blipTimeOut, new Vector3(currentPos.x, currentPos.y-10, currentPos.z), RadarBlipLocalePreFab.transform);
     }
 
     protected virtual Transform[] SendAndCreateTargets()
     {
-        return PulseSender.SendAndRecieveRadarPulse();
+        return PulseSender.SendAndRecieveRadarPulse(HitList);
     } 
 
     private void AddRadarHit(Transform radarHit)
@@ -125,6 +156,12 @@ public class RadarSweepScript : NetworkBehaviour
         {
             _currentlyTrackedTarget = null;
         }
+    }
+
+    [ClientRpc]
+    private void CreateLocaleRadarBlipClientRpc(Vector3 dir, ClientRpcParams clientRpcParams = default)
+    {
+        DisappearTimerLocaleScript.CreateLocaleRadarBlip(HitList, dir);
     }
 
     public void ChangeSweepDirection() {

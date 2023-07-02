@@ -10,6 +10,7 @@ public class SpawnPlayerManager : NetworkBehaviour
     [SerializeField] public GameObject EwoPrefab;
     private GameSettings gameSetting;
     private Dictionary<ulong, ulong> clientsObject = new Dictionary<ulong, ulong>();
+    public NetworkVariable<bool> AllPlayersHaveSpawned;
 
     public string SceneName { get; private set; }
     public Dictionary<ulong, ulong> ClientsObject { get => clientsObject; }
@@ -27,6 +28,7 @@ public class SpawnPlayerManager : NetworkBehaviour
         //and when their lobby scenes are finished loading.
         if (IsServer)
         {
+            AllPlayersHaveSpawned.Value = false;
             gameSetting = FindAnyObjectByType<GameSettings>();
             gameState = SceneTransitionHandler.sceneTransitionHandler.gameState;
             SceneTransitionHandler.sceneTransitionHandler.OnEventLoadedScene += SetupBattleScene;
@@ -89,5 +91,12 @@ public class SpawnPlayerManager : NetworkBehaviour
             gameSetting.SetPilotGoClientRpc(networkObjectRef, clientRpcArgs);
         else if (playerType == 2 && playerType != playerVal[0])
             gameSetting.SetEwoGoClientRpc(networkObjectRef, clientRpcArgs);
+        if (allHaveSpawned())
+            AllPlayersHaveSpawned.Value = true;
+    }
+
+    private bool allHaveSpawned()
+    {
+        return ClientsObject.Count == gameState.ClientsWithRoles.Count;
     }
 }

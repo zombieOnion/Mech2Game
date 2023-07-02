@@ -25,6 +25,7 @@ public class RadarSweepScriptAiEnemySubclass : RadarSweepScript
 
     protected override void CreateTargetCache()
     {
+        return;
         HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature, GetComponent<NetworkObject>().NetworkObjectId, hideAiBlips);
         SendRadarPulseAndCreateRadarEchoes.SerParentList(HitList, gameObject.transform);
     }

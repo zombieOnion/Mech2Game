@@ -15,11 +15,19 @@ public class JammerScript : NetworkBehaviour
     public float BlipTimeOut = 0.5f;
     public int BlipSize = 20;
     public bool IsJamming { set; get; }
+    public RadarHitList<Transform> HitList { get; private set; }
+    [SerializeField] GameObject RadarBlipLocalePreFab;
+
     private Guid? jammTargetGuid = Guid.Empty;
     private RadarTargetScript jammingTargetScript = null;
     private List<RadarTargetScript> paintedTargetOnUs = null;
     private int blipCount = 2;
+    private float blipTimeOut = 3f;
     private NetworkObjectPoolSpawner spawner;
+    private ClientRpcParams clientRpcParams;
+    private bool hasCreatedClientRpcParams;
+    private SpawnPlayerManager playerSpawnManager;
+    private bool playerSpawningIsDone = false;
 
     void Awake()
     {
@@ -28,12 +36,15 @@ public class JammerScript : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        CreateTargetCache();
         if (!IsServer)
         {
             base.OnNetworkDespawn();
             return;
         }
         spawner = FindAnyObjectByType<NetworkObjectPoolSpawner>();
+        playerSpawnManager = FindAnyObjectByType<SpawnPlayerManager>();
+        playerSpawnManager.AllPlayersHaveSpawned.OnValueChanged += OnAllPlayerSpawnedValueChanged;
         base.OnNetworkDespawn();
     }
 
@@ -41,11 +52,28 @@ public class JammerScript : NetworkBehaviour
     {
         if (!IsServer)
         {
+            playerSpawnManager.AllPlayersHaveSpawned.OnValueChanged -= OnAllPlayerSpawnedValueChanged;
             base.OnNetworkDespawn();
             return;
         }
         base.OnNetworkDespawn();
     }
+
+    private void OnAllPlayerSpawnedValueChanged(bool oldValue, bool newValue) => playerSpawningIsDone = newValue;
+
+    protected virtual void CreateTargetCache()
+    { //RadarSignature
+        var currentPos = transform.position;
+        HitList = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneral(BlipSize, blipTimeOut, new Vector3(currentPos.x, currentPos.y - 10, currentPos.z), RadarBlipLocalePreFab.transform);
+    }
+
+
+    [ClientRpc]
+    private void CreateLocaleRadarBlipClientRpc(Vector3 dir, ClientRpcParams clientRpcParams = default)
+    {
+        DisappearTimerLocaleScript.CreateLocaleRadarBlip(HitList, dir);
+    }
+
     public void SetUpJamming(Guid? radarSignature, RadarTargetScript targetToJamm)
     {
         if(!radarSignature.HasValue)
@@ -68,6 +96,7 @@ public class JammerScript : NetworkBehaviour
             IsJamming = false;
             return false;
         }
+        Debug.Log("Jamming");
         var heading = (jammingTargetScript.transform.position - gameObject.transform.root.position).normalized;
         var direction = jammingTargetScript.transform.position + heading;
 
@@ -75,10 +104,15 @@ public class JammerScript : NetworkBehaviour
         var newVector = new Vector3(gameObject.transform.position.x + UnityEngine.Random.Range(10, 60), 
             gameObject.transform.position.y, 
             gameObject.transform.position.z + UnityEngine.Random.Range(-30, 30));
-        var blip = spawner.SpawnRadarBlip(newVector + heading * 1 * blipCount, Quaternion.identity);
-        blip.GetComponent<NetworkObject>().Spawn();
-        blip.GetComponent<DisappearTimerScript>().DisappearTimerMax.Value = 3f;
-        blip.GetComponent<DisappearTimerScript>().StartCountDown();
+        var blip = DisappearTimerLocaleScript.CreateLocaleRadarBlip(HitList, newVector + heading * 1 * blipCount);
+
+        if (hasCreatedClientRpcParams == false)
+        {
+            var clientId = playerSpawnManager.ClientsObject[gameObject.transform.root.GetComponent<NetworkObject>().NetworkObjectId];
+            clientRpcParams = GameObjectUtilityFunctions.CreateSrvParaWithClientId(clientId);
+            hasCreatedClientRpcParams = true;
+        }
+        CreateLocaleRadarBlipClientRpc(blip.position, clientRpcParams);
         // TODO efter att målet har flyttat sig så hittar vi det inte längre och kan då inte skicka in fler störmål
         // Koll varje gång efter nya mål och ifall de fortfarande har oss som mål, uppdatera listan
         Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity, 1 << 8);
@@ -101,7 +135,7 @@ public class JammerScript : NetworkBehaviour
     void FixedUpdate()
     {
         if (!IsServer) return;
-        if (IsJamming) JammTarget();
+        if (IsJamming && playerSpawningIsDone) JammTarget();
     }
 
     private void SetColourOfBlip(RadarBlipScript blipScript) => blipScript.gameObject.GetComponent<Renderer>().materials[0].color = Color.grey;

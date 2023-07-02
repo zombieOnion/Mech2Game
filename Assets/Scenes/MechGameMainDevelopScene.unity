@@ -817,7 +817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PooledPrefabsList:
   - Prefab: {fileID: 4531837818513917039, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
-    PrewarmCount: 1000
+    PrewarmCount: 200
   - Prefab: {fileID: 8455763901918205870, guid: 21efbbe562b00a2439a1977e563b60a4, type: 3}
     PrewarmCount: 50
 --- !u!4 &579098586
@@ -6298,8 +6298,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c579743cb0ecb84fb1336758d074193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MechPrefab: {fileID: 6378853636365475855, guid: ac0551a3decc730418890d313f0919af, type: 3}
+  MechPrefab: {fileID: 3788626340683502656, guid: ac0551a3decc730418890d313f0919af, type: 3}
   EwoPrefab: {fileID: 1632856752478138634, guid: ed52af2b0ead6054d8d55e7f2fbedd30, type: 3}
+  AllPlayersHaveSpawned:
+    m_InternalValue: 0
 --- !u!1 &1576507372
 GameObject:
   m_ObjectHideFlags: 0
@@ -7575,7 +7577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3214608601521043397, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9055358669915373021, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
       propertyPath: GlobalObjectIdHash

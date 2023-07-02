@@ -48,7 +48,7 @@ public class RadarWarningReceiver : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         utility = FindAnyObjectByType<GameObjectUtilityFunctions>();
-        LineGos = DisappearTimerLocaleScript.InstantiateRadarBlipsGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
+        LineGos = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
         //SendRadarPulseAndCreateRadarEchoes.SerParentList(LineGos, gameObject.transform);
         transform.root.GetComponent<EwoGameObjectReference>().EwoRefeenceId.OnValueChanged += OnEwoGoIdChanged;
         if (!IsServer)
@@ -85,7 +85,7 @@ public class RadarWarningReceiver : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!IsServer) return;
-        if (other.gameObject.layer != radarBlipsMask || !other.name.Equals("RadarBlip(Clone)"))
+        if (other.gameObject.layer != radarBlipsMask || !other.name.StartsWith("RadarBlip"))
             return;
         if(triggerActivationRestPeriodCount < triggerActivationRestPeriod)
             return;

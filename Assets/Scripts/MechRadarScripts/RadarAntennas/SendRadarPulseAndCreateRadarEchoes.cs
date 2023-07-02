@@ -71,8 +71,7 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
                 }
                 else
                 {
-                    nextHit = hitList.AdvanceNext();
-                    nextHit.position = hit.transform.position;
+                    nextHit = DisappearTimerLocaleScript.CreateLocaleRadarBlip(hitList, hit.point);
                 }
                 //rendererControlScript.ResetAppearTimer();
                 //rendererControlScript.ResetAppearTimerClientRpc();

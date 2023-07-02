@@ -9,14 +9,12 @@ public class DisappearTimerLocaleScript : MonoBehaviour
     public float DisappearTimerMax;
     private bool hasStarted = false;
     private bool hasFinished = false;
-    private IEnumerator coroutine;
+    private Coroutine coroutine;
     private BoxCollider boxCollider;
     private EnableDisableRendererInterface rendererInterface;
-    public GameObject prefab;
 
     void Awake()
     {
-        coroutine = CheckDisappear();
         boxCollider = GetComponent<BoxCollider>();
         rendererInterface = gameObject.GetComponent<EnableDisableRendererInterface>();
     }
@@ -33,7 +31,9 @@ public class DisappearTimerLocaleScript : MonoBehaviour
 
     public void StartCountDown()
     {
-        StartCoroutine(CheckDisappear());
+        if (coroutine != null)
+            StopCoroutine(coroutine);
+        coroutine = StartCoroutine(CheckDisappear());
     }
 
     private IEnumerator CheckDisappear()
@@ -65,7 +65,7 @@ public class DisappearTimerLocaleScript : MonoBehaviour
     }
 
 
-    public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)
+    public static RadarHitList<Transform> InstantiatePrefabWithDisappearsGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)
     {
         var lobeHits = new RadarHitList<Transform>(size);
         for (int i = 0; i < size; i++)
@@ -78,5 +78,14 @@ public class DisappearTimerLocaleScript : MonoBehaviour
         return lobeHits;
     }
 
+    public static Transform CreateLocaleRadarBlip(RadarHitList<Transform> HitList, Vector3 dir)
+    {
+        var nextHit = HitList.AdvanceNext();
+        var rendererControlScript = nextHit.GetComponent<DisappearTimerLocaleScript>();
+        rendererControlScript.DisappearTimerMax = 2;
+        nextHit.position = dir;
+        rendererControlScript.StartCountDown();
+        return nextHit;
+    }
 }
 
