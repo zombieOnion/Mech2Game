@@ -11,8 +11,10 @@ public class RadarWarningReceiver : NetworkBehaviour
     LayerMask radarBlipsMask;
     LayerMask uiMask;
     private NetworkObjectPoolSpawner spawner;
+    private SpawnPlayerManager playerSpawnManager;
 
     public RadarHitList<Transform> LineGos { get; private set; }
+    public DisappearTimerLocaleScript RadarWarningReceiverUITimerScript { get; private set; }
 
     public GameObject RadarWarningReceiverUI;
     float radarHitTime = 1f;
@@ -28,11 +30,14 @@ public class RadarWarningReceiver : NetworkBehaviour
     [SerializeField] GameObject RadarWarningLinePreFab;
     private string RadarWarnerText = null;
 
+    private ClientRpcParams clientRpcParams;
+    private bool hasCreatedClientRpcParams = false;
+
     // Start is called before the first frame update
 
     void Awake()
     {
-        utility = FindAnyObjectByType<GameObjectUtilityFunctions>();
+        //utility = FindAnyObjectByType<GameObjectUtilityFunctions>();
         ewoRefScript = transform.root.GetComponent<EwoGameObjectReference>();
     }
     void Start()
@@ -42,15 +47,17 @@ public class RadarWarningReceiver : NetworkBehaviour
     }
     public override void OnNetworkSpawn()
     {
+        utility = FindAnyObjectByType<GameObjectUtilityFunctions>();
+        LineGos = DisappearTimerLocaleScript.InstantiateRadarBlipsGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
+        //SendRadarPulseAndCreateRadarEchoes.SerParentList(LineGos, gameObject.transform);
+        transform.root.GetComponent<EwoGameObjectReference>().EwoRefeenceId.OnValueChanged += OnEwoGoIdChanged;
         if (!IsServer)
         {
             base.OnNetworkSpawn();
             return;
         }
         spawner = FindAnyObjectByType<NetworkObjectPoolSpawner>();
-        //LineGos = DisappearTimerScript.InstantiateRadarBlipsGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
-        //SendRadarPulseAndCreateRadarEchoes.SerParentList(LineGos, gameObject.transform);
-        transform.root.GetComponent<EwoGameObjectReference>().EwoRefeenceId.OnValueChanged += OnEwoGoIdChanged;
+        playerSpawnManager = FindAnyObjectByType<SpawnPlayerManager>();
         base.OnNetworkSpawn();
     }
     public override void OnNetworkDespawn()
@@ -66,12 +73,13 @@ public class RadarWarningReceiver : NetworkBehaviour
 
     private void OnEwoGoIdChanged(ulong previous, ulong current)
     {
-        if (!IsServer) return;
+        //if (!IsServer) return;
         canvasGo = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav");
         ewoGoId = utility.FindGameObjectByNetworkObjectId(current);
         RadarWarningReceiverUI = utility.FindGameObjectByNetworkObjectId(current).transform.Find("Canvas nav/RWR").gameObject;
         RadarWarningReceiverUI.GetComponent<TextMeshProUGUI>().enabled = false;
-        RadarWarningReceiverUI.GetComponent<DisappearTimerScript>().DisappearTimerMax.Value = 2f;
+        RadarWarningReceiverUITimerScript = RadarWarningReceiverUI.GetComponent<DisappearTimerLocaleScript>();
+        RadarWarningReceiverUITimerScript.DisappearTimerMax = 2f;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -90,7 +98,13 @@ public class RadarWarningReceiver : NetworkBehaviour
         Vector3 dir = (hit - org).normalized;
         //Debug.DrawLine(transform.position, transform.position + dir * 10, Color.red, Mathf.Infinity);
         //Debug.Log(other.name +" "+ dir);
-        DrawRadarDirection(dir);
+        if (hasCreatedClientRpcParams == false)
+        {
+            var clientId = playerSpawnManager.ClientsObject[gameObject.transform.root.GetComponent<NetworkObject>().NetworkObjectId];
+            clientRpcParams = GameObjectUtilityFunctions.CreateSrvParaWithClientId(clientId);
+            hasCreatedClientRpcParams = true;
+        }
+        DrawRadarDirectionClientRpc(dir, clientRpcParams);
         //StartCoroutine(TurnOffRWR());
     }
 
@@ -109,18 +123,17 @@ public class RadarWarningReceiver : NetworkBehaviour
         }
     }
 
-    private void DrawRadarDirection(Vector3 dir)
+    [ClientRpc]
+    private void DrawRadarDirectionClientRpc(Vector3 dir, ClientRpcParams clientRpcParams = default)
     {
         Vector3 offsetFromText = new Vector3(0, 0, -20);
 
-        var lineGo = spawner.SpawnWarningLineBlip(transform.position, Quaternion.identity);//LineGos.AdvanceNext();
-        lineGo.GetComponent<NetworkObject>().Spawn(destroyWithScene: true);
-        var rendererControlScript = lineGo.GetComponent<DisappearTimerScript>();
-        rendererControlScript.DisappearTimerMax.Value = 2;
+        var lineGo = LineGos.AdvanceNext();
+        var rendererControlScript = lineGo.GetComponent<DisappearTimerLocaleScript>();
+        rendererControlScript.DisappearTimerMax = 2;
+        lineGo.GetComponent<RadarWarningLineScript>().ResetPos(RadarWarningReceiverUI.transform.position + offsetFromText, RadarWarningReceiverUI.transform.position + offsetFromText + dir * 20);
         rendererControlScript.StartCountDown();
-        var currentLineRenderer = lineGo.GetComponent<LineRenderer>();
-        currentLineRenderer.SetPositions(new Vector3[] { RadarWarningReceiverUI.transform.position + offsetFromText, RadarWarningReceiverUI.transform.position + offsetFromText + dir * 20 });
-        lineGo.GetComponent<RadarWarningLineScript>().ResetPosClientRpc(RadarWarningReceiverUI.transform.position + offsetFromText, RadarWarningReceiverUI.transform.position + offsetFromText + dir * 20);
+        RadarWarningReceiverUITimerScript.StartCountDown();
         //lineGo.GetComponent<NetworkObject>().TrySetParent(ewoGoId, true);
     }
 }

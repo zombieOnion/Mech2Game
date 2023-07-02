@@ -1,0 +1,82 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class DisappearTimerLocaleScript : MonoBehaviour
+{
+    private float DisappearTimer = 0;
+    public float DisappearTimerMax;
+    private bool hasStarted = false;
+    private bool hasFinished = false;
+    private IEnumerator coroutine;
+    private BoxCollider boxCollider;
+    private EnableDisableRendererInterface rendererInterface;
+    public GameObject prefab;
+
+    void Awake()
+    {
+        coroutine = CheckDisappear();
+        boxCollider = GetComponent<BoxCollider>();
+        rendererInterface = gameObject.GetComponent<EnableDisableRendererInterface>();
+    }
+
+    void Start()
+    {
+        StartCountDown();
+    }
+
+    void OnDestroy()
+    {
+        StopCoroutine(coroutine);
+    }
+
+    public void StartCountDown()
+    {
+        StartCoroutine(CheckDisappear());
+    }
+
+    private IEnumerator CheckDisappear()
+    {
+        hasStarted = true;
+        EnableRenderer();
+        yield return new WaitForSeconds(DisappearTimerMax);
+        DisableRenderer();
+        hasStarted = false;
+        hasFinished = true;
+    }
+
+    private void EnableRenderer()
+    {
+        if(boxCollider != null)
+        {
+            boxCollider.enabled = true;
+        }
+        rendererInterface.EnableRenderer();
+    }
+
+    private void DisableRenderer()
+    {
+        if (boxCollider != null)
+        {
+            boxCollider.enabled = false;
+        }
+        rendererInterface.DisableRenderer();
+    }
+
+
+    public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)
+    {
+        var lobeHits = new RadarHitList<Transform>(size);
+        for (int i = 0; i < size; i++)
+        {
+            var radarHit = Instantiate(preFab, pos, new Quaternion());
+            var blipScript = radarHit.gameObject.GetComponent<DisappearTimerLocaleScript>();
+            lobeHits.Add(radarHit);
+            blipScript.DisappearTimerMax = disappearTime;
+        }
+        return lobeHits;
+    }
+
+}
+

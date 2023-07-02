@@ -549,7 +549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RadarWarningReceiverUI: {fileID: 0}
-  RadarWarningLinePreFab: {fileID: 8501477130994481694, guid: eebae4d6fcbe7ce4aa640235f37bc015, type: 3}
+  RadarWarningLinePreFab: {fileID: 7807685787874956961, guid: 5ffbdb28bc5ff2745887f43bacc4c3d5, type: 3}
 --- !u!65 &6562976807580793771
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -926,6 +926,8 @@ MonoBehaviour:
   SidewaysDirection: 0
   LookRotationSpeed: 1
   PilotPrefab: {fileID: 1803561295360038, guid: 6ae6bad03cc9fc744b25829443fc4439, type: 3}
+  hasActedOnUpdateSpeed: 1
+  hasActedOnUpdateVector: 1
   ForwardSpeeds:
   - 0
   - -5

@@ -6,17 +6,11 @@ using UnityEngine;
 public class NetworkObjectPoolSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject radarBlipPrefab;
-    [SerializeField] private GameObject warningLinePrefab;
     [SerializeField] private GameObject radarTrackerPrefab;
     // Start is called before the first frame update
     public GameObject SpawnRadarBlip(Vector3 pos, Quaternion rot)
     {
         return SpawnNetworkObject(radarBlipPrefab, pos, rot);
-    }
-
-    public GameObject SpawnWarningLineBlip(Vector3 pos, Quaternion rot)
-    {
-        return SpawnNetworkObject(warningLinePrefab, pos, rot);
     }
 
     public GameObject SpawnRadarTrackingObject(Vector3 pos, Quaternion rot)

@@ -9,8 +9,10 @@ public class SpawnPlayerManager : NetworkBehaviour
     [SerializeField] public GameObject MechPrefab;
     [SerializeField] public GameObject EwoPrefab;
     private GameSettings gameSetting;
+    private Dictionary<ulong, ulong> clientsObject = new Dictionary<ulong, ulong>();
 
     public string SceneName { get; private set; }
+    public Dictionary<ulong, ulong> ClientsObject { get => clientsObject; }
 
     // Start is called before the first frame update
     void Awake()
@@ -73,9 +75,15 @@ public class SpawnPlayerManager : NetworkBehaviour
         if (playerVal[1] != team)
             return;
         if (playerType == 1 && playerType == playerVal[0])
+        {
             gameSetting.SetPilotActive2ClientRpc(networkObjectRef, clientRpcArgs);
+            ClientsObject.Add(networkObjectRef.NetworkObjectId, clientId);
+        }
         else if (playerType == 2 && playerType == playerVal[0])
+        {
             gameSetting.SetEwoActive2ClientRpc(networkObjectRef, clientRpcArgs);
+            ClientsObject.Add(networkObjectRef.NetworkObjectId, clientId);
+        }
 
         if (playerType == 1 && playerType != playerVal[0])
             gameSetting.SetPilotGoClientRpc(networkObjectRef, clientRpcArgs);

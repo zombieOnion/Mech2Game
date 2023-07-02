@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class RadarWarningLineScript : NetworkBehaviour, EnableDisableRendererInterface
+public class RadarWarningLineScript : MonoBehaviour, EnableDisableRendererInterface
 {
     private LineRenderer lineRenderer;
 
@@ -22,8 +22,7 @@ public class RadarWarningLineScript : NetworkBehaviour, EnableDisableRendererInt
         lineRenderer.enabled = false;
     }
 
-    [ClientRpc]
-    public void ResetPosClientRpc(Vector3 start, Vector3 end)
+    public void ResetPos(Vector3 start, Vector3 end)
     {
         var currentLineRenderer = gameObject.GetComponent<LineRenderer>();
         currentLineRenderer.SetPositions(new Vector3[] { start, end });

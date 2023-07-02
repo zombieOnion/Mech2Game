@@ -818,8 +818,6 @@ MonoBehaviour:
   PooledPrefabsList:
   - Prefab: {fileID: 4531837818513917039, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
     PrewarmCount: 1000
-  - Prefab: {fileID: 8501477130994481694, guid: eebae4d6fcbe7ce4aa640235f37bc015, type: 3}
-    PrewarmCount: 50
   - Prefab: {fileID: 8455763901918205870, guid: 21efbbe562b00a2439a1977e563b60a4, type: 3}
     PrewarmCount: 50
 --- !u!4 &579098586
@@ -870,7 +868,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radarBlipPrefab: {fileID: 4531837818513917039, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
-  warningLinePrefab: {fileID: 8501477130994481694, guid: eebae4d6fcbe7ce4aa640235f37bc015, type: 3}
   radarTrackerPrefab: {fileID: 8455763901918205870, guid: 21efbbe562b00a2439a1977e563b60a4, type: 3}
 --- !u!1 &673596877
 GameObject:
