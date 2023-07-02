@@ -47,7 +47,7 @@ public class RadarSweepScript : NetworkBehaviour
             base.OnNetworkSpawn();
             return;
         }
-        CreateTargetCache();
+        //CreateTargetCache();
         base.OnNetworkSpawn();
     }
 
@@ -87,13 +87,13 @@ public class RadarSweepScript : NetworkBehaviour
     }
     protected virtual void CreateTargetCache()
     {
-        HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature);
+        HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature, GetComponent<NetworkObject>().NetworkObjectId);
         SendRadarPulseAndCreateRadarEchoes.SerParentList(HitList, gameObject.transform);
     }
 
     protected virtual Transform[] SendAndCreateTargets()
     {
-        return PulseSender.SendAndRecieveRadarPulse(HitList);
+        return PulseSender.SendAndRecieveRadarPulse();
     } 
 
     private void AddRadarHit(Transform radarHit)

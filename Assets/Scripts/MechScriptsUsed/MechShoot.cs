@@ -7,7 +7,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
-public class MechShoot : NetworkBehaviour {
+public class MechShoot : NetworkBehaviour
+{
 
     [SerializeField] GameObject varBullet;
     [SerializeField] GameObject CommandGuidedRocket;
@@ -30,7 +31,8 @@ public class MechShoot : NetworkBehaviour {
     private float xRotation = 0f;
     private float yRotation = 0f;
 
-    void Awake() {
+    void Awake()
+    {
         mechWeapons.Add(varBullet);
         mechWeapons.Add(CommandGuidedRocket);
         selectedWeapon = mechWeapons.First();
@@ -39,20 +41,22 @@ public class MechShoot : NetworkBehaviour {
         gunnerCam = transform.parent.gameObject.GetComponentInChildren<Camera>();
     }
 
-    public void LockTarget(Transform target) {
+    public void LockTarget(Transform target)
+    {
         CurrentTarget = target;
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void FireMainGunServerRpc() {
-        GameObject newRocket = Instantiate(selectedWeapon, transform.position + transform.forward*2, transform.rotation) as GameObject;
+    public void FireMainGunServerRpc()
+    {
+        GameObject newRocket = Instantiate(selectedWeapon, transform.position + transform.forward * 2, transform.rotation) as GameObject;
         newRocket.GetComponent<NetworkObject>().Spawn();
         newRocket.GetComponent<Rigidbody>().AddForce(transform.forward * 5, ForceMode.VelocityChange);
         ILockTarget lockTarget = newRocket.GetComponent<ILockTarget>();
         if (CurrentTarget != null && lockTarget != null)
             lockTarget.SetTarget(CurrentTarget);
     }
-    
+
     void Update()
     {
         if (!IsClient) return;
@@ -78,7 +82,7 @@ public class MechShoot : NetworkBehaviour {
         oldyRotation = yRotation;
     }
 
-    [ServerRpc(RequireOwnership = false, Delivery = RpcDelivery.Unreliable)]
+    [ServerRpc(RequireOwnership = false)]
     void SetNewTurnVectorServerRpc(float newX, float newY)
     {
         xRotation = newX;
@@ -97,30 +101,42 @@ public class MechShoot : NetworkBehaviour {
         oldyRotation = yRotation;
     }
 
-    public void OnFire1() {
+    public void OnFire1()
+    {
         FireGun = true;
     }
 
-    public void OnFire2() {
+    public void OnFire2()
+    {
         Debug.Log("Locking");
         RaycastHit objectHit;
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
         Debug.DrawRay(transform.position, fwd * 50, Color.red, duration: 1200, depthTest: false);
-        if(Physics.Raycast(transform.position, fwd, out objectHit, 50) && objectHit.transform.tag == "TestEnemy")
-            LockTarget(objectHit.transform); 
+        if (Physics.Raycast(transform.position, fwd, out objectHit, 50) && objectHit.transform.tag == "TestEnemy")
+            LockTarget(objectHit.transform);
     }
-    public void OnLook(InputValue input) {
+    public void OnLook(InputValue input)
+    {
         _panThisFrame = input.Get<Vector2>() * 0.125f;
     }
 
-    public void OnChangeWeapon() {
+    public void OnChangeWeapon()
+    {
+        if (!IsClient) return;
+        ChangeWeaponServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ChangeWeaponServerRpc()
+    {
+
         int weaponIndex = mechWeapons.IndexOf(selectedWeapon);
-        if(weaponIndex == mechWeapons.Count - 1)
+        if (weaponIndex == mechWeapons.Count - 1)
             weaponIndex = 0;
         else
             weaponIndex += 1;
         selectedWeapon = mechWeapons[weaponIndex];
         selectedWeaponBase = (selectedWeapon as GameObject).GetComponent<WeaponBase>();
-        nextFire = selectedWeaponBase.RateOfFire+1f;
+        nextFire = selectedWeaponBase.RateOfFire + 1f;
     }
 }

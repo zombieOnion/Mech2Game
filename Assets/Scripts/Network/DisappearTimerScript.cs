@@ -6,11 +6,11 @@ using UnityEngine.Events;
 
 public class DisappearTimerScript : NetworkBehaviour
 {
-    private float DisappearTimer;
+    private float DisappearTimer = 0;
     public NetworkVariable<float> DisappearTimerMax;
-    private bool doneWithUpdate = false;
-    private bool hasEnabled = false;
+    private bool hasStarted = false;
     private IEnumerator coroutine;
+    public GameObject prefab;
 
     public override void OnNetworkSpawn()
     {
@@ -19,7 +19,9 @@ public class DisappearTimerScript : NetworkBehaviour
         if (IsServer)
         {
             coroutine = CheckDisappear();
-            StartCoroutine(coroutine);
+            /*coroutine = CheckDisappear();
+            if (DisappearTimerMax.Value == 0)
+                DisappearTimerMax.Value = 2f;*/
         }
         base.OnNetworkSpawn();
     }
@@ -34,23 +36,27 @@ public class DisappearTimerScript : NetworkBehaviour
         }
         base.OnNetworkDespawn();
     }
+    /*private void Update()
+    {
+        DisappearTimer += Time.deltaTime;
+        if (DisappearTimer >= DisappearTimerMax.Value)
+        {
+            Destroy(gameObject);
+        }
+    }*/
 
+    public void StartCountDown()
+    {
+        if (hasStarted)
+            return;
+        hasStarted = true;
+        StartCoroutine(coroutine);
+    }
 
     IEnumerator CheckDisappear()
     {
-        if (doneWithUpdate) yield return new WaitForSeconds(1f);
-        DisappearTimer += Time.deltaTime;
-        if (DisappearTimer >= DisappearTimerMax.Value && hasEnabled)
-        {
-            DisableRenderer();
-            doneWithUpdate = true;
-        }
-        else if (!hasEnabled)
-        {
-            EnableRenderer();
-            hasEnabled = true;
-        }
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(DisappearTimerMax.Value);
+        Destroy(gameObject);
     }
 
     private void EnableRenderer()
@@ -61,21 +67,6 @@ public class DisappearTimerScript : NetworkBehaviour
     private void DisableRenderer()
     {
         gameObject.GetComponent<EnableDisableRendererInterface>().DisableRenderer();
-    }
-
-    public void ResetAppearTimer()
-    {
-        DisappearTimer = 0;
-        doneWithUpdate = false;
-        hasEnabled = false;
-    }
-
-    [ClientRpc]
-    public void ResetAppearTimerClientRpc()
-    {
-        DisappearTimer = 0;
-        doneWithUpdate = false;
-        hasEnabled = false;
     }
 
     public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)

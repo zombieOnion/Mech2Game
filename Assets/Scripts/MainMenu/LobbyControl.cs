@@ -4,7 +4,6 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using System.Linq;
 
 public class LobbyControl : NetworkBehaviour

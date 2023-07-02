@@ -17,6 +17,7 @@ public class RadarTargetComputer : NetworkBehaviour
     public LayerMask PlotLayermask = 1 << 6;
     public LayerMask TargetLayermask = 1 << 8;
     public LayerMask UnitLayermask = 1 << 3;
+    private NetworkObjectPoolSpawner spawner;
 
     public Guid MechRadarComputerSignature
     {
@@ -42,8 +43,24 @@ public class RadarTargetComputer : NetworkBehaviour
         _radarTracker.MechRadarComputerSignature = MechRadarComputerSignature;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        if (!IsServer)
+        {
+            base.OnNetworkDespawn();
+            return;
+        }
+        spawner = FindAnyObjectByType<NetworkObjectPoolSpawner>();
+        base.OnNetworkDespawn();
+    }
+
     public override void OnNetworkDespawn()
     {
+        if (!IsServer)
+        {
+            base.OnNetworkDespawn();
+            return;
+        }
         Targets.ForEach(x => Destroy(x.gameObject));
         Targets.Clear();
         base.OnNetworkDespawn();
@@ -71,27 +88,26 @@ public class RadarTargetComputer : NetworkBehaviour
     }
 
     public GameObject CreateNewTarget(Vector3 position, ulong clientId, bool isServer = false) {
-        var newTarget = Instantiate(RadarTarget, position, new Quaternion());
+        var newTarget = spawner.SpawnRadarTrackingObject(position, Quaternion.identity);
         newTarget.GetComponent<RadarTargetScript>().MechRadarComputerSignature = MechRadarComputerSignature;
-        if (isServer)
-            newTarget.gameObject.GetComponent<NetworkObject>().Spawn();
-        else
-            newTarget.gameObject.GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
+        //newTarget.gameObject.GetComponent<NetworkObject>().Spawn();
+        newTarget.gameObject.GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
         Targets.Add(newTarget.transform);
         return newTarget.gameObject;
     }
 
     public void TrackTarget(RadarTargetScript target) {
         var lockedTarget = Targets.Find(t => t.transform.GetInstanceID() == target.transform.GetInstanceID());
-        if (lockedTarget == null)
+        if (target == null)
         {
-            var trackedTarget = _radarTracker.StopTracking();
-            if(trackedTarget != null)
-                Targets.Add(trackedTarget.transform);
+            _radarTracker.StopTracking();
+            //var trackedTarget = _radarTracker.StopTracking();
+            //if (trackedTarget != null)
+            //    Targets.Add(trackedTarget.transform);
         }
         else
         {
-            Targets.Remove(lockedTarget.transform);
+            Targets.Remove(target.transform);
             _radarTracker.TrackTarget(target);
         } 
     }

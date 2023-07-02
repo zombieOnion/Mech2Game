@@ -128,6 +128,7 @@ public class MinimapUserInterfaceControl : NetworkBehaviour {
 		Vector3 clickedWorldPoint = GetClickedWorldPoint(userClicked);
 		OnPointClick2ServerRpc(clickedWorldPoint);
 	}
+
     [ServerRpc(RequireOwnership = false)]
 	public void OnPointClick2ServerRpc(Vector3 userClicked, ServerRpcParams serverRpcAttribute = default)
 	{

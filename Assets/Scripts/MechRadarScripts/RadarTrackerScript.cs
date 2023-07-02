@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class RadarTrackerScript : NetworkBehaviour
 {
+    //delegate void Radar();
+
+
     public Guid MechRadarComputerSignature;
     [SerializeField] public Transform RadarBlip;
     public bool TrackingTarget = false;
@@ -24,8 +27,14 @@ public class RadarTrackerScript : NetworkBehaviour
         if (!IsServer) return;
         if (TrackingTarget)
         {
-            LeftToRight.SearchAndTrack();
-            UpToDown.SearchAndTrack();
+            int leftRightStatus = LeftToRight.SearchAndTrack();
+            int upDownStatus = UpToDown.SearchAndTrack();
+            if(leftRightStatus == 3 && upDownStatus == 3)
+            {
+                StopTracking();
+                return;
+            }
+
             UpdateTargetWithHits(LeftToRight);
             UpdateTargetWithHits(UpToDown);
         }
@@ -35,7 +44,7 @@ public class RadarTrackerScript : NetworkBehaviour
     {
         if (CurrentlyTrackedTarget == null)
         {
-            TrackingTarget = false;
+            StopTracking();
             return;
         }
             
@@ -57,29 +66,44 @@ public class RadarTrackerScript : NetworkBehaviour
     }
 
     public void TrackTarget(RadarTargetScript target) {
-        if (target.MechRadarComputerSignature != MechRadarComputerSignature)
-            return;
+        //if (target.MechRadarComputerSignature != MechRadarComputerSignature)
+        //    return;
+        LeftToRight.CreateaBlipCache();
+        UpToDown.CreateaBlipCache();
         TrackingTarget = true;
         CurrentlyTrackedTarget = target;
         CurrentlyTrackedTarget.TrackerRadarIsOn = true;
+        CurrentlyTrackedTarget.OnRadarTargetDestroyed += StopTracking;
         transform.LookAt(target.transform);
+        Debug.Log("Started Tracking");
     }
 
-    public RadarTargetScript StopTracking()
+    public void StopTracking()
     {
         TrackingTarget = false;
         if (CurrentlyTrackedTarget == null)
-            return null;
+            return;
         CurrentlyTrackedTarget.TrackerRadarIsOn = false;
         var previouslyTrackedTarget = CurrentlyTrackedTarget;
         CurrentlyTrackedTarget = null;
-        return previouslyTrackedTarget;
+        CleanupAfterStopTracking();
+        Debug.Log("Stoped Tracking");
+        //return previouslyTrackedTarget;
+    }
+
+    private void CleanupAfterStopTracking()
+    {
+        LeftToRight.DestroyBlipCache();
+        UpToDown.DestroyBlipCache();
     }
 
     public override void OnDestroy()
     {
-        if(CurrentlyTrackedTarget != null)
+        if (CurrentlyTrackedTarget != null)
+        {
+            CleanupAfterStopTracking();
             Destroy(CurrentlyTrackedTarget.gameObject);
+        }
         base.OnDestroy();
     }
 }

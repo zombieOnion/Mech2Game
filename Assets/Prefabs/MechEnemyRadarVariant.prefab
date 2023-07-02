@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22458ab46adb2c41a1cf65bf2ca1077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RadarBlip: {fileID: 1991437818032701531, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
+  RadarBlip: {fileID: 8124682591620736644, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
   TrackingTarget: 0
   CurrentlyTrackedTarget: {fileID: 0}
   RadarLayer:
@@ -277,6 +277,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftToRight: 1
+  LobeHitsLeft: []
+  LobeHitsRight: []
+  LobeStraightAhead: []
   sideAngleAdjustDegree: 0.2
   driftMaxTime: 0.8
   PulseSender: {fileID: 794545240}
@@ -295,6 +298,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftToRight: 0
+  LobeHitsLeft: []
+  LobeHitsRight: []
+  LobeStraightAhead: []
   sideAngleAdjustDegree: 0.2
   driftMaxTime: 0.8
   PulseSender: {fileID: 794545240}
@@ -312,7 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03eb648c511d4af4ca3da850502521b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RadarBlip: {fileID: 1991437818032701531, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
+  RadarBlip: {fileID: 8124682591620736644, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
   RadarLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -475,7 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03eb648c511d4af4ca3da850502521b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RadarBlip: {fileID: 1991437818032701531, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
+  RadarBlip: {fileID: 8124682591620736644, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
   RadarLayer:
     serializedVersion: 2
     m_Bits: 136

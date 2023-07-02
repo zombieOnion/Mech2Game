@@ -7,6 +7,10 @@ using UnityEngine;
 
 public class RadarTargetScript : NetworkBehaviour
 {
+
+    public delegate void RadarTargetDestroyed();
+    public event RadarTargetDestroyed OnRadarTargetDestroyed;
+
     public Guid MechRadarComputerSignature;
     public bool StayActive = true;
     public bool TrackerRadarIsOn = false;
@@ -64,5 +68,11 @@ public class RadarTargetScript : NetworkBehaviour
         _hitReceiverCountDown = 0;
         RadarHits.Add(newHit);
         ++_hitsReceivedInSweep;
+    }
+
+    public override void OnDestroy()
+    {
+        OnRadarTargetDestroyed?.Invoke();
+        base.OnDestroy();
     }
 }

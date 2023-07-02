@@ -10,6 +10,7 @@ public class RadarWarningReceiver : NetworkBehaviour
 {
     LayerMask radarBlipsMask;
     LayerMask uiMask;
+    private NetworkObjectPoolSpawner spawner;
 
     public RadarHitList<Transform> LineGos { get; private set; }
 
@@ -46,8 +47,9 @@ public class RadarWarningReceiver : NetworkBehaviour
             base.OnNetworkSpawn();
             return;
         }
-        LineGos = DisappearTimerScript.InstantiateRadarBlipsGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
-        SendRadarPulseAndCreateRadarEchoes.SerParentList(LineGos, gameObject.transform);
+        spawner = FindAnyObjectByType<NetworkObjectPoolSpawner>();
+        //LineGos = DisappearTimerScript.InstantiateRadarBlipsGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
+        //SendRadarPulseAndCreateRadarEchoes.SerParentList(LineGos, gameObject.transform);
         transform.root.GetComponent<EwoGameObjectReference>().EwoRefeenceId.OnValueChanged += OnEwoGoIdChanged;
         base.OnNetworkSpawn();
     }
@@ -89,8 +91,6 @@ public class RadarWarningReceiver : NetworkBehaviour
         //Debug.DrawLine(transform.position, transform.position + dir * 10, Color.red, Mathf.Infinity);
         //Debug.Log(other.name +" "+ dir);
         DrawRadarDirection(dir);
-        RadarWarningReceiverUI.GetComponent<DisappearTimerScript>().ResetAppearTimer();
-        RadarWarningReceiverUI.GetComponent<DisappearTimerScript>().ResetAppearTimerClientRpc();
         //StartCoroutine(TurnOffRWR());
     }
 
@@ -112,12 +112,15 @@ public class RadarWarningReceiver : NetworkBehaviour
     private void DrawRadarDirection(Vector3 dir)
     {
         Vector3 offsetFromText = new Vector3(0, 0, -20);
-        var lineGo = LineGos.AdvanceNext();
-        lineGo.GetComponent<DisappearTimerScript>().ResetAppearTimer();
-        lineGo.GetComponent<DisappearTimerScript>().ResetAppearTimerClientRpc();
+
+        var lineGo = spawner.SpawnWarningLineBlip(transform.position, Quaternion.identity);//LineGos.AdvanceNext();
+        lineGo.GetComponent<NetworkObject>().Spawn(destroyWithScene: true);
+        var rendererControlScript = lineGo.GetComponent<DisappearTimerScript>();
+        rendererControlScript.DisappearTimerMax.Value = 2;
+        rendererControlScript.StartCountDown();
         var currentLineRenderer = lineGo.GetComponent<LineRenderer>();
         currentLineRenderer.SetPositions(new Vector3[] { RadarWarningReceiverUI.transform.position + offsetFromText, RadarWarningReceiverUI.transform.position + offsetFromText + dir * 20 });
         lineGo.GetComponent<RadarWarningLineScript>().ResetPosClientRpc(RadarWarningReceiverUI.transform.position + offsetFromText, RadarWarningReceiverUI.transform.position + offsetFromText + dir * 20);
-        lineGo.GetComponent<NetworkObject>().TrySetParent(ewoGoId, true);
+        //lineGo.GetComponent<NetworkObject>().TrySetParent(ewoGoId, true);
     }
 }

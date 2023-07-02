@@ -11,6 +11,7 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
     [SerializeField] public LayerMask RadarLayer;
     public int RadarRange = 1000;
     private Collider localeCollider;
+    private NetworkObjectPoolSpawner spawner;
 
     // Start is called before the first frame update
     void Awake()
@@ -18,17 +19,29 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
         localeCollider = gameObject.GetComponent<Collider>();
     }
 
-    public RadarHitList<Transform> InstantiateRadarBlips(int size, float disappearTime, Guid signature, Action<RadarBlipScript> modifyBlip = null)
+    public override void OnNetworkSpawn()
     {
-        return InstantiateRadarBlipsGeneral(size, disappearTime, transform.position + Vector3.down * 5, signature, RadarBlip, modifyBlip);
+        if(!IsServer)
+        {
+            base.OnNetworkSpawn();
+            return;
+        }
+        spawner = FindAnyObjectByType<NetworkObjectPoolSpawner>();
+        base.OnNetworkSpawn();
     }
 
-    public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Guid signature, Transform preFab, Action < RadarBlipScript> modifyBlip = null )
+    public RadarHitList<Transform> InstantiateRadarBlips(int size, float disappearTime, Guid signature, ulong id, Action<RadarBlipScript> modifyBlip = null)
+    {
+        return InstantiateRadarBlipsGeneral(size, disappearTime, transform.position + Vector3.down * 5, signature, RadarBlip, id, modifyBlip);
+    }
+
+    public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Guid signature, Transform preFab, ulong id, Action < RadarBlipScript> modifyBlip = null )
     {
         var lobeHits = DisappearTimerScript.InstantiateRadarBlipsGeneral(size, disappearTime, pos, preFab);
         foreach (var radarHit in lobeHits.GetLast(size))
         {
             var blipScript = radarHit.gameObject.GetComponent<RadarBlipScript>();
+            blipScript.CreatorId = id;
             blipScript.radarSignature = signature;
             if (modifyBlip != null)
                 modifyBlip(blipScript);
@@ -37,7 +50,7 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
         return lobeHits;
     }
 
-    public Transform[] SendAndRecieveRadarPulse(RadarHitList<Transform> blipPool, Action<RadarBlipScript, RaycastHit> modifyBlip = null)
+    public Transform[] SendAndRecieveRadarPulse(RadarHitList<Transform> hitList = null, Action<RadarBlipScript, RaycastHit> modifyBlip = null)
     {
         var lobeHits = Physics.BoxCastAll(localeCollider.bounds.center, transform.localScale, transform.forward, transform.rotation, RadarRange, RadarLayer);
         if (lobeHits.Length < 1)
@@ -47,16 +60,26 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
         {
             if (hit.distance != 0)
             {
-                var nextHit = blipPool.AdvanceNext();
+                Transform nextHit;
+                if (hitList == null)
+                {
+                    nextHit = spawner.SpawnRadarBlip(hit.point, Quaternion.identity).transform; //blipPool.AdvanceNext();
+                    nextHit.GetComponent<NetworkObject>().Spawn(destroyWithScene: true);
+                    var rendererControlScript = nextHit.GetComponent<DisappearTimerScript>();
+                    rendererControlScript.DisappearTimerMax.Value = 2;
+                    rendererControlScript.StartCountDown();
+                }
+                else
+                {
+                    nextHit = hitList.AdvanceNext();
+                    nextHit.position = hit.transform.position;
+                }
+                //rendererControlScript.ResetAppearTimer();
+                //rendererControlScript.ResetAppearTimerClientRpc();
                 var nextHitScript = nextHit.GetComponent<RadarBlipScript>();
-                var rendererControlScript = nextHit.GetComponent<DisappearTimerScript>();
-                rendererControlScript.ResetAppearTimer();
-                rendererControlScript.ResetAppearTimerClientRpc();
                 if (modifyBlip != null)
                     modifyBlip(nextHitScript, hit);
-                nextHit.position = hit.point;
-                nextHit.rotation = Quaternion.identity;
-                blipHits.Add(nextHit);
+                blipHits.Add(nextHit.transform);
             }
         }
         return blipHits.ToArray();

@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class MechHealth : NetworkBehaviour, IHealth
 {
-
+    public delegate void MechDestroyed();
+    public event MechDestroyed OnMechDestroyed;
     private int _health = 100;
 
     int IHealth.Health
@@ -32,9 +33,11 @@ public class MechHealth : NetworkBehaviour, IHealth
         if (!IsServer)
             return;
         print("Mech was destroyed");
-        Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity, 1 << 8);
+        OnMechDestroyed?.Invoke();
+        /*Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity, 1 << 8);
          foreach (Collider collider in hitColliders)
             Destroy(collider.gameObject);
+        */
         base.OnDestroy();
     }
 }

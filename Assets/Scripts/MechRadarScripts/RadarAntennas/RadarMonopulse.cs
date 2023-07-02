@@ -28,7 +28,7 @@ public class RadarMonopulse : NetworkBehaviour
     // Blip settings
     public SendRadarPulseAndCreateRadarEchoes PulseSender;
     public float BlipTimeOut = 0.5f;
-    public int BlipSize = 10;
+    public int BlipSize = 20;
     public readonly Guid RadarSignature = Guid.NewGuid();
 
     void Awake()
@@ -39,20 +39,44 @@ public class RadarMonopulse : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
-        HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
+        /*HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
         HitListRightLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
         HitListStraightAhead = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, SetColourOfBlip);
         SendRadarPulseAndCreateRadarEchoes.SerParentList(HitListLeftLobe, gameObject.transform);
         SendRadarPulseAndCreateRadarEchoes.SerParentList(HitListRightLobe, gameObject.transform);
-        SendRadarPulseAndCreateRadarEchoes.SerParentList(HitListStraightAhead, gameObject.transform);
+        SendRadarPulseAndCreateRadarEchoes.SerParentList(HitListStraightAhead, gameObject.transform);*/
         base.OnNetworkSpawn();
     }
 
 
-    public void SearchAndTrack()
+    public void CreateaBlipCache()
+    {
+        var id = transform.root.GetComponent<NetworkObject>().NetworkObjectId;
+        HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, id, SetColourOfBlip);
+        HitListRightLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, id, SetColourOfBlip);
+        HitListStraightAhead = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, id, SetColourOfBlip);
+    }
+
+    public void DestroyBlipCache()
+    {
+        DestroyCachedBlips(HitListLeftLobe);
+        DestroyCachedBlips(HitListRightLobe);
+        DestroyCachedBlips(HitListStraightAhead);
+    }
+
+    private void DestroyCachedBlips(RadarHitList<Transform> HitListLeftLobe)
+    {
+        foreach (var hit in HitListLeftLobe.GetLast(HitListLeftLobe.Size))
+        {
+            if(hit != null)
+                Destroy(hit.gameObject);
+        }
+    }
+
+    public int SearchAndTrack()
     {
         // SCAN SEGMENT
-        LobeStraightAhead = PulseSender.SendAndRecieveRadarPulse(HitListLeftLobe);
+        LobeStraightAhead = PulseSender.SendAndRecieveRadarPulse(HitListStraightAhead);
         var lastRightLeftBalance = rightLeftBalance;
         RotateTransform(false);
         LobeHitsLeft = PulseSender.SendAndRecieveRadarPulse(HitListLeftLobe);
@@ -138,7 +162,7 @@ public class RadarMonopulse : NetworkBehaviour
         else if (rightLeftBalance != 3)
             driftTime = 0f;
         */
-
+        return rightLeftBalance;
     }
 
     public void DecreaseSearchAngle()

@@ -17,7 +17,7 @@ public class RadarSweepScriptAiEnemySubclass : RadarSweepScript
         if(hit.transform.root.gameObject.tag != "Player")
         {
             var blipScript = blip.GetComponent<DisappearTimerScript>();
-            blipScript.DisappearTimerMax.Value = 0;
+            blipScript.DisappearTimerMax.Value = 1;
             return;
         }
         blip.gameObject.GetComponent<Renderer>().materials[0].color = Color.magenta;
@@ -25,12 +25,12 @@ public class RadarSweepScriptAiEnemySubclass : RadarSweepScript
 
     protected override void CreateTargetCache()
     {
-        HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature, hideAiBlips);
+        HitList = PulseSender.InstantiateRadarBlips(blipCount, blipTimeOut, RadarSignature, GetComponent<NetworkObject>().NetworkObjectId, hideAiBlips);
         SendRadarPulseAndCreateRadarEchoes.SerParentList(HitList, gameObject.transform);
     }
 
     protected override Transform[] SendAndCreateTargets()
     {
-        return PulseSender.SendAndRecieveRadarPulse(HitList, onlyBlipOnPlayer);
+        return PulseSender.SendAndRecieveRadarPulse(modifyBlip: onlyBlipOnPlayer);
     }
 }

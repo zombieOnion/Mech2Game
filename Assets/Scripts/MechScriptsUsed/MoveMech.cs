@@ -15,6 +15,8 @@ public class MoveMech : NetworkBehaviour {
     public float LookRotationSpeed = 1f;
     public GameObject PilotPrefab;
     private Vector3 inputVec = default;
+    public bool hasActedOnUpdateSpeed = true;
+    public bool hasActedOnUpdateVector = true;
 
     public enum MovementEnum
     {
@@ -54,34 +56,29 @@ public class MoveMech : NetworkBehaviour {
         base.OnNetworkSpawn();
     }
 
-    void Update()
+    private void Tick()
     {
         if (!IsClient) return;
-        var newSidewaysDirection= DetermineMovementDirection(inputVec.x);
-        if (HasMovemnetDirectionChanged(SidewaysDirection, newSidewaysDirection))
+        if (!hasActedOnUpdateVector)
         {
-            SidewaysDirection = newSidewaysDirection;
-            var turnSpeed = SidewaysSpeeds[(int)newSidewaysDirection];
-            TurnVector.Set(0, turnSpeed, 0);
             SetNewTurnVectorServerRpc(TurnVector);
+            hasActedOnUpdateVector = true;
         }
-
-        var newForwardDirection = DetermineMovementDirection(inputVec.y);
-        if (HasMovemnetDirectionChanged(ForwardDirection, newForwardDirection))
+        if (!hasActedOnUpdateSpeed)
         {
-            ForwardDirection = newForwardDirection;
-            Speed = ForwardSpeeds[(int)newForwardDirection];
             SetNewSpeedServerRpc(Speed);
+            hasActedOnUpdateSpeed = true;
         }
+        Debug.Log($"Tick: {NetworkManager.LocalTime.Tick}");
     }
 
-    [ServerRpc(RequireOwnership = false, Delivery = RpcDelivery.Unreliable)]
+    [ServerRpc(RequireOwnership = false)]
     void SetNewTurnVectorServerRpc(Vector3 newTurn)
     {
         TurnVector = newTurn;
     }
 
-    [ServerRpc(RequireOwnership = false, Delivery = RpcDelivery.Unreliable)]
+    [ServerRpc(RequireOwnership = false)]
     void SetNewSpeedServerRpc(float newSpeed)
     {
         Speed = newSpeed;
@@ -111,6 +108,25 @@ public class MoveMech : NetworkBehaviour {
 
     void FixedUpdate()
     {
+        if (IsClient)
+        {
+            var newSidewaysDirection = DetermineMovementDirection(inputVec.x);
+            if (HasMovemnetDirectionChanged(SidewaysDirection, newSidewaysDirection))
+            {
+                SidewaysDirection = newSidewaysDirection;
+                var turnSpeed = SidewaysSpeeds[(int)newSidewaysDirection];
+                TurnVector.Set(0, turnSpeed, 0);
+                SetNewTurnVectorServerRpc(TurnVector);
+            }
+
+            var newForwardDirection = DetermineMovementDirection(inputVec.y);
+            if (HasMovemnetDirectionChanged(ForwardDirection, newForwardDirection))
+            {
+                ForwardDirection = newForwardDirection;
+                Speed = ForwardSpeeds[(int)newForwardDirection];
+                SetNewSpeedServerRpc(Speed);
+            }
+        }
         if (!IsServer) return;
         Quaternion deltaRotation = Quaternion.Euler(TurnVector * Time.deltaTime);
         if(TurnVector.y != 0)
