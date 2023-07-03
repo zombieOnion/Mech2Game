@@ -72,13 +72,13 @@ public class MoveMech : NetworkBehaviour {
         Debug.Log($"Tick: {NetworkManager.LocalTime.Tick}");
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc(Delivery = RpcDelivery.Unreliable)]
     void SetNewTurnVectorServerRpc(Vector3 newTurn)
     {
         TurnVector = newTurn;
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc(Delivery = RpcDelivery.Unreliable)]
     void SetNewSpeedServerRpc(float newSpeed)
     {
         Speed = newSpeed;
@@ -108,7 +108,7 @@ public class MoveMech : NetworkBehaviour {
 
     void FixedUpdate()
     {
-        if (IsClient)
+        if (IsOwner)
         {
             var newSidewaysDirection = DetermineMovementDirection(inputVec.x);
             if (HasMovemnetDirectionChanged(SidewaysDirection, newSidewaysDirection))

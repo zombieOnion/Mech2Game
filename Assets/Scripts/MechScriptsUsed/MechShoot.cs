@@ -30,6 +30,8 @@ public class MechShoot : NetworkBehaviour
     private float oldyRotation = 0f;
     private float xRotation = 0f;
     private float yRotation = 0f;
+    private bool hasSentRotation = true;
+    private float timeSinceSentMouse = 0f;
 
     void Awake()
     {
@@ -46,7 +48,7 @@ public class MechShoot : NetworkBehaviour
         CurrentTarget = target;
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc]
     public void FireMainGunServerRpc()
     {
         GameObject newRocket = Instantiate(selectedWeapon, transform.position + transform.forward * 2, transform.rotation) as GameObject;
@@ -59,7 +61,7 @@ public class MechShoot : NetworkBehaviour
 
     void Update()
     {
-        if (!IsClient) return;
+        if (!IsOwner) return;
         if (FireGun && selectedWeaponBase.RateOfFire < nextFire)
         {
             FireMainGunServerRpc();
@@ -70,19 +72,18 @@ public class MechShoot : NetworkBehaviour
         {
             nextFire += Time.deltaTime;
         }
-        xRotation -= _panThisFrame.y * LookRotationSpeed;
-        yRotation += _panThisFrame.x * LookRotationSpeed;
-        xRotation = Mathf.Clamp(xRotation, transform.parent.rotation.eulerAngles.x - 20, transform.parent.rotation.eulerAngles.x + 20);
-        yRotation = Mathf.Clamp(yRotation, transform.parent.rotation.eulerAngles.y - 40, transform.parent.rotation.eulerAngles.y + 40);
-        if (oldxRotation != xRotation || oldyRotation != yRotation)
+        if (hasSentRotation)
         {
-            SetNewTurnVectorServerRpc(xRotation, yRotation);
+            timeSinceSentMouse += Time.deltaTime;
+            if(timeSinceSentMouse > 0.2f)
+            {
+                hasSentRotation = false;
+                timeSinceSentMouse = 0f;
+            }
         }
-        oldxRotation = xRotation;
-        oldyRotation = yRotation;
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc(Delivery = RpcDelivery.Unreliable)]
     void SetNewTurnVectorServerRpc(float newX, float newY)
     {
         xRotation = newX;
@@ -117,7 +118,19 @@ public class MechShoot : NetworkBehaviour
     }
     public void OnLook(InputValue input)
     {
+        if (!IsOwner) return;
         _panThisFrame = input.Get<Vector2>() * 0.125f;
+        xRotation -= _panThisFrame.y * LookRotationSpeed;
+        yRotation += _panThisFrame.x * LookRotationSpeed;
+        xRotation = Mathf.Clamp(xRotation, transform.parent.rotation.eulerAngles.x - 20, transform.parent.rotation.eulerAngles.x + 20);
+        yRotation = Mathf.Clamp(yRotation, transform.parent.rotation.eulerAngles.y - 40, transform.parent.rotation.eulerAngles.y + 40);
+        if (!hasSentRotation && oldxRotation != xRotation || oldyRotation != yRotation)
+        {
+            SetNewTurnVectorServerRpc(xRotation, yRotation);
+            hasSentRotation = true;
+        }
+        oldxRotation = xRotation;
+        oldyRotation = yRotation;
     }
 
     public void OnChangeWeapon()
@@ -126,7 +139,7 @@ public class MechShoot : NetworkBehaviour
         ChangeWeaponServerRpc();
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc]
     public void ChangeWeaponServerRpc()
     {
 

@@ -104,7 +104,11 @@ public class RadarSweepScript : NetworkBehaviour
         if (hasCreatedClientRpcParams == false && mechShootAtPlayer == null)
         {
             var clientId = SpawnPlayerManager.Singleton.ClientsObject[gameObject.transform.root.GetComponent<NetworkObject>().NetworkObjectId];
-            clientRpcParams = GameObjectUtilityFunctions.CreateSrvParaWithClientId(clientId);
+            var ewoOwnerId = gameObject.transform.root.GetComponentInChildren<EwoGameObjectReference>().EwoRefeence.GetComponent<NetworkObject>().OwnerClientId;
+            if (clientId != ewoOwnerId)
+                clientRpcParams = GameObjectUtilityFunctions.CreateSrvParaWithClientId(new ulong[] { clientId , ewoOwnerId });
+            else
+                clientRpcParams = GameObjectUtilityFunctions.CreateSrvParaWithClientId(clientId);
             hasCreatedClientRpcParams = true;
         }
         if (hits.Length > 0)

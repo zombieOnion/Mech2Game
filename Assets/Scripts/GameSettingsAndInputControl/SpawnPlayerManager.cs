@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -54,16 +55,27 @@ public class SpawnPlayerManager : NetworkBehaviour
             {
                 SceneTransitionHandler.sceneTransitionHandler.SetSceneState(SceneTransitionHandler.SceneStates.Ingame);
                 SceneName = sceneName;
-                GameObject mechGo = Instantiate(MechPrefab, new Vector3(250+offset, 1.53f, 300+offset), Quaternion.Euler(0, 45, 0));
+                GameObject mechGo = Instantiate(MechPrefab, new Vector3(250-offset, 1.53f, 300-offset), Quaternion.Euler(0, 45, 0));
                 var PilotCamera = mechGo.transform.Find("Main Camera").GetComponent<Camera>();
                 var pilotInputCfg = PilotCamera.transform.parent.GetComponent<MechPilotInputConfiguration>();
-                GameObject EwoGo = Instantiate(EwoPrefab, new Vector3(250+offset, 20, 300+offset), Quaternion.Euler(90, 0, -45));
+                GameObject EwoGo = Instantiate(EwoPrefab, new Vector3(250-offset, 20, 300-offset), Quaternion.Euler(90, 0, -45));
                 var EWOCamera = EwoGo.GetComponent<Camera>();
                 var ewoInputCfg = EWOCamera.GetComponent<EWOInputConfiguration>();
                 mechGo.GetComponent<EwoGameObjectReference>().EwoRefeence = EwoGo;
                 EwoGo.GetComponent<MinimapUserInterfaceControl>().mechPlayer = mechGo;
-                mechGo.GetComponent<NetworkObject>().Spawn();
-                EwoGo.GetComponent<NetworkObject>().Spawn();
+
+                var mechClientID = gameState.ClientsWithRoles.Where(cwr => cwr.Value[0] == 1 && cwr.Value[1] == i + 1).ToList();
+                if(mechClientID.Count() > 0)
+                    mechGo.GetComponent<NetworkObject>().SpawnAsPlayerObject(mechClientID[0].Key, true);
+                else
+                    mechGo.GetComponent<NetworkObject>().Spawn();
+
+                var ewoClientID = gameState.ClientsWithRoles.Where(cwr => cwr.Value[0] == 2 && cwr.Value[1] == i + 1).ToList();
+                if (ewoClientID.Count() > 0)
+                    EwoGo.GetComponent<NetworkObject>().SpawnAsPlayerObject(ewoClientID[0].Key, true);
+                else
+                    EwoGo.GetComponent<NetworkObject>().Spawn();
+
                 EwoGo.GetComponent<MinimapUserInterfaceControl>().mechPlayerId.Value = mechGo.GetComponent<NetworkObject>().NetworkObjectId;
                 mechGo.GetComponent<EwoGameObjectReference>().EwoRefeenceId.Value = EwoGo.GetComponent<NetworkObject>().NetworkObjectId;
                 mechGo.GetComponent<ClientPlayerSpawnConnector>().team.Value = i + 1;
@@ -82,16 +94,18 @@ public class SpawnPlayerManager : NetworkBehaviour
         Debug.Log($"Client spawned rpc: {serverRpcAttribute.Receive.SenderClientId} {playerType} {networkObjectRef.NetworkObjectId}");
         var clientRpcArgs = GameObjectUtilityFunctions.CreateSrvParaWithClientId(serverRpcAttribute.Receive.SenderClientId);
         var playerVal = gameState.ClientsWithRoles[clientId];
-        if (playerVal[1] != team)
+        if (playerVal[1] != team || !networkObjectRef.TryGet(out NetworkObject targetObject))
             return;
         if (playerType == 1 && playerType == playerVal[0])
         {
             gameSetting.SetPilotActive2ClientRpc(networkObjectRef, clientRpcArgs);
+            //targetObject.GetComponent<NetworkObject>().ChangeOwnership(clientId);
             ClientsObject.Add(networkObjectRef.NetworkObjectId, clientId);
         }
         else if (playerType == 2 && playerType == playerVal[0])
         {
             gameSetting.SetEwoActive2ClientRpc(networkObjectRef, clientRpcArgs);
+            //targetObject.GetComponent<NetworkObject>().ChangeOwnership(clientId);
             ClientsObject.Add(networkObjectRef.NetworkObjectId, clientId);
         }
 

@@ -17,7 +17,7 @@ public class RadarSweepScriptAiEnemySubclass : RadarSweepScript
         if(hit.transform.root.gameObject.tag != "Player")
         {
             var blipScript = blip.GetComponent<DisappearTimerLocaleScript>();
-            blipScript.DisappearTimerMax = 1;
+            blipScript.DisappearTimerMax = 0.01f;
             return;
         }
         blip.gameObject.GetComponent<Renderer>().materials[0].color = Color.magenta;

@@ -51,11 +51,16 @@ public class GameObjectUtilityFunctions : MonoBehaviour
 
     public static ClientRpcParams CreateSrvParaWithClientId(ulong clientId)
     {
+        return CreateSrvParaWithClientId(new ulong[] { clientId });
+    }
+
+    public static ClientRpcParams CreateSrvParaWithClientId(ulong[] clientIds)
+    {
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
             {
-                TargetClientIds = new ulong[] { clientId }
+                TargetClientIds = clientIds
             }
         };
         return clientRpcParams;
