@@ -6295,7 +6295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c579743cb0ecb84fb1336758d074193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MechPrefab: {fileID: 3788626340683502656, guid: ac0551a3decc730418890d313f0919af, type: 3}
+  MechPrefab: {fileID: 4397776447641456947, guid: ac0551a3decc730418890d313f0919af, type: 3}
   EwoPrefab: {fileID: 1632856752478138634, guid: ed52af2b0ead6054d8d55e7f2fbedd30, type: 3}
   AllPlayersHaveSpawned:
     m_InternalValue: 0
