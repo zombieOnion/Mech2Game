@@ -12,18 +12,6 @@ public class LockOnPlayer : NetworkBehaviour
     RadarTargetComputer radarTargetComputerScript;
     private bool hasInit = false;
     // Start is called before the first frame update
-    public override void OnNetworkSpawn()
-    {
-        //tryInit();
-        base.OnNetworkSpawn();
-    }
-
-    public void Update()
-    {
-        //if (!IsServer || hasInit == true) return;
-        //tryInit();
-    }
-
     public void Init(GameObject playerMech)
     {
         if (hasInit) return;

@@ -52,7 +52,7 @@ public class JammerScript : NetworkBehaviour
     {
         if (!IsServer)
         {
-            playerSpawnManager.AllPlayersHaveSpawned.OnValueChanged -= OnAllPlayerSpawnedValueChanged;
+            SpawnPlayerManager.Singleton.AllPlayersHaveSpawned.OnValueChanged -= OnAllPlayerSpawnedValueChanged;
             base.OnNetworkDespawn();
             return;
         }
@@ -64,7 +64,7 @@ public class JammerScript : NetworkBehaviour
     protected virtual void CreateTargetCache()
     { //RadarSignature
         var currentPos = transform.position;
-        HitList = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneral(BlipSize, blipTimeOut, new Vector3(currentPos.x, currentPos.y - 10, currentPos.z), RadarBlipLocalePreFab.transform);
+        HitList = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneralLocale(BlipSize, blipTimeOut, new Vector3(currentPos.x, currentPos.y - 10, currentPos.z), RadarBlipLocalePreFab.transform);
     }
 
 

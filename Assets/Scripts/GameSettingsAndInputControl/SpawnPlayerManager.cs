@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SpawnPlayerManager : NetworkBehaviour
 {
+    public static SpawnPlayerManager Singleton { get; private set; }
     public GameState gameState;
     [SerializeField] public GameObject MechPrefab;
     [SerializeField] public GameObject EwoPrefab;
@@ -16,12 +17,19 @@ public class SpawnPlayerManager : NetworkBehaviour
     public Dictionary<ulong, ulong> ClientsObject { get => clientsObject; }
 
     // Start is called before the first frame update
-    void Awake()
+    public void Awake()
     {
-        //DontDestroyOnLoad(gameObject);
+        if (Singleton != null && Singleton != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Singleton = this;
+        }
     }
 
-    
+
     public override void OnNetworkSpawn()
     {
         //If we are hosting, then handle the server side for detecting when clients have connected

@@ -816,8 +816,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PooledPrefabsList:
-  - Prefab: {fileID: 4531837818513917039, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
-    PrewarmCount: 200
   - Prefab: {fileID: 8455763901918205870, guid: 21efbbe562b00a2439a1977e563b60a4, type: 3}
     PrewarmCount: 50
 --- !u!4 &579098586
@@ -867,7 +865,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91746646eb33c624dbcd29ae572c683a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radarBlipPrefab: {fileID: 4531837818513917039, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
   radarTrackerPrefab: {fileID: 8455763901918205870, guid: 21efbbe562b00a2439a1977e563b60a4, type: 3}
 --- !u!1 &673596877
 GameObject:
@@ -7503,6 +7500,18 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 794545240, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
+      propertyPath: RadarBlipLocale
+      value: 
+      objectReference: {fileID: 4862545940967670299, guid: 22f597e57d9d72447b2bf731ae33735b, type: 3}
+    - target: {fileID: 808947237, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
+      propertyPath: RadarBlipLocale
+      value: 
+      objectReference: {fileID: 4862545940967670299, guid: 22f597e57d9d72447b2bf731ae33735b, type: 3}
+    - target: {fileID: 808947243, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
+      propertyPath: RadarBlipLocalePreFab
+      value: 
+      objectReference: {fileID: 963702684337823984, guid: 22f597e57d9d72447b2bf731ae33735b, type: 3}
     - target: {fileID: 849938941, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
       propertyPath: m_LocalScale.z
       value: 800
@@ -7577,7 +7586,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3214608601521043397, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9055358669915373021, guid: c8cc79d649baa3642bfc75fa48dada3b, type: 3}
       propertyPath: GlobalObjectIdHash

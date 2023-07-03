@@ -48,7 +48,7 @@ public class RadarWarningReceiver : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         utility = FindAnyObjectByType<GameObjectUtilityFunctions>();
-        LineGos = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneral(30, 2, transform.position, RadarWarningLinePreFab.transform);
+        LineGos = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneralLocale(30, 2, transform.position, RadarWarningLinePreFab.transform);
         //SendRadarPulseAndCreateRadarEchoes.SerParentList(LineGos, gameObject.transform);
         transform.root.GetComponent<EwoGameObjectReference>().EwoRefeenceId.OnValueChanged += OnEwoGoIdChanged;
         if (!IsServer)

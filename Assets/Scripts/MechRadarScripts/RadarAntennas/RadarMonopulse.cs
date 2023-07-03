@@ -52,9 +52,9 @@ public class RadarMonopulse : NetworkBehaviour
     public void CreateaBlipCache()
     {
         var id = transform.root.GetComponent<NetworkObject>().NetworkObjectId;
-        HitListLeftLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, id, SetColourOfBlip);
-        HitListRightLobe = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, id, SetColourOfBlip);
-        HitListStraightAhead = PulseSender.InstantiateRadarBlips(BlipSize, BlipTimeOut, RadarSignature, id, SetColourOfBlip);
+        HitListLeftLobe = PulseSender.InstantiateRadarBlipsLocale(BlipSize, BlipTimeOut, RadarSignature, id, SetColourOfBlip);
+        HitListRightLobe = PulseSender.InstantiateRadarBlipsLocale(BlipSize, BlipTimeOut, RadarSignature, id, SetColourOfBlip);
+        HitListStraightAhead = PulseSender.InstantiateRadarBlipsLocale(BlipSize, BlipTimeOut, RadarSignature, id, SetColourOfBlip);
     }
 
     public void DestroyBlipCache()
@@ -91,6 +91,8 @@ public class RadarMonopulse : NetworkBehaviour
         else if (LobeHitsRight.Length > LobeHitsLeft.Length)
             rightLeftBalance = 1;
         else if (Mathf.Abs(LobeHitsRight.Length - LobeHitsLeft.Length) < 4 && (LobeHitsRight.Length > 0 && LobeHitsLeft.Length > 0))
+            rightLeftBalance = 2;
+        else if (Mathf.Abs(LobeHitsRight.Length + LobeHitsLeft.Length) < LobeStraightAhead.Length)
             rightLeftBalance = 2;
         else
             rightLeftBalance = 3;

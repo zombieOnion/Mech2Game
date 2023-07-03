@@ -59,7 +59,7 @@ public class DisappearTimerScript : NetworkBehaviour
         Destroy(gameObject);
     }
 
-    public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)
+    public static RadarHitList<Transform> InstantiatePrefabWithDisappearsGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)
     {
         var lobeHits = new RadarHitList<Transform>(size);
         for (int i = 0; i < size; i++)

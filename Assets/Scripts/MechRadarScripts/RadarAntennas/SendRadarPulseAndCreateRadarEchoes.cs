@@ -8,6 +8,7 @@ using UnityEngine;
 public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
 {
     [SerializeField] public Transform RadarBlip;
+    [SerializeField] public Transform RadarBlipLocale;
     [SerializeField] public LayerMask RadarLayer;
     public int RadarRange = 1000;
     private Collider localeCollider;
@@ -32,12 +33,20 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
 
     public RadarHitList<Transform> InstantiateRadarBlips(int size, float disappearTime, Guid signature, ulong id, Action<RadarBlipScript> modifyBlip = null)
     {
-        return InstantiateRadarBlipsGeneral(size, disappearTime, transform.position + Vector3.down * 5, signature, RadarBlip, id, modifyBlip);
+        var pos = transform.position + Vector3.down * 5;
+        var lobeHits = DisappearTimerScript.InstantiatePrefabWithDisappearsGeneral(size, disappearTime, pos, RadarBlip);
+        return InstantiateRadarBlipsGeneral(lobeHits, size, disappearTime, pos, signature, RadarBlip, id, modifyBlip);
     }
 
-    public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(int size, float disappearTime, Vector3 pos, Guid signature, Transform preFab, ulong id, Action < RadarBlipScript> modifyBlip = null )
+    public RadarHitList<Transform> InstantiateRadarBlipsLocale(int size, float disappearTime, Guid signature, ulong id, Action<RadarBlipScript> modifyBlip = null)
     {
-        var lobeHits = DisappearTimerScript.InstantiateRadarBlipsGeneral(size, disappearTime, pos, preFab);
+        var pos = transform.position + Vector3.down * 5;
+        var lobeHits = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneralLocale(size, disappearTime, pos, RadarBlipLocale);
+        return InstantiateRadarBlipsGeneral(lobeHits,size, disappearTime, pos, signature, RadarBlip, id, modifyBlip);
+    }
+
+    public static RadarHitList<Transform> InstantiateRadarBlipsGeneral(RadarHitList<Transform> lobeHits, int size, float disappearTime, Vector3 pos, Guid signature, Transform preFab, ulong id, Action < RadarBlipScript> modifyBlip = null )
+    {
         foreach (var radarHit in lobeHits.GetLast(size))
         {
             var blipScript = radarHit.gameObject.GetComponent<RadarBlipScript>();
@@ -61,7 +70,7 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
             if (hit.distance != 0)
             {
                 Transform nextHit;
-                if (hitList == null)
+                /*if (hitList == null)
                 {
                     nextHit = spawner.SpawnRadarBlip(hit.point, Quaternion.identity).transform; //blipPool.AdvanceNext();
                     nextHit.GetComponent<NetworkObject>().Spawn(destroyWithScene: true);
@@ -70,9 +79,9 @@ public class SendRadarPulseAndCreateRadarEchoes : NetworkBehaviour
                     rendererControlScript.StartCountDown();
                 }
                 else
-                {
+                {*/
                     nextHit = DisappearTimerLocaleScript.CreateLocaleRadarBlip(hitList, hit.point);
-                }
+                //}
                 //rendererControlScript.ResetAppearTimer();
                 //rendererControlScript.ResetAppearTimerClientRpc();
                 var nextHitScript = nextHit.GetComponent<RadarBlipScript>();

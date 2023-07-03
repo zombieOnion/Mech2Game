@@ -65,7 +65,7 @@ public class DisappearTimerLocaleScript : MonoBehaviour
     }
 
 
-    public static RadarHitList<Transform> InstantiatePrefabWithDisappearsGeneral(int size, float disappearTime, Vector3 pos, Transform preFab)
+    public static RadarHitList<Transform> InstantiatePrefabWithDisappearsGeneralLocale(int size, float disappearTime, Vector3 pos, Transform preFab)
     {
         var lobeHits = new RadarHitList<Transform>(size);
         for (int i = 0; i < size; i++)

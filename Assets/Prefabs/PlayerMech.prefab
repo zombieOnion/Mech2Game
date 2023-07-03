@@ -418,6 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RadarBlip: {fileID: 8124682591620736644, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
+  RadarBlipLocale: {fileID: 4862545940967670299, guid: 22f597e57d9d72447b2bf731ae33735b, type: 3}
   RadarLayer:
     serializedVersion: 2
     m_Bits: 136
@@ -1438,6 +1439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RadarBlip: {fileID: 8124682591620736644, guid: 453f51cf6d075c947947d972e54ca16b, type: 3}
+  RadarBlipLocale: {fileID: 4862545940967670299, guid: 22f597e57d9d72447b2bf731ae33735b, type: 3}
   RadarLayer:
     serializedVersion: 2
     m_Bits: 8

@@ -16,7 +16,8 @@ public class RadarSweepScript : NetworkBehaviour
 
     // cache variables and blips
     public SendRadarPulseAndCreateRadarEchoes PulseSender;
-    [SerializeField] GameObject RadarBlipLocalePreFab;
+    private MechShootAtPlayer mechShootAtPlayer;
+    [SerializeField] protected GameObject RadarBlipLocalePreFab;
     public RadarHitList<Transform> HitList;
     protected int blipCount = 100;
     protected float blipTimeOut = 5;
@@ -44,27 +45,26 @@ public class RadarSweepScript : NetworkBehaviour
     {
         targetProcessor = gameObject.GetComponent<RadarTargetComputer>();
         PulseSender = gameObject.GetComponent<SendRadarPulseAndCreateRadarEchoes>();
+        mechShootAtPlayer = gameObject.transform.root.GetComponentInChildren<MechShootAtPlayer>();
     }
 
     public override void OnNetworkSpawn()
     {
         CreateTargetCache();
+        SpawnPlayerManager.Singleton.AllPlayersHaveSpawned.OnValueChanged += OnAllPlayerSpawnedValueChanged;
         if (!IsServer)
         {
             base.OnNetworkDespawn();
             return;
         }
-        spawner = FindAnyObjectByType<NetworkObjectPoolSpawner>();
-        playerSpawnManager = FindAnyObjectByType<SpawnPlayerManager>();
-        playerSpawnManager.AllPlayersHaveSpawned.OnValueChanged += OnAllPlayerSpawnedValueChanged;
         base.OnNetworkDespawn();
     }
 
     public override void OnNetworkDespawn()
     {
+        SpawnPlayerManager.Singleton.AllPlayersHaveSpawned.OnValueChanged -= OnAllPlayerSpawnedValueChanged;
         if (!IsServer)
         {
-            playerSpawnManager.AllPlayersHaveSpawned.OnValueChanged -= OnAllPlayerSpawnedValueChanged;
             base.OnNetworkDespawn();
             return;
         }
@@ -101,9 +101,9 @@ public class RadarSweepScript : NetworkBehaviour
         if (lastXAngle <= 360f && xSweepRotationAngle > 360f)
             xSweepRotationAngle = 0;
         var hits = SendAndCreateTargets();
-        if (hasCreatedClientRpcParams == false)
+        if (hasCreatedClientRpcParams == false && mechShootAtPlayer == null)
         {
-            var clientId = playerSpawnManager.ClientsObject[gameObject.transform.root.GetComponent<NetworkObject>().NetworkObjectId];
+            var clientId = SpawnPlayerManager.Singleton.ClientsObject[gameObject.transform.root.GetComponent<NetworkObject>().NetworkObjectId];
             clientRpcParams = GameObjectUtilityFunctions.CreateSrvParaWithClientId(clientId);
             hasCreatedClientRpcParams = true;
         }
@@ -112,14 +112,15 @@ public class RadarSweepScript : NetworkBehaviour
             foreach (var hit in hits)
             {
                 AddRadarHit(hit);
-                CreateLocaleRadarBlipClientRpc(hit.transform.position, clientRpcParams);
+                if(mechShootAtPlayer == null)
+                    CreateLocaleRadarBlipClientRpc(hit.transform.position, clientRpcParams);
             }
         }
     }
     protected virtual void CreateTargetCache()
     { //RadarSignature
         var currentPos = transform.position;
-        HitList = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneral(blipCount, blipTimeOut, new Vector3(currentPos.x, currentPos.y-10, currentPos.z), RadarBlipLocalePreFab.transform);
+        HitList = DisappearTimerLocaleScript.InstantiatePrefabWithDisappearsGeneralLocale(blipCount, blipTimeOut, new Vector3(currentPos.x, currentPos.y-10, currentPos.z), RadarBlipLocalePreFab.transform);
     }
 
     protected virtual Transform[] SendAndCreateTargets()

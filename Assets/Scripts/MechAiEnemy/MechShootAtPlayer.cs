@@ -12,6 +12,8 @@ public class MechShootAtPlayer : NetworkBehaviour
     public float ShootReloadTime = 1f;
     float currentReloadTime = 0f;
     bool hasInit = false;
+    private bool playerSpawningIsDone = false;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -21,13 +23,31 @@ public class MechShootAtPlayer : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (!IsServer) return;
-        base.OnNetworkSpawn();
+        if (!IsServer)
+        {
+            base.OnNetworkDespawn();
+            return;
+        }
+        SpawnPlayerManager.Singleton.AllPlayersHaveSpawned.OnValueChanged += OnAllPlayerSpawnedValueChanged;
+        base.OnNetworkDespawn();
     }
+
+    public override void OnNetworkDespawn()
+    {
+        if (!IsServer)
+        {
+            SpawnPlayerManager.Singleton.AllPlayersHaveSpawned.OnValueChanged -= OnAllPlayerSpawnedValueChanged;
+            base.OnNetworkDespawn();
+            return;
+        }
+        base.OnNetworkDespawn();
+    }
+
+    private void OnAllPlayerSpawnedValueChanged(bool oldValue, bool newValue) => playerSpawningIsDone = newValue;
 
     private void tryInitShootPlayer()
     {
-        if (GameObject.FindGameObjectsWithTag("Player").Length > 0 && hasInit == false)
+        if (GameObject.FindGameObjectsWithTag("Player").Length > 0 && hasInit == false && playerSpawningIsDone)
             initShootPlayer();
     }
 
