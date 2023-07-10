@@ -225,12 +225,13 @@ GameObject:
   - component: {fileID: 65463273944070008}
   - component: {fileID: 23735416250182318}
   - component: {fileID: 54626018736626550}
-  - component: {fileID: 90669760}
-  - component: {fileID: 90669761}
-  - component: {fileID: 219970310476326771}
-  - component: {fileID: -3372662229659043266}
-  - component: {fileID: 2008034293614279948}
-  - component: {fileID: 2009640777372799712}
+  - component: {fileID: 2775476981412589028}
+  - component: {fileID: 6692566027667767700}
+  - component: {fileID: 1430493178723152887}
+  - component: {fileID: 6152589121549107199}
+  - component: {fileID: 1867988969989172465}
+  - component: {fileID: 6770056425254653680}
+  - component: {fileID: 2739090187696162512}
   m_Layer: 3
   m_Name: MechEnemy
   m_TagString: TestEnemy
@@ -353,51 +354,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &90669760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1803561295360038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0b1d436975e18947b1048facfc5fe5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &90669761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1803561295360038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53d233d378e985d43b7ed89b1b26dbaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  thrust: 1
-  rb: {fileID: 0}
---- !u!114 &219970310476326771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1803561295360038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c7635ac80112af48ad2797f3d0085dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DisableUiElements:
-  - {fileID: 0}
-  - {fileID: 0}
-  ActivateUiElements:
-  - {fileID: 0}
-  - {fileID: 0}
---- !u!114 &-3372662229659043266
+--- !u!114 &2775476981412589028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -417,7 +374,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &2008034293614279948
+--- !u!114 &6692566027667767700
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -447,7 +404,7 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &2009640777372799712
+--- !u!114 &1430493178723152887
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -459,6 +416,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6152589121549107199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803561295360038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49ccb65cdb01b954ca55e10e1e98df51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 0
+  TurnVector: {x: 0, y: 0, z: 0}
+  rb: {fileID: 0}
+  ForwardDirection: 0
+  SidewaysDirection: 0
+  LookRotationSpeed: 1
+  PilotPrefab: {fileID: 0}
+  hasActedOnUpdateSpeed: 1
+  hasActedOnUpdateVector: 1
+  ForwardSpeeds: []
+  SidewaysSpeeds: []
+--- !u!114 &1867988969989172465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803561295360038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0b1d436975e18947b1048facfc5fe5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6770056425254653680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803561295360038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7635ac80112af48ad2797f3d0085dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActivateUiElements: []
+  MissionIndex: 0
+--- !u!114 &2739090187696162512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803561295360038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d233d378e985d43b7ed89b1b26dbaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thrust: 1
+  rb: {fileID: 0}
 --- !u!1 &1927623204560760
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,9 +492,10 @@ GameObject:
   - component: {fileID: 65577985664779300}
   - component: {fileID: 23780608516131898}
   - component: {fileID: 54926583147491992}
-  - component: {fileID: 8554912676101096570}
-  - component: {fileID: 912460294685778858}
-  - component: {fileID: 3345148143177260551}
+  - component: {fileID: 3608218158216457910}
+  - component: {fileID: 297715220403484201}
+  - component: {fileID: 4135502618947019852}
+  - component: {fileID: 8999517515849055101}
   m_Layer: 0
   m_Name: Cannon
   m_TagString: Untagged
@@ -595,46 +616,9 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 64
+  m_Constraints: 14
   m_CollisionDetection: 0
---- !u!114 &8554912676101096570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1927623204560760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6498a847efbaab14b940c664be1e9289, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  varBullet: {fileID: 1500980065570562, guid: 0cea77a2a1a2db34684c3bab20011966, type: 3}
-  CommandGuidedRocket: {fileID: 1165133563092066, guid: 207650295ab97c7469eec37c6f249051, type: 3}
-  selectedWeapon: {fileID: 0}
-  selectedWeaponBase: {fileID: 0}
-  LookRotationSpeed: 1
-  rb: {fileID: 0}
-  gunnerCam: {fileID: 0}
-  MechParent: {fileID: 4185401245404222}
-  CurrentTarget: {fileID: 0}
-  UseMouse: 0
-  TimeSenseFires: 0
---- !u!114 &912460294685778858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1927623204560760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e28e540eb69776428661ece0f717e13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerMech: {fileID: 0}
-  ShootReloadTime: 1
---- !u!114 &3345148143177260551
+--- !u!114 &3608218158216457910
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -664,6 +648,55 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &297715220403484201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927623204560760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4135502618947019852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927623204560760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6498a847efbaab14b940c664be1e9289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  varBullet: {fileID: 1500980065570562, guid: 0cea77a2a1a2db34684c3bab20011966, type: 3}
+  CommandGuidedRocket: {fileID: 1165133563092066, guid: 207650295ab97c7469eec37c6f249051, type: 3}
+  selectedWeapon: {fileID: 0}
+  selectedWeaponBase: {fileID: 0}
+  LookRotationSpeed: 1
+  rb: {fileID: 0}
+  gunnerCam: {fileID: 0}
+  MechParent: {fileID: 0}
+  CurrentTarget: {fileID: 0}
+  UseMouse: 0
+  TimeSenseFires: 0
+--- !u!114 &8999517515849055101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927623204560760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e28e540eb69776428661ece0f717e13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerMech: {fileID: 0}
+  ShootReloadTime: 1
 --- !u!1001 &4797290497795258522
 PrefabInstance:
   m_ObjectHideFlags: 0

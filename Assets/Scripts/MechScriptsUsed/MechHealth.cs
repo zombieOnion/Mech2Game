@@ -30,8 +30,7 @@ public class MechHealth : NetworkBehaviour, IHealth
 
     public override void OnDestroy()
     {
-        if (!IsServer)
-            return;
+        if (!IsServer) { base.OnDestroy(); return; }
         print("Mech was destroyed");
         OnMechDestroyed?.Invoke();
         /*Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity, 1 << 8);

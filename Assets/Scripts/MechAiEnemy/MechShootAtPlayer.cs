@@ -43,11 +43,12 @@ public class MechShootAtPlayer : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
-    private void OnAllPlayerSpawnedValueChanged(bool oldValue, bool newValue) => playerSpawningIsDone = newValue;
+    private void OnAllPlayerSpawnedValueChanged(bool oldValue, bool newValue) => playerSpawningIsDone = newValue ||
+        SpawnPlayerManager.Singleton.AllPlayersHaveSpawned.Value;
 
     private void tryInitShootPlayer()
     {
-        if (GameObject.FindGameObjectsWithTag("Player").Length > 0 && hasInit == false && playerSpawningIsDone)
+        if (GameObject.FindGameObjectsWithTag("Player").Length > 0 && hasInit == false && (playerSpawningIsDone || SpawnPlayerManager.Singleton.AllPlayersHaveSpawned.Value))
             initShootPlayer();
     }
 

@@ -88,7 +88,7 @@ public class RadarTargetComputer : NetworkBehaviour
     }
 
     public GameObject CreateNewTarget(Vector3 position, ulong clientId, bool isServer = false) {
-        var newTarget = spawner.SpawnRadarTrackingObject(position, Quaternion.identity);
+        var newTarget = spawner.InstansiateRadarTrackingObject(position, Quaternion.identity);
         newTarget.GetComponent<RadarTargetScript>().MechRadarComputerSignature = MechRadarComputerSignature;
         //newTarget.gameObject.GetComponent<NetworkObject>().Spawn();
         newTarget.gameObject.GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
