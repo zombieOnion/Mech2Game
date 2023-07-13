@@ -27,9 +27,7 @@ public class RadarTrackerScript : NetworkBehaviour
         if (!IsServer) return;
         if (TrackingTarget)
         {
-            int leftRightStatus = LeftToRight.SearchAndTrack();
-            int upDownStatus = UpToDown.SearchAndTrack();
-            if(leftRightStatus == 3 && upDownStatus == 3)
+            if(LeftToRight.SearchAndTrack() == 3 && UpToDown.SearchAndTrack() == 3)
             {
                 StopTracking();
                 return;

@@ -83,6 +83,7 @@ public class GameSettings : NetworkBehaviour
             PilotCamera = targetObject.transform.Find("Main Camera").GetComponent<Camera>();
             // deal damage or something to target object.
             targetObject.GetComponentInChildren<Camera>().enabled = true;
+            PilotCamera.GetComponent<AudioListener>().enabled = true;
             Cursor.lockState = CursorLockMode.Locked;
             pilotInputCfg = targetObject.GetComponent<MechPilotInputConfiguration>();
             pilotInputCfg.enabled = true;
@@ -99,6 +100,7 @@ public class GameSettings : NetworkBehaviour
         if (goNetId.TryGet(out NetworkObject targetObject))
         {
             PilotCamera = targetObject.transform.Find("Main Camera").GetComponent<Camera>();
+            PilotCamera.GetComponent<AudioListener>().enabled = true;
             pilotInputCfg = targetObject.GetComponent<MechPilotInputConfiguration>();
         }
     }

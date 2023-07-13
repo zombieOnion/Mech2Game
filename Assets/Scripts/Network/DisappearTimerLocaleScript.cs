@@ -5,10 +5,7 @@ using UnityEngine.Events;
 
 public class DisappearTimerLocaleScript : MonoBehaviour
 {
-    private float DisappearTimer = 0;
     public float DisappearTimerMax;
-    private bool hasStarted = false;
-    private bool hasFinished = false;
     private Coroutine coroutine;
     private BoxCollider boxCollider;
     private EnableDisableRendererInterface rendererInterface;
@@ -38,12 +35,9 @@ public class DisappearTimerLocaleScript : MonoBehaviour
 
     private IEnumerator CheckDisappear()
     {
-        hasStarted = true;
         EnableRenderer();
         yield return new WaitForSeconds(DisappearTimerMax);
         DisableRenderer();
-        hasStarted = false;
-        hasFinished = true;
     }
 
     private void EnableRenderer()

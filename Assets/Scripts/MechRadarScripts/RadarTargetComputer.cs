@@ -97,7 +97,7 @@ public class RadarTargetComputer : NetworkBehaviour
     }
 
     public void TrackTarget(RadarTargetScript target) {
-        var lockedTarget = Targets.Find(t => t.transform.GetInstanceID() == target.transform.GetInstanceID());
+        //var lockedTarget = Targets.Find(t => t.transform.GetInstanceID() == target.transform.GetInstanceID());
         if (target == null)
         {
             _radarTracker.StopTracking();
